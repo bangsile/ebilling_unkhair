@@ -20,7 +20,7 @@
             <!-- /.card-header -->
             <div class="card-body">
               <a href="{{ route('data.import') }}" class="btn btn-primary">
-                <i class="fas fa-plus"></i> Tambah
+                Upload Data UKT
               </a>
               <table id="semua_billing" class="table table-bordered table-hover">
                 <thead>
