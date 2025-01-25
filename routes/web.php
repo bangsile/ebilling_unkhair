@@ -42,6 +42,6 @@ Route::get('/tes', function () {
     return view('tes');
 });
 
-Route::get('/import', [DataImportController::class, 'importForm'])->name('data.import.form');
+Route::get('/import', [DataImportController::class, 'importForm'])->middleware(['auth'])->name('data.import.form');
 Route::post('/import', [DataImportController::class, 'import'])->name('data.import');
 

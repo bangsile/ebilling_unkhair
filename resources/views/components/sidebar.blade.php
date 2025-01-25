@@ -37,7 +37,7 @@
               <ul class="nav nav-treeview">
                 <x-nav-link icon="far fa-circle nav-icon" href="{{ route('billing') }}"
                   active="{{ Route::is('billing') }}">
-                  Semua Billing
+                  Billing Pembayaran
                 </x-nav-link>
                 <x-nav-link icon="far fa-circle nav-icon" href="{{ route('billing.ukt') }}"
                   active="{{ Route::is('billing.ukt') }}">
@@ -47,9 +47,10 @@
                   active="{{ Route::is('billing.umb') }}">
                   Billing UMB
                 </x-nav-link>
-
+              </ul>
             </x-slot>
           </x-nav-link>
+
 
           <x-nav-link icon="nav-icon fas fa-list-alt" href="{{ route('jenis-bayar') }}"
             active="{{ Route::is('jenis-bayar') }}">
