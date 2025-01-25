@@ -30,8 +30,18 @@
                 <input type="text" class="form-control" name="tahun_akademik" placeholder="Masukkan Tahun Akademik"
                   value="{{ $tahunPembayaran->tahun_akademik ?? '' }}">
               </div>
-
               <div class="form-group">
+                <label>Awal Pembayaran</label>
+                <input type="date" class="form-control" name="awal_pembayaran" placeholder=""
+                  value="{{ $tahunPembayaran->awal_pembayaran ?? '' }}">
+              </div>
+              <div class="form-group">
+                <label>Akhir Pembayaran</label>
+                <input type="date" class="form-control" name="akhir_pembayaran" placeholder=""
+                  value="{{ $tahunPembayaran->akhir_pembayaran ?? '' }}">
+              </div>
+
+              {{-- <div class="form-group">
                 <label>Pilih Rentang Tanggal</label>
                 <div class="input-group">
                   <div class="input-group-prepend">
@@ -46,7 +56,7 @@
                   <input type="hidden" name="akhir_pembayaran" id="end_date"
                     value="{{ $tahunPembayaran->akhir_pembayaran ?? '' }}">
                 </div>
-              </div>
+              </div> --}}
 
               <button type="submit" class="btn btn-primary float-right">Simpan</button>
             </form>
