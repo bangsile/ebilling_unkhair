@@ -31,7 +31,7 @@ class BillingController extends Controller
                 'nama' => 'required|string',
                 // 'deskripsi' => 'required',
                 // 'tgl_expire' => 'required',
-                'detail' => 'array'
+                // 'detail' => 'array'
             ]);
 
             if ($validator->fails()) {
@@ -53,7 +53,7 @@ class BillingController extends Controller
                 'no_identitas' => $request->no_identitas,
                 'angkatan' => $request->angkatan,
                 // 'tahun_akademik' => $request->tahun_akademik,
-                'tahun_akademik' => '',
+                'tahun_akademik' => '20242',
                 'kode_prodi' => $request->kode_prodi,
                 'nama_prodi' => $request->nama_prodi,
                 'nama_fakultas' => $request->nama_fakultas,
