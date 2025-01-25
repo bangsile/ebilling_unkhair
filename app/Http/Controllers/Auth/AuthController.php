@@ -32,25 +32,7 @@ class AuthController extends Controller
 			'password.required' => 'Password wajib diisi.',
 		]);
 
-		$token = env('API_TOKEN_SIMAK', 'default_token');
-
-		// Function untuk hit ke API
-		function get_data($url)
-		{
-			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL, $url);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-			$result = curl_exec($ch);
-			if (!empty(curl_error($ch))) {
-				$result = print_r(curl_error($ch) . ' - ' . $url);
-			}
-			curl_close($ch);
-			return $result;
-		}
-		function str_curl($url, $data)
-		{
-			return $url . '?' . http_build_query($data);
-		}
+		$token = env('API_TOKEN_SIMAK', 'default_token'); 
 
 		// Cek user di DB
 		$user = User::where('username', $request->username)->first();
