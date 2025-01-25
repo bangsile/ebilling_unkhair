@@ -27,7 +27,8 @@ return new class extends Migration
             $table->string('kode_prodi');
             $table->string('nama_prodi');
             $table->string('nama_fakultas');
-            $table->string('kategori_ukt');
+            $table->string('kategori_ukt', 10);
+            $table->string('jalur', 20);
             $table->json('detail')->nullable();
             $table->timestamps();
         });
