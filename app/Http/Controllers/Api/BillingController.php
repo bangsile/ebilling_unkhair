@@ -59,7 +59,7 @@ class BillingController extends Controller
                 'nama_fakultas' => $request->nama_fakultas,
                 'kategori_ukt' => $request->kategori_ukt,
                 'jalur' => $request->jalur,
-                'detail' => $request->detail,
+                // 'detail' => $request->detail,
             ]);
 
             return new BillingResource(true, 'Berhasil Create Billing', $billing);
