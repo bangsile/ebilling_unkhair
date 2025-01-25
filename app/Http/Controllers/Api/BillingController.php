@@ -40,7 +40,7 @@ class BillingController extends Controller
                     'message' => $validator->errors(),
                 ], 402);
             }
-            
+
             $billing = BillingUkt::create([
                 'trx_id' => $request->trx_id,
                 'no_va' => $request->no_va,
@@ -59,7 +59,7 @@ class BillingController extends Controller
                 'nama_fakultas' => $request->nama_fakultas,
                 'kategori_ukt' => $request->kategori_ukt,
                 'jalur' => $request->jalur,
-                // 'detail' => $request->detail,
+                'detail' => $request->detail,
             ]);
 
             return new BillingResource(true, 'Berhasil Create Billing', $billing);
