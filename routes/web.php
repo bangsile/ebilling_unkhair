@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\BillingController;
+use App\Http\Controllers\DataImportController;
 use App\Http\Controllers\TahunPembayaranController;
 use App\Models\JenisBayar;
 use Illuminate\Support\Facades\Route;
@@ -20,6 +21,7 @@ Route::get('/tambah-billing',[BillingController::class, 'create_billing'] )->mid
 Route::post('/tambah-billing',[BillingController::class, 'store_billing'] )->middleware(['auth', 'role:admin'])->name('billing.store');
 
 Route::get('/billing-ukt', [BillingController::class, 'billing_ukt'])->middleware(['auth'])->name('billing.ukt');
+Route::get('/billing-umb', [BillingController::class, 'billing_umb'])->middleware(['auth'])->name('billing.umb');
 
 Route::get('/billing-dosen', [BillingController::class, 'billing_dosen'])->middleware(['auth'])->name('billing.dosen');
 Route::get('/billing-dosen/tambah', [BillingController::class, 'create_billing_dosen'])->middleware(['auth'])->name('billing.dosen.tambah');
@@ -39,3 +41,7 @@ Route::post('/tahun-pembayaran', [TahunPembayaranController::class, 'store'])
 Route::get('/tes', function () {
     return view('tes');
 });
+
+Route::get('/import', [DataImportController::class, 'importForm'])->name('data.import.form');
+Route::post('/import', [DataImportController::class, 'import'])->name('data.import');
+

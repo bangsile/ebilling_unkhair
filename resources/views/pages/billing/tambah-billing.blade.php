@@ -25,7 +25,6 @@
           <div class="card-body">
             <form action="{{ route('billing.store') }}" method="POST">
               @csrf
-
               {{-- Jenis Bayar --}}
               <div class="form-group">
                 <label>Jenis Bayar</label>

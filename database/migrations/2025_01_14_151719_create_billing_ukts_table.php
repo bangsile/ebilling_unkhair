@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('billing_ukts', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('trx_id')->unique();
-            $table->string('no_va')->unique();
+            $table->string('trx_id')->unique()->nullable();
+            $table->string('no_va')->unique()->nullable();
             $table->string('nama_bank');
             $table->integer('nominal');
-            $table->date('tgl_expire')->default(now()->addDays(2));
+            $table->datetime('tgl_expire')->nullable();
             $table->boolean('lunas')->default(false);
             $table->string('jenis_bayar');
             $table->string('nama');
@@ -28,7 +28,7 @@ return new class extends Migration
             $table->string('nama_prodi');
             $table->string('nama_fakultas');
             $table->string('kategori_ukt', 10);
-            $table->string('jalur', 20);
+            $table->string('jalur', 20)->nullable();
             $table->json('detail')->nullable();
             $table->timestamps();
         });

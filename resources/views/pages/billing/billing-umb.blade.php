@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
   </x-slot>
-  <x-page-header>Billing UKT</x-page-header>
+  <x-page-header>Billing UMB</x-page-header>
 
   <section class="content">
     <div class="container-fluid">
@@ -19,16 +19,13 @@
             </div> --}}
             <!-- /.card-header -->
             <div class="card-body">
-              <a href="{{ route('data.import') }}" class="btn btn-primary">
-                <i class="fas fa-plus"></i> Tambah
-              </a>
               <table id="semua_billing" class="table table-bordered table-hover">
                 <thead>
                   <tr>
                     <th>No</th>
-                    <th>NPM</th>
+                    <th>No. Peserta</th>
                     <th>Nama</th>
-                    <th>Angkatan</th>
+                    <th>Jalur</th>
                     <th>Kategori</th>
                     <th>Prodi</th>
                     <th>Nominal</th>
@@ -48,7 +45,7 @@
                       {{-- <td>{{ $billing->no_va }}</td> --}}
                       <td>{{ $billing->no_identitas }}</td>
                       <td>{{ $billing->nama }}</td>
-                      <td>{{ $billing->angkatan }}</td>
+                      <td>{{ $billing->jalur }}</td>
                       <td>{{ $billing->kategori_ukt }}</td>
                       <td>{{ $billing->nama_prodi }}</td>
                       <td>{{ formatRupiah($billing->nominal) }}</td>

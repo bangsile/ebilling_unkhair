@@ -43,7 +43,11 @@
                   active="{{ Route::is('billing.ukt') }}">
                   Billing UKT
                 </x-nav-link>
-              </ul>
+                <x-nav-link icon="far fa-circle nav-icon" href="{{ route('billing.umb') }}"
+                  active="{{ Route::is('billing.umb') }}">
+                  Billing UMB
+                </x-nav-link>
+
             </x-slot>
           </x-nav-link>
 

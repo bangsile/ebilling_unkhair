@@ -14,3 +14,25 @@ if (!function_exists('post_data')) {
     return $output; // mengembalikan hasil curl
   }
 }
+
+if (!function_exists('get_data')) {
+  function get_data($url)
+  {
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    $result = curl_exec($ch);
+    if (!empty(curl_error($ch))) {
+      $result = print_r(curl_error($ch) . ' - ' . $url);
+    }
+    curl_close($ch);
+    return $result;
+  }
+}
+
+if (!function_exists('str_curl')) {
+  function str_curl($url, $data)
+  {
+    return $url . '?' . http_build_query($data);
+  }
+}

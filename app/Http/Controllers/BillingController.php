@@ -6,6 +6,7 @@ use App\Models\Billing;
 use App\Models\BillingUkt;
 use App\Models\DosenHasBilling;
 use App\Models\JenisBayar;
+use App\Models\TahunPembayaran;
 use App\Services\EcollService;
 use Exception;
 use Illuminate\Http\Request;
@@ -86,8 +87,17 @@ class BillingController extends Controller
     }
     public function billing_ukt()
     {
-        $billings = BillingUkt::all();
+        $tahun_akademik = TahunPembayaran::first();
+        // dd($tahun_akademik->tahun_akademik);
+        $billings = BillingUkt::where('tahun_akademik', $tahun_akademik->tahun_akademik)->where('jenis_bayar', 'ukt')->get();
         return view('pages.billing.billing-ukt',["billings" => $billings]);
+    }
+    public function billing_umb()
+    {
+        $tahun_akademik = TahunPembayaran::first();
+        // dd($tahun_akademik->tahun_akademik);
+        $billings = BillingUkt::where('tahun_akademik', $tahun_akademik->tahun_akademik)->where('jenis_bayar', 'umb')->get();
+        return view('pages.billing.billing-umb',["billings" => $billings]);
     }
     public function billing_dosen()
     {
