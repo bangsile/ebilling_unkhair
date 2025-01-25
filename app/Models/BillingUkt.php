@@ -25,6 +25,7 @@ class BillingUkt extends Model
         'nama_prodi',
         'nama_fakultas',
         'kategori_ukt',
+        'jalur',
         'detail',
     ];
 

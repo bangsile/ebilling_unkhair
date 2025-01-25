@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('nominal');
             $table->date('tgl_expire')->default(now()->addDays(2));
             $table->boolean('lunas')->default(false);
-            $table->foreignId('jenis_bayar');
+            $table->string('jenis_bayar');
             $table->string('nama');
             $table->string('no_identitas');
             $table->smallInteger('angkatan');
