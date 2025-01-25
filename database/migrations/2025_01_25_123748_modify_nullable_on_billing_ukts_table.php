@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::table('billing_ukts', function (Blueprint $table) {
             $table->string('trx_id')->nullable()->change();
             $table->string('no_va')->nullable()->change();
+            $table->string('tgl_expire')->nullable()->change();
         });
     }
 
@@ -25,6 +26,7 @@ return new class extends Migration
         Schema::table('billing_ukts', function (Blueprint $table) {
             $table->string('trx_id')->nullable(false)->change();
             $table->string('no_va')->nullable(false)->change();
+            $table->string('tgl_expire')->nullable(false)->change();
         });
     }
 };
