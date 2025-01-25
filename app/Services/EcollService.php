@@ -6,9 +6,6 @@ use Exception;
 
 class EcollService
 {
-  public $api_key = env('API_KEY_ECOLL');
-  public $api_url = env('API_URL_ECOLL');
-
   // CREATE VA BTN
   public function createVaBTN($data)
   {
