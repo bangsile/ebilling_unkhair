@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('trx_id')->unique();
             $table->string('no_va')->unique();
             $table->string('nama_bank');
-            // $table->foreignId('jenis_bayar')->references('kode')->on('jenis_bayars')->cascadeOnDelete();
             $table->integer('nominal');
             $table->date('tgl_expire')->default(now()->addDays(2));
             $table->boolean('lunas')->default(false);
@@ -29,7 +28,7 @@ return new class extends Migration
             $table->string('nama_prodi');
             $table->string('nama_fakultas');
             $table->string('kategori_ukt');
-            $table->json('detail');
+            $table->json('detail')->nullable();
             $table->timestamps();
         });
     }

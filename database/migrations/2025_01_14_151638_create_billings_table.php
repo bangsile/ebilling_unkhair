@@ -22,7 +22,7 @@ return new class extends Migration
             $table->integer('nominal');
             $table->date('tgl_expire')->default(now()->addDays(2));
             $table->boolean('lunas')->default(false);
-            $table->json('detail');
+            $table->json('detail')->nullable();
             $table->timestamps();
         });
     }
