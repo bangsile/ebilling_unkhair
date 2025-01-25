@@ -40,12 +40,7 @@ class BillingController extends Controller
                     'message' => $validator->errors(),
                 ], 402);
             }
-
-            return response()->json([
-                'response' => true,
-                'message' => "OK",
-            ], 200);
-
+            
             $billing = BillingUkt::create([
                 'trx_id' => $request->trx_id,
                 'no_va' => $request->no_va,
@@ -69,8 +64,11 @@ class BillingController extends Controller
 
             return new BillingResource(true, 'Berhasil Create Billing', $billing);
         } catch (\Throwable $th) {
-
-            throw $th;
+            return response()->json([
+                'response' => false,
+                'message' => $th,
+            ], 402);
+            // throw $th;
         }
     }
 }
