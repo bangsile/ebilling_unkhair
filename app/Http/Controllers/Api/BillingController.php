@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BillingResource;
 use App\Models\BillingUkt;
+use App\Models\TahunPembayaran;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -40,7 +41,7 @@ class BillingController extends Controller
                     'message' => $validator->errors(),
                 ], 402);
             }
-
+            $tahun_pembayaran = TahunPembayaran::first();
             $billing = BillingUkt::create([
                 'trx_id' => $request->trx_id,
                 'no_va' => $request->no_va,
@@ -52,8 +53,7 @@ class BillingController extends Controller
                 'nama' => $request->nama,
                 'no_identitas' => $request->no_identitas,
                 'angkatan' => $request->angkatan,
-                // 'tahun_akademik' => $request->tahun_akademik,
-                'tahun_akademik' => '20242',
+                'tahun_akademik' => $tahun_pembayaran->tahun_akademik,
                 'kode_prodi' => $request->kode_prodi,
                 'nama_prodi' => $request->nama_prodi,
                 'nama_fakultas' => $request->nama_fakultas,
