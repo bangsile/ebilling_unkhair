@@ -16,10 +16,13 @@
       <div class="row">
         <div class="col-12">
           <div class="card">
-            <div class="card-body">
+            <div class="card-header">
               <a href="{{ route('billing.tambah') }}" class="btn btn-primary">
                 <i class="fas fa-plus"></i> Tambah
               </a>
+            </div>
+            <div class="card-body">
+              
               <table id="semua_billing" class="table table-bordered table-hover">
                 <thead>
                   <tr>
@@ -107,7 +110,7 @@
       $(function() {
         $('#semua_billing').DataTable({
           "paging": true,
-          "lengthChange": false,
+          "lengthChange": true,
           "searching": true,
           "ordering": true,
           "info": true,

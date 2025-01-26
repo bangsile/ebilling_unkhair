@@ -19,10 +19,10 @@ class BillingController extends Controller
     {
         $this->ecollService = $ecollService;
     }
-    public function semua_billing()
+    public function billing_pembayaran()
     {
         $billings = Billing::all();
-        return view('pages.billing.semua-billing',["billings" => $billings]);
+        return view('pages.billing.billing-pembayaran',["billings" => $billings]);
     }
     public function create_billing()
     {

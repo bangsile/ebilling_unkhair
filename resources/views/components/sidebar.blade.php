@@ -30,13 +30,13 @@
         </x-nav-link>
 
         @if (Auth::user()->hasRole('admin'))
-          <x-nav-link icon="nav-icon fas fa-money-bill-wave" active="{{ Route::is('billing', 'billing.*') }}">
+          <x-nav-link icon="nav-icon fas fa-money-bill-wave" active="{{ Route::is('billing.*') }}">
             Billing
             <i class="right fas fa-angle-left"></i>
             <x-slot name="navtree">
               <ul class="nav nav-treeview">
-                <x-nav-link icon="far fa-circle nav-icon" href="{{ route('billing') }}"
-                  active="{{ Route::is('billing') }}">
+                <x-nav-link icon="far fa-circle nav-icon" href="{{ route('billing.pembayaran') }}"
+                  active="{{ Route::is('billing.pembayaran') }}">
                   Billing Pembayaran
                 </x-nav-link>
                 <x-nav-link icon="far fa-circle nav-icon" href="{{ route('billing.ukt') }}"

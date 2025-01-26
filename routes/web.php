@@ -15,7 +15,7 @@ Route::get('/dashboard', function () {
     return view('pages.dashboard');
 })->middleware(['auth'])->name('dashboard');
 
-Route::get('/semua-billing', [BillingController::class, 'semua_billing'])->middleware(['auth', 'role:admin'])->name('billing');
+Route::get('/billing-pembayaran', [BillingController::class, 'billing_pembayaran'])->middleware(['auth', 'role:admin'])->name('billing.pembayaran');
 
 Route::get('/tambah-billing',[BillingController::class, 'create_billing'] )->middleware(['auth', 'role:admin'])->name('billing.tambah');
 Route::post('/tambah-billing',[BillingController::class, 'store_billing'] )->middleware(['auth', 'role:admin'])->name('billing.store');
@@ -42,6 +42,6 @@ Route::get('/tes', function () {
     return view('tes');
 });
 
-Route::get('/import', [DataImportController::class, 'importForm'])->middleware(['auth'])->name('data.import.form');
-Route::post('/import', [DataImportController::class, 'import'])->name('data.import');
+Route::get('/import-ukt', [DataImportController::class, 'import_data_ukt_form'])->middleware(['auth'])->name('ukt.import.form');
+Route::post('/import-ukt', [DataImportController::class, 'import_data_ukt'])->middleware(['auth'])->name('ukt.import');
 
