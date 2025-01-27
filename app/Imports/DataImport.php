@@ -25,17 +25,10 @@ class DataImport implements ToModel,  WithHeadingRow, WithValidation, WithLimit
         }
         // Cek apakah data sudah ada berdasarkan email
         $existingData = BillingUkt::where('no_identitas', $row['npm'])->first();
-        // $data = $this->get_mahasiswa($row['no_identitas']);
-        // dd($data);
         $token = env('API_TOKEN_SIMAK', 'default_token');
         $response_mahasiswa = json_decode(get_data(str_curl('https://simak.unkhair.ac.id/apiv2/mahasiswa', ['token' => $token, 'nim' => $row['npm']])), TRUE);
-        // $nama = str_replace(array("'", "'", "’", "â", "€", "™"), '', addslashes($response_mahasiswa['data']['mahasiswa']['nama_mahasiswa']));
-        // preg_replace('/[^a-zA-Z0-9\s]/', '', $input);
         $decodedName = html_entity_decode($response_mahasiswa['data']['mahasiswa']['nama_mahasiswa']);
         $nama = preg_replace('/[^a-zA-Z0-9\s]/', '', $decodedName);
-        // dd($response_mahasiswa);
-        // $data = $response_mahasiswa['data'];
-        // dd($data['mahasiswa']['nama_mahasiswa']);
 
         if ($existingData) {
             // Jika data sudah ada, lakukan update

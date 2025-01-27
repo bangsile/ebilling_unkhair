@@ -13,15 +13,12 @@
       <div class="row">
         <div class="col-12">
           <div class="card">
-
-            {{-- <div class="card-header">
-              <h3 class="card-title">DataTable with minimal features & hover style</h3>
-            </div> --}}
-            <!-- /.card-header -->
-            <div class="card-body">
-              <a href="{{ route('data.import') }}" class="btn btn-primary">
+            <div class="card-header">
+              <a href="{{ route('ukt.import.form') }}" class="btn btn-primary">
                 Upload Data UKT
               </a>
+            </div>
+            <div class="card-body">
               <table id="semua_billing" class="table table-bordered table-hover">
                 <thead>
                   <tr>
@@ -34,7 +31,6 @@
                     <th>Nominal</th>
                     <th>Tgl. Expire</th>
                     <th>Status</th>
-                    <th>Created At</th>
                     <th>Aksi</th>
                   </tr>
                 </thead>
@@ -66,7 +62,6 @@
                           @endif
                         @endif
                       </td>
-                      <td style="display: none;">{{ $billing->created_at }}</td> <!-- Kolom tersembunyi -->
                       <td></td>
                     </tr>
                   @endforeach
@@ -104,28 +99,14 @@
 
     <script>
       $(function() {
-        $("#example1").DataTable({
-          "responsive": true,
-          "lengthChange": false,
-          "autoWidth": false,
-          "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
         $('#semua_billing').DataTable({
           "paging": true,
-          "lengthChange": false,
+          "lengthChange": true,
           "searching": true,
           "ordering": true,
           "info": true,
           "autoWidth": false,
           "responsive": true,
-          // "order": [
-          //   [9, "desc"]
-          // ], // Urut berdasarkan kolom ke-8
-          "columnDefs": [{
-              "targets": [9],
-              "visible": false
-            } // Sembunyikan kolom created_at
-          ],
         });
       });
     </script>

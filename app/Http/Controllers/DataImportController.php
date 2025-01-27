@@ -2,32 +2,45 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\BillingUktImport;
 use App\Imports\DataImport;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
 class DataImportController extends Controller
 {
-    public function importForm()
+    public function import_data_ukt_form()
     {
-        return view('import-form');
+        return view('pages.billing.import-ukt');
     }
 
-    public function import(Request $request)
+    public function import_data_ukt(Request $request)
     {
         $request->validate([
-            'file' => 'required|mimes:xlsx,xls,csv|max:2048', // Maksimal ukuran file 2MB
+            'file' => 'required|mimes:xlsx,xls,csv|max:2048',
         ]);
-        $filePath = $request->file('file')->getRealPath();
-        // dd($request);
+
+        if (!$request->hasFile('file')) {
+            return back()->withErrors(['file' => 'File tidak ditemukan.']);
+        }
+
+        $file = $request->file('file');
+
         try {
-            Excel::import(new DataImport, $request->file('file'));
+            $import = new BillingUktImport();
+            Excel::import($import, $file);
 
-            return redirect()->back()->with('success', 'Data berhasil diimpor!');
-        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
-            $failures = $e->failures();
+            $successCount = $import->successCount;
+            $failedRows   = $import->failedRows;
+            // dd($successCount, $failedRows);
 
-            return redirect()->back()->withErrors($failures);
+            return redirect()->back()->with([
+                'info'     => "Proses import selesai!",
+                'successCount' => $successCount,
+                'failedRows'  => $failedRows,
+            ]);
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Gagal Mengimport File']);
         }
     }
 }

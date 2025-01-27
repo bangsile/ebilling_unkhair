@@ -21,6 +21,9 @@ Route::get('/tambah-billing',[BillingController::class, 'create_billing'] )->mid
 Route::post('/tambah-billing',[BillingController::class, 'store_billing'] )->middleware(['auth', 'role:admin'])->name('billing.store');
 
 Route::get('/billing-ukt', [BillingController::class, 'billing_ukt'])->middleware(['auth'])->name('billing.ukt');
+Route::get('/billing-ukt/import-data', [DataImportController::class, 'import_data_ukt_form'])->middleware(['auth'])->name('ukt.import.form');
+Route::post('/billing-ukt/import-data', [DataImportController::class, 'import_data_ukt'])->middleware(['auth'])->name('ukt.import');
+
 Route::get('/billing-umb', [BillingController::class, 'billing_umb'])->middleware(['auth'])->name('billing.umb');
 
 Route::get('/billing-dosen', [BillingController::class, 'billing_dosen'])->middleware(['auth'])->name('billing.dosen');
@@ -42,6 +45,4 @@ Route::get('/tes', function () {
     return view('tes');
 });
 
-Route::get('/import-ukt', [DataImportController::class, 'import_data_ukt_form'])->middleware(['auth'])->name('ukt.import.form');
-Route::post('/import-ukt', [DataImportController::class, 'import_data_ukt'])->middleware(['auth'])->name('ukt.import');
 
