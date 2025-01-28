@@ -3,8 +3,8 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\BillingController;
 use App\Http\Controllers\DataImportController;
+use App\Http\Controllers\JenisBayarController;
 use App\Http\Controllers\TahunPembayaranController;
-use App\Models\JenisBayar;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [AuthController::class, 'index'])->name('login');
@@ -30,10 +30,9 @@ Route::get('/billing-dosen', [BillingController::class, 'billing_dosen'])->middl
 Route::get('/billing-dosen/tambah', [BillingController::class, 'create_billing_dosen'])->middleware(['auth'])->name('billing.dosen.tambah');
 Route::post('/billing-dosen/tambah', [BillingController::class, 'store_billing_dosen'])->middleware(['auth'])->name('billing.dosen.store');
 
-Route::get('/jenis-bayar', function () {
-    $jenis_bayar = JenisBayar::all();
-    return view('pages.jenis-bayar.index', ['jenis_bayar' => $jenis_bayar]);
-})->middleware(['auth'])->name('jenis-bayar');
+Route::get('/jenis-bayar', [JenisBayarController::class, 'index'])->middleware(['auth'])->name('jenis-bayar');
+Route::get('/jenis-bayar/tambah', [JenisBayarController::class, 'create'])->middleware(['auth'])->name('jenis-bayar.tambah');
+Route::post('/jenis-bayar/tambah', [JenisBayarController::class, 'store'])->middleware(['auth'])->name('jenis-bayar.store');
 
 Route::get('/tahun-pembayaran', [TahunPembayaranController::class, 'index'])
     ->middleware(['auth'])->name('tahun-pembayaran');

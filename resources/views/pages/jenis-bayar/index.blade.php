@@ -5,6 +5,8 @@
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
+    <!-- Toastr CSS -->
+    <link rel="stylesheet" href="{{ asset('adminlte/plugins/toastr/toastr.min.css') }}">
   </x-slot>
   <x-page-header>Jenis Bayar</x-page-header>
 
@@ -13,14 +15,13 @@
       <div class="row">
         <div class="col-12">
           <div class="card">
-            {{-- <div class="card-header">
-                <h3 class="card-title">DataTable with minimal features & hover style</h3>
-              </div> --}}
-            <!-- /.card-header -->        
+            <div class="card-header">
+              <a href="{{ route('jenis-bayar.tambah') }}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Tambah
+              </a>
+            </div>
+            <!-- /.card-header -->
             <div class="card-body">
-                <a href="/" class="btn btn-primary">
-                    <i class="fas fa-plus"></i> Tambah
-                  </a>
               <table id="semua_billing" class="table table-bordered table-hover">
                 <thead>
                   <tr>
@@ -69,30 +70,24 @@
     <script src="{{ asset('adminlte/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
     <script src="{{ asset('adminlte/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
 
+    <!-- Toastr JS -->
+    <script src="{{ asset('adminlte/plugins/toastr/toastr.min.js') }}"></script>
+
+    @if (session('success'))
+      <script>
+        toastr.success('{{ session('success') }}', 'Berhasil');
+      </script>
+    @endif
     <script>
       $(function() {
-        $("#example1").DataTable({
-          "responsive": true,
-          "lengthChange": false,
-          "autoWidth": false,
-          "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
         $('#semua_billing').DataTable({
           "paging": true,
           "lengthChange": false,
-          "searching": true,
+          "searching": false,
           "ordering": true,
           "info": true,
           "autoWidth": false,
           "responsive": true,
-          "order": [
-            [8, "asc"]
-          ], // Urut berdasarkan kolom ke-8
-          "columnDefs": [{
-              "targets": [8],
-              "visible": false
-            } // Sembunyikan kolom created_at
-          ],
         });
       });
     </script>
