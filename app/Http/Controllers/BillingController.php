@@ -22,7 +22,7 @@ class BillingController extends Controller
     public function billing_pembayaran()
     {
         $billings = Billing::all();
-        return view('pages.billing.billing-pembayaran',["billings" => $billings]);
+        return view('pages.billing.billing-pembayaran', ["billings" => $billings]);
     }
     public function create_billing()
     {
@@ -50,21 +50,20 @@ class BillingController extends Controller
 
         try {
             $response = [];
-            if($jenis_bayar->bank == 'btn') {
-                $response = $this->ecollService->createVaBTN($data);
-                if (!$response['res']) {
-                    throw new Exception("Respon failed");
-                }
-            } elseif ($jenis_bayar->bank == 'bni') {
-                $response = $this->ecollService->createVaBNI($data);
-                if (!$response['res']) {
-                    throw new Exception("Respon failed");
-                }
+            switch ($jenis_bayar->bank) {
+                case 'btn':
+                    $response = $this->ecollService->createVaBTN($data);
+                    break;
+                case 'bni':
+                    $response = $this->ecollService->createVaBNI($data);
+                    break;
+                default:
+                    throw new Exception("Respon failed salah bank");
             }
-            else {
-                throw new Exception("Respon failed salah bank");
+
+            if (!$response['res']) {
+                throw new Exception("Respon failed");
             }
-            // dd($response);
 
             $result = Billing::create([
                 'trx_id' => $response['data']['trx_id'],
@@ -79,7 +78,7 @@ class BillingController extends Controller
         } catch (\Throwable $e) {
             dd($e->getMessage());
             //throw $th;
-            // return redirect()->route('billing.dosen')->withErrors(['billing' => 'Gagal Membuat Billing']);
+            // return redirect()->route('billing')->withErrors(['billing' => 'Gagal Membuat Billing']);
             return redirect()->route('billing')->withErrors(['billing' => $e->getMessage()]);
         }
 
@@ -87,17 +86,15 @@ class BillingController extends Controller
     }
     public function billing_ukt()
     {
-        $tahun_akademik = TahunPembayaran::first();
-        // dd($tahun_akademik->tahun_akademik);
-        $billings = BillingUkt::where('tahun_akademik', $tahun_akademik->tahun_akademik)->where('jenis_bayar', 'ukt')->get();
-        return view('pages.billing.billing-ukt',["billings" => $billings]);
+        $tahun_pembayaran = TahunPembayaran::first();
+        $billings = BillingUkt::where('tahun_akademik', $tahun_pembayaran?->tahun_akademik)->where('jenis_bayar', 'ukt')->get();
+        return view('pages.billing.billing-ukt', ["billings" => $billings]);
     }
     public function billing_umb()
     {
         $tahun_akademik = TahunPembayaran::first();
-        // dd($tahun_akademik->tahun_akademik);
-        $billings = BillingUkt::where('tahun_akademik', $tahun_akademik->tahun_akademik)->where('jenis_bayar', 'umb')->get();
-        return view('pages.billing.billing-umb',["billings" => $billings]);
+        $billings = BillingUkt::where('tahun_akademik', $tahun_akademik?->tahun_akademik)->where('jenis_bayar', 'umb')->get();
+        return view('pages.billing.billing-umb', ["billings" => $billings]);
     }
     public function billing_dosen()
     {
@@ -126,28 +123,25 @@ class BillingController extends Controller
             "detail" => [
                 "nama_kegiatan" => $request->nama_kegiatan,
                 "tgl_kegiatan" => $request->tgl_kegiatan
-            ]   
+            ]
         ];
-
-        // dd($data);
 
         try {
             $response = [];
-            if($jenis_bayar->bank == 'btn') {
-                $response = $this->ecollService->createVaBTN($data);
-                if (!$response['res']) {
-                    throw new Exception("Respon failed");
-                }
-            } elseif ($jenis_bayar->bank == 'bni') {
-                $response = $this->ecollService->createVaBNI($data);
-                if (!$response['res']) {
-                    throw new Exception("Respon failed");
-                }
+            switch ($jenis_bayar->bank) {
+                case 'btn':
+                    $response = $this->ecollService->createVaBTN($data);
+                    break;
+                case 'bni':
+                    $response = $this->ecollService->createVaBNI($data);
+                    break;
+                default:
+                    throw new Exception("Respon failed salah bank");
             }
-            else {
-                throw new Exception("Respon failed salah bank");
+
+            if (!$response['res']) {
+                throw new Exception("Respon failed");
             }
-            // dd($response);
 
             $result = Billing::create([
                 'trx_id' => $response['data']['trx_id'],
@@ -164,10 +158,10 @@ class BillingController extends Controller
                 'user_dosen_id' => Auth::user()->id,
             ]);
         } catch (\Throwable $e) {
-            dd($e->getMessage());
+            // dd($e->getMessage());
             //throw $th;
-            // return redirect()->route('billing.dosen')->withErrors(['billing' => 'Gagal Membuat Billing']);
-            return redirect()->route('billing.dosen')->withErrors(['billing' => $e->getMessage()]);
+            return redirect()->route('billing.dosen')->withErrors(['billing' => 'Gagal Membuat Billing']);
+            // return redirect()->route('billing.dosen')->withErrors(['billing' => $e->getMessage()]);
         }
 
         return redirect()->route('billing.dosen')->with('success', 'Berhasil Membuat Billing');
