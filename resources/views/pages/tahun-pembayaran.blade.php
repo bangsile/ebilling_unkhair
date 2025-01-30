@@ -1,8 +1,5 @@
 <x-app-layout>
   <x-slot name="head">
-    <!-- daterange picker -->
-    <link rel="stylesheet" href="{{ asset('adminlte/plugins/daterangepicker/daterangepicker.css') }}">
-
     <!-- Toastr CSS -->
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/toastr/toastr.min.css') }}">
 
@@ -39,23 +36,6 @@
                   value="{{ $tahun_pembayaran->akhir_pembayaran ? date('Y-m-d', strtotime($tahun_pembayaran->akhir_pembayaran)) : '' }}">
               </div>
 
-              {{-- <div class="form-group">
-                <label>Pilih Rentang Tanggal</label>
-                <div class="input-group">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">
-                      <i class="far fa-calendar-alt"></i>
-                    </span>
-                  </div>
-                  <input type="text" class="form-control float-right daterange" placeholder="Pilih Rentang Tanggal"
-                    value="{{ $tahunPembayaran->awal_pembayaran ?? '' }} - {{ $tahunPembayaran->akhir_pembayaran ?? '' }}">
-                  <input type="hidden" name="awal_pembayaran" id="start_date"
-                    value="{{ $tahunPembayaran->awal_pembayaran ?? '' }}">
-                  <input type="hidden" name="akhir_pembayaran" id="end_date"
-                    value="{{ $tahunPembayaran->akhir_pembayaran ?? '' }}">
-                </div>
-              </div> --}}
-
               <button type="submit" class="btn btn-primary float-right">Simpan</button>
             </form>
           </div>
@@ -69,37 +49,9 @@
   <x-slot name="script">
     <!-- Moment.js -->
     <script src="{{ asset('adminlte/plugins/moment/moment.min.js') }}"></script>
-    <!-- Date Range Picker -->
-    <script src="{{ asset('adminlte/plugins/daterangepicker/daterangepicker.js') }}"></script>
     <!-- Toastr JS -->
     <script src="{{ asset('adminlte/plugins/toastr/toastr.min.js') }}"></script>
 
-
-    <script>
-      $(function() {
-        $('.daterange').daterangepicker({
-          autoUpdateInput: false,
-          locale: {
-            format: 'YYYY-MM-DD',
-            cancelLabel: 'Clear'
-          }
-        });
-
-        // Set nilai pada input hidden ketika user memilih tanggal
-        $('.daterange').on('apply.daterangepicker', function(ev, picker) {
-          $('#start_date').val(picker.startDate.format('YYYY-MM-DD'));
-          $('#end_date').val(picker.endDate.format('YYYY-MM-DD'));
-          $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
-        });
-
-        // Kosongkan jika pengguna membatalkan pilihan
-        $('.daterange').on('cancel.daterangepicker', function(ev, picker) {
-          $('#start_date').val('');
-          $('#end_date').val('');
-          $(this).val('');
-        });
-      });
-    </script>
 
     @if (session('success'))
       <script>
