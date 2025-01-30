@@ -13,6 +13,7 @@ Route::get('/user', function (Request $request) {
 Route::post('/billing-ukt', [BillingController::class, 'store_billing_ukt']);
 Route::post('/history-bank', [HistoryBankController::class, 'auto_lunas']);
 Route::post('/billing-ukt/detail', [BillingController::class, 'get_detail_ukt'])->withoutMiddleware(['throttle:api']);
+Route::patch('/billing-ukt/update', [BillingController::class, 'update_billing_ukt'])->withoutMiddleware(['throttle:api']);
 
 Route::get('/tahun-pembayaran', function (Request $request) {
     $apiKey = $request->header('X-API-KEY');
