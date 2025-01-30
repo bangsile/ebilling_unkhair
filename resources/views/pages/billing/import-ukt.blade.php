@@ -49,7 +49,7 @@
         </div>
       </div>
     </div>
-    @if (session('successCount') || session('failedCount'))
+    @if (session('successCount') || session('failedRows'))
       @php
         $successCount = session('successCount');
         $failedRows = session('failedRows');
