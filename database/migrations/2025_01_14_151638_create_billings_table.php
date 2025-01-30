@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('jenis_bayar');
             $table->foreign('jenis_bayar')->references('kode')->on('jenis_bayars')->cascadeOnDelete();
             $table->integer('nominal');
-            $table->date('tgl_expire')->default(now()->addDays(2));
+            $table->datetime('tgl_expire')->nullable();
             $table->boolean('lunas')->default(false);
             $table->json('detail')->nullable();
             $table->timestamps();

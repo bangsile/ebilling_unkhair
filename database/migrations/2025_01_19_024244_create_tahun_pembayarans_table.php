@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('tahun_pembayarans', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('tahun_akademik', 5)->nullable();
-            $table->date('awal_pembayaran')->nullable();
-            $table->date('akhir_pembayaran')->nullable();
+            $table->datetime('awal_pembayaran')->nullable();
+            $table->datetime('akhir_pembayaran')->nullable();
             $table->timestamps();
         });
     }
