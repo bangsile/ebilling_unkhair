@@ -118,8 +118,8 @@ class BillingController extends Controller
             $validator = Validator::make($request->all(), [
                 'npm' => 'required',
                 'tahun_akademik' => 'required|min:5|max:5',
-                'no_va' => 'required|string|unique:billing_ukts,no_va',
-                'trx_id' => 'required|string|unique:billing_ukts,trx_id',
+                'no_va' => 'required',
+                'trx_id' => 'required',
                 'nominal' => 'required|numeric',
                 'tgl_expire' => 'required',
             ], [
@@ -128,9 +128,7 @@ class BillingController extends Controller
                 'tahun_akademik.min' => 'Tahun akademik harus terdiri dari 5 karakter',
                 'tahun_akademik.max' => 'Tahun akademik harus terdiri dari 5 karakter',
                 'no_va.required' => 'No VA wajib diisi',
-                'no_va.unique' => 'No VA Sudah Terdaftar',
                 'trx_id.required' => 'Trx ID wajib diisi',
-                'trx_id.unique' => 'Trx ID Sudah Terdaftar',
                 'nominal.required' => 'Nominal wajib diisi',
                 'nominal.numeric' => 'Nominal harus berupa angka',
                 'tgl_expire.required' => 'Tanggal Expire wajib diisi',
