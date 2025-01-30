@@ -10,11 +10,9 @@
 
   <x-page-header>Tahun Pembayaran</x-page-header>
 
-  {{-- @if ($errors->any())
-      @php
-          dd($errors->first());
-      @endphp
-  @endif --}}
+  @php
+    // dd($tahun_pembayaran);
+  @endphp
   <section class="content">
     <div class="row">
       <div class="col-md-6">
@@ -28,17 +26,17 @@
               <div class="form-group">
                 <label>Tahun Akademik</label>
                 <input type="text" class="form-control" name="tahun_akademik" placeholder="Masukkan Tahun Akademik"
-                  value="{{ $tahunPembayaran->tahun_akademik ?? '' }}">
+                  value="{{ $tahun_pembayaran->tahun_akademik ?? '' }}">
               </div>
               <div class="form-group">
                 <label>Awal Pembayaran</label>
                 <input type="date" class="form-control" name="awal_pembayaran" placeholder=""
-                  value="{{ $tahunPembayaran->awal_pembayaran ?? '' }}">
+                  value="{{ $tahun_pembayaran->awal_pembayaran ? date('Y-m-d', strtotime($tahun_pembayaran->awal_pembayaran)) : '' }}">
               </div>
               <div class="form-group">
                 <label>Akhir Pembayaran</label>
                 <input type="date" class="form-control" name="akhir_pembayaran" placeholder=""
-                  value="{{ $tahunPembayaran->akhir_pembayaran ?? '' }}">
+                  value="{{ $tahun_pembayaran->akhir_pembayaran ? date('Y-m-d', strtotime($tahun_pembayaran->akhir_pembayaran)) : '' }}">
               </div>
 
               {{-- <div class="form-group">

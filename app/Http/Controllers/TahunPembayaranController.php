@@ -10,8 +10,8 @@ class TahunPembayaranController extends Controller
     public function index()
     {
         // Code to retrieve and return a list of resources, e.g.:
-        $tahunPembayaran = TahunPembayaran::first();
-        return view('pages.tahun-pembayaran', compact('tahunPembayaran'));
+        $tahun_pembayaran = TahunPembayaran::first();
+        return view('pages.tahun-pembayaran', compact('tahun_pembayaran'));
     }
 
     public function store(Request $request)
