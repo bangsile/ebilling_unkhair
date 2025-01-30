@@ -11,6 +11,40 @@ use Illuminate\Support\Facades\Validator;
 
 class BillingController extends Controller
 {
+    public function get_detail_ukt(Request $request)
+    {
+        $apiKey = $request->header('X-API-KEY');
+
+        if (!$apiKey || $apiKey !== 'secret') {
+            return response()->json([
+                'response' => false,
+                'message' => 'Unauthorized: Invalid or missing API key.',
+            ], 401);
+        }
+        $validator = Validator::make($request->all(), [
+            'npm' => 'required',
+            'tahun_akademik' => 'required|min:5|max:5',
+        ], [
+            'npm.required' => 'NPM wajib diisi',
+            'tahun_akademik.required' => 'Tahun akademik wajib diisi',
+            'tahun_akademik.min' => 'Tahun akademik harus terdiri dari 5 karakter',
+            'tahun_akademik.max' => 'Tahun akademik harus terdiri dari 5 karakter',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'response' => false,
+                'message' => $validator->errors(),
+            ], 402);
+        }
+
+        $billing = BillingUkt::where('no_identitas', $request->npm)->where('tahun_akademik', $request->tahun_akademik)->first();
+        if (!$billing) {
+            return new BillingResource(false, 'Billing Tidak Ditemukan', null);
+        }
+        return new BillingResource(true, 'Billing Ditemukan', $billing);
+
+    }
     public function store_billing_ukt(Request $request)
     {
         $apiKey = $request->header('X-API-KEY');
