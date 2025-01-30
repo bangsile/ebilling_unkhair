@@ -65,7 +65,7 @@ class BillingController extends Controller
                 throw new Exception("Respon failed");
             }
 
-            $result = Billing::create([
+            Billing::create([
                 'trx_id' => $response['data']['trx_id'],
                 'no_va' => $response['data']['no_va'],
                 'nama_bank' => strtoupper($jenis_bayar->bank),
@@ -76,13 +76,13 @@ class BillingController extends Controller
                 'detail' => isset($data['detail']) ? json_encode($data['detail']) : json_encode([])
             ]);
         } catch (\Throwable $e) {
-            dd($e->getMessage());
+            // dd($e->getMessage());
             //throw $th;
-            // return redirect()->route('billing')->withErrors(['billing' => 'Gagal Membuat Billing']);
-            return redirect()->route('billing')->withErrors(['billing' => $e->getMessage()]);
+            return redirect()->route('billing')->withErrors(['billing' => 'Gagal Membuat Billing']);
+            // return redirect()->route('billing.pembayaran')->withErrors(['billing' => $e->getMessage()]);
         }
 
-        return redirect()->route('billing')->with('success', 'Berhasil Membuat Billing');
+        return redirect()->route('billing.pembayaran')->with('success', 'Berhasil Membuat Billing');
     }
     public function billing_ukt()
     {
