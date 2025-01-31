@@ -62,23 +62,35 @@
                         @endif
                       </td>
                       <td>
-                        <a href="{{ route('billing.ukt.edit', $billing->id) }}" class="btn btn-sm btn-warning"><i
-                            class="fas fa-edit"></i></a>
-                        <a href="{{ '/' }}" class="btn btn-sm btn-info"><i class="fas fa-print"></i></a>
-                        @if (!$billing->trx_id || !$billing->no_va)
+                        @if ($billing->lunas)
+                          <button type="button" class="btn btn-sm btn-warning disabled">
+                            <i class="fas fa-edit"></i>
+                          </button>
+                          <button type="button" class="btn btn-sm btn-info disabled">
+                            <i class="fas fa-print"></i>
+                          </button>
                           <button type="button" class="btn btn-sm btn-success disabled">
                             Set Lunas
                           </button>
                         @else
-                          <form id="delete-form-{{ $billing->id }}" action="{{ route('billing.ukt.lunas') }}"
-                            method="POST" style="display: inline;">
-                            @csrf
-                            <input type="hidden" name="id" value="{{ $billing->id }}">
-                            <button type="button" class="btn btn-sm btn-success"
-                              onclick="confirmDelete('{{ $billing->id }}')">
+                          <a href="{{ route('billing.ukt.edit', $billing->id) }}" class="btn btn-sm btn-warning"><i
+                              class="fas fa-edit"></i></a>
+                          <a href="{{ '/' }}" class="btn btn-sm btn-info"><i class="fas fa-print"></i></a>
+                          @if (!$billing->trx_id || !$billing->no_va)
+                            <button type="button" class="btn btn-sm btn-success disabled">
                               Set Lunas
                             </button>
-                          </form>
+                          @else
+                            <form id="delete-form-{{ $billing->id }}" action="{{ route('billing.ukt.lunas') }}"
+                              method="POST" style="display: inline;">
+                              @csrf
+                              <input type="hidden" name="id" value="{{ $billing->id }}">
+                              <button type="button" class="btn btn-sm btn-success"
+                                onclick="confirmDelete('{{ $billing->id }}')">
+                                Set Lunas
+                              </button>
+                            </form>
+                          @endif
                         @endif
                       </td>
                     </tr>
