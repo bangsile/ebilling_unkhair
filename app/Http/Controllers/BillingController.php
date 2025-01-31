@@ -103,6 +103,13 @@ class BillingController extends Controller
         $id = $request->route('id');
         $billing = BillingUkt::find($id);
 
+        if(!$billing->trx_id || !$billing->no_va){
+            $billing->update([
+                'nominal' => $request->nominal
+            ]);
+            return redirect()->route('billing.ukt')->with('success', 'Berhasil Update Billing');
+        }
+
         $data = [
             'trx_id' => $billing->trx_id,
             'no_va' => $billing->no_va,
@@ -112,8 +119,24 @@ class BillingController extends Controller
         ];
         // dd($data);
         $response = $this->ecollService->updateVaBNI($data);
-        dd($response);
+        if(!$response['response']){
+            return back()->withErrors(['billing' => $response['message']]);
+        }
+        // dd($response);
+        $billing->update([
+            'nominal' => $request->nominal
+        ]);
+        return redirect()->route('billing.ukt')->with('success', 'Berhasil Update Billing');
     }
+    public function set_lunas_billing(Request $request)
+    {
+        $id = $request->route('id');
+        $billing = BillingUkt::find($id);
+        $billing->update([
+            'lunas' => 1
+        ]);
+        return redirect()->route('billing.ukt')->with('success', 'Berhasil Update Billing Lunas');
+    } 
     public function billing_umb()
     {
         $tahun_akademik = TahunPembayaran::first();

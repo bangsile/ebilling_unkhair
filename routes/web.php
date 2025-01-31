@@ -23,6 +23,7 @@ Route::post('/tambah-billing',[BillingController::class, 'store_billing'] )->mid
 Route::get('/billing-ukt', [BillingController::class, 'billing_ukt'])->middleware(['auth'])->name('billing.ukt');
 Route::get('/billing-ukt/edit/{id}', [BillingController::class, 'edit_billing_ukt'])->middleware(['auth'])->name('billing.ukt.edit');
 Route::patch('/billing-ukt/edit/{id}', [BillingController::class, 'update_billing_ukt'])->middleware(['auth'])->name('billing.ukt.update');
+Route::patch('/billing-ukt/lunas/{id}', [BillingController::class, 'set_lunas_billing'])->middleware(['auth'])->name('billing.ukt.lunas');
 Route::get('/billing-ukt/import-data', [DataImportController::class, 'import_data_ukt_form'])->middleware(['auth'])->name('ukt.import.form');
 Route::post('/billing-ukt/import-data', [DataImportController::class, 'import_data_ukt'])->middleware(['auth'])->name('ukt.import');
 

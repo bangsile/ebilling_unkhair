@@ -1,6 +1,7 @@
 <x-app-layout>
   <x-slot name="head">
-
+    <!-- Toastr CSS -->
+    <link rel="stylesheet" href="{{ asset('adminlte/plugins/toastr/toastr.min.css') }}">
   </x-slot>
 
   <x-page-header>Edit Billing</x-page-header>
@@ -16,7 +17,8 @@
               {{-- Nominal --}}
               <div class="form-group">
                 <label>Nominal</label>
-                <input type="number" class="form-control" name="nominal" placeholder="0" value="{{ $billing->nominal }}">
+                <input type="number" class="form-control" name="nominal" placeholder="0"
+                  value="{{ $billing->nominal }}">
               </div>
 
               <button type="submit" class="btn btn-primary float-right">Update</button>
@@ -34,13 +36,14 @@
     <script src="{{ asset('adminlte/plugins/select2/js/select2.full.min.js') }}"></script>
     <!-- Moment.js -->
     <script src="{{ asset('adminlte/plugins/moment/moment.min.js') }}"></script>
+    <!-- Toastr JS -->
+    <script src="{{ asset('adminlte/plugins/toastr/toastr.min.js') }}"></script>
 
-    @if (session('success'))
-      <script>
-        toastr.success('{{ session('success') }}', 'Berhasil');
-      </script>
-    @endif
+    
     @if ($errors->any())
+      {{-- @php
+        dd($errors->first());
+    @endphp --}}
       @foreach ($errors->all() as $error)
         <script>
           toastr.error('{{ $error }}', 'Gagal');

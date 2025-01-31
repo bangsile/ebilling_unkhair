@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
     <!-- SweetAlert2 -->
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
-    {{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
-
+    <!-- Toastr CSS -->
+    <link rel="stylesheet" href="{{ asset('adminlte/plugins/toastr/toastr.min.css') }}">
   </x-slot>
   <x-page-header>Billing UKT</x-page-header>
 
@@ -62,13 +62,14 @@
                         @endif
                       </td>
                       <td>
-                        <a href="{{ route('billing.ukt.edit', $billing->id) }}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
+                        <a href="{{ route('billing.ukt.edit', $billing->id) }}" class="btn btn-sm btn-warning"><i
+                            class="fas fa-edit"></i></a>
                         <a href="{{ '/' }}" class="btn btn-sm btn-info"><i class="fas fa-print"></i></a>
                         {{-- <a href="{{ '/' }}" class="btn btn-sm bg-lightblue">Set Lunas</a> --}}
-                        <form id="delete-form-{{ $billing->trx_id }}" action="{{ '/' }}" method="GET"
+                        <form id="delete-form-{{ $billing->trx_id }}" action="{{ route('billing.ukt.lunas', $billing->id) }}" method="POST"
                           style="display: inline;">
                           @csrf
-                          {{-- @method('DELETE') --}}
+                          @method("PATCH")
                           <button type="button" class="btn btn-sm btn-success"
                             onclick="confirmDelete({{ $billing->trx_id }})">
                             Set Lunas
@@ -108,7 +109,8 @@
     <script src="{{ asset('adminlte/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
     <script src="{{ asset('adminlte/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
     <script src="{{ asset('adminlte/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
-
+    <!-- Toastr JS -->
+    <script src="{{ asset('adminlte/plugins/toastr/toastr.min.js') }}"></script>
     <!-- SweetAlert2 -->
     <script src="{{ asset('adminlte/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
 
@@ -140,11 +142,16 @@
         }).then((result) => {
           if (result.isConfirmed) {
             document.getElementById('delete-form-' + id).submit();
-          } 
+          }
         });
       }
     </script>
 
+    @if (session('success'))
+      <script>
+        toastr.success('{{ session('success') }}', 'Berhasil');
+      </script>
+    @endif
 
   </x-slot>
 </x-app-layout>
