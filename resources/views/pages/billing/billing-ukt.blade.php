@@ -65,16 +65,21 @@
                         <a href="{{ route('billing.ukt.edit', $billing->id) }}" class="btn btn-sm btn-warning"><i
                             class="fas fa-edit"></i></a>
                         <a href="{{ '/' }}" class="btn btn-sm btn-info"><i class="fas fa-print"></i></a>
-                        {{-- <a href="{{ '/' }}" class="btn btn-sm bg-lightblue">Set Lunas</a> --}}
-                        <form id="delete-form-{{ $billing->trx_id }}" action="{{ route('billing.ukt.lunas', $billing->id) }}" method="POST"
-                          style="display: inline;">
-                          @csrf
-                          @method("PATCH")
-                          <button type="button" class="btn btn-sm btn-success"
-                            onclick="confirmDelete({{ $billing->trx_id }})">
+                        @if (!$billing->trx_id || !$billing->no_va)
+                          <button type="button" class="btn btn-sm btn-success disabled">
                             Set Lunas
                           </button>
-                        </form>
+                        @else
+                          <form id="delete-form-{{ $billing->id }}" action="{{ route('billing.ukt.lunas') }}"
+                            method="POST" style="display: inline;">
+                            @csrf
+                            <input type="hidden" name="id" value="{{ $billing->id }}">
+                            <button type="button" class="btn btn-sm btn-success"
+                              onclick="confirmDelete('{{ $billing->id }}')">
+                              Set Lunas
+                            </button>
+                          </form>
+                        @endif
                       </td>
                     </tr>
                   @endforeach

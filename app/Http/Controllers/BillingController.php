@@ -130,7 +130,7 @@ class BillingController extends Controller
     }
     public function set_lunas_billing(Request $request)
     {
-        $id = $request->route('id');
+        $id = $request->id;
         $billing = BillingUkt::find($id);
         $billing->update([
             'lunas' => 1
