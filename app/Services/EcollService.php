@@ -91,4 +91,37 @@ class EcollService
       ];
     }
   }
+
+  public function updateVaBNI($data)
+  {
+    $api_key = env('API_KEY_ECOLL');
+    $api_url = env('API_URL_ECOLL');
+
+    // $tgl_expire_billing = date('Y-m-d', strtotime($bayar['tgl_expire']));
+		// $tgl_now = new DateTime(date("Y-m-d"));
+		// $tgl_expire = new DateTime($tgl_expire_billing);
+		// $jarak = $tgl_expire->diff($tgl_now);
+		// $expired_va = $jarak->d;
+		
+		$params = [
+			'apikey' => $api_key,
+			'type' => 'updatebilling',
+			'trx_id' => $data["trx_id"],
+			'virtual_account' => $data["no_va"],
+			'trx_amount' => $data['nominal'],
+			'expired_va' => ($data["tgl_expire"]) ? $data["tgl_expire"] : 1, // expired_va 1 hari
+			'customer_name' => $data["nama"],
+		];
+		
+		// dd($params);
+		
+		$response = json_decode(post_data("{$api_url}/bni/createva.php", $params), TRUE);
+		// dd($response);
+		if (!$response['response']) {
+      dd($response);
+			return false;
+		}
+		return $response;
+		//update nominal di database billing_ukts jika  response true
+  }
 }

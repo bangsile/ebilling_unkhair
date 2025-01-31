@@ -90,6 +90,30 @@ class BillingController extends Controller
         $billings = BillingUkt::where('tahun_akademik', $tahun_pembayaran?->tahun_akademik)->where('jenis_bayar', 'ukt')->get();
         return view('pages.billing.billing-ukt', ["billings" => $billings]);
     }
+
+    public function edit_billing_ukt(Request $request)
+    {
+        $id = $request->route('id');
+        $billing = BillingUkt::find($id);
+        return view('pages.billing.edit-billing-ukt', compact('billing'));
+    }
+
+    public function update_billing_ukt(Request $request)
+    {
+        $id = $request->route('id');
+        $billing = BillingUkt::find($id);
+
+        $data = [
+            'trx_id' => $billing->trx_id,
+            'no_va' => $billing->no_va,
+            'nominal' => $request->nominal,
+            'tgl_expire' => $billing->tgl_expire, // expired_va 1 hari
+            'nama' => $billing->nama,
+        ];
+        // dd($data);
+        $response = $this->ecollService->updateVaBNI($data);
+        dd($response);
+    }
     public function billing_umb()
     {
         $tahun_akademik = TahunPembayaran::first();

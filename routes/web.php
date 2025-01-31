@@ -21,6 +21,8 @@ Route::get('/tambah-billing',[BillingController::class, 'create_billing'] )->mid
 Route::post('/tambah-billing',[BillingController::class, 'store_billing'] )->middleware(['auth', 'role:admin'])->name('billing.store');
 
 Route::get('/billing-ukt', [BillingController::class, 'billing_ukt'])->middleware(['auth'])->name('billing.ukt');
+Route::get('/billing-ukt/edit/{id}', [BillingController::class, 'edit_billing_ukt'])->middleware(['auth'])->name('billing.ukt.edit');
+Route::patch('/billing-ukt/edit/{id}', [BillingController::class, 'update_billing_ukt'])->middleware(['auth'])->name('billing.ukt.update');
 Route::get('/billing-ukt/import-data', [DataImportController::class, 'import_data_ukt_form'])->middleware(['auth'])->name('ukt.import.form');
 Route::post('/billing-ukt/import-data', [DataImportController::class, 'import_data_ukt'])->middleware(['auth'])->name('ukt.import');
 

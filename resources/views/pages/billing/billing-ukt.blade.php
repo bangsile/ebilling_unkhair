@@ -5,6 +5,10 @@
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="{{ asset('adminlte/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
+    {{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
+
   </x-slot>
   <x-page-header>Billing UKT</x-page-header>
 
@@ -29,7 +33,6 @@
                     <th>Kategori</th>
                     <th>Prodi</th>
                     <th>Nominal</th>
-                    <th>Tgl. Expire</th>
                     <th>Status</th>
                     <th>Aksi</th>
                   </tr>
@@ -41,16 +44,12 @@
                   @foreach ($billings as $index => $billing)
                     <tr>
                       <td>{{ $nomor++ }}</td>
-                      {{-- <td>{{ $billing->no_va }}</td> --}}
                       <td>{{ $billing->no_identitas }}</td>
                       <td>{{ $billing->nama }}</td>
                       <td>{{ $billing->angkatan }}</td>
                       <td>{{ $billing->kategori_ukt }}</td>
                       <td>{{ $billing->nama_prodi }}</td>
                       <td>{{ formatRupiah($billing->nominal) }}</td>
-                      <td>
-                        {{ $billing->tgl_expire ? date('d-m-Y H:i', strtotime($billing->tgl_expire)) : '-' }}
-                      </td>
                       <td>
                         @if ($billing->tgl_expire)
                           @if ($billing->lunas)
@@ -62,7 +61,20 @@
                           @endif
                         @endif
                       </td>
-                      <td></td>
+                      <td>
+                        <a href="{{ route('billing.ukt.edit', $billing->id) }}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
+                        <a href="{{ '/' }}" class="btn btn-sm btn-info"><i class="fas fa-print"></i></a>
+                        {{-- <a href="{{ '/' }}" class="btn btn-sm bg-lightblue">Set Lunas</a> --}}
+                        <form id="delete-form-{{ $billing->trx_id }}" action="{{ '/' }}" method="GET"
+                          style="display: inline;">
+                          @csrf
+                          {{-- @method('DELETE') --}}
+                          <button type="button" class="btn btn-sm btn-success"
+                            onclick="confirmDelete({{ $billing->trx_id }})">
+                            Set Lunas
+                          </button>
+                        </form>
+                      </td>
                     </tr>
                   @endforeach
 
@@ -97,6 +109,9 @@
     <script src="{{ asset('adminlte/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
     <script src="{{ asset('adminlte/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
 
+    <!-- SweetAlert2 -->
+    <script src="{{ asset('adminlte/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+
     <script>
       $(function() {
         $('#semua_billing').DataTable({
@@ -110,5 +125,26 @@
         });
       });
     </script>
+
+    <script>
+      function confirmDelete(id) {
+        Swal.fire({
+          // title: "Apakah Anda yakin?",
+          text: "Apakah anda ingin mengset billing ini menjadi lunas?",
+          // icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#28a745",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Ya",
+          cancelButtonText: "Batal"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            document.getElementById('delete-form-' + id).submit();
+          } 
+        });
+      }
+    </script>
+
+
   </x-slot>
 </x-app-layout>
