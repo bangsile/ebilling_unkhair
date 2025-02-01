@@ -30,7 +30,7 @@ class HistoryBankController extends Controller
             $billing = $billing_pembayaran ?? $billing_ukt;
             // dd($billing);
             if ($billing) {
-                HistoryBank::create([
+                HistoryBank::updateOrCreate([
                     "trx_id" => $billing->trx_id,
                     "no_va" => $billing->no_va,
                     "nominal" => $billing->nominal,
