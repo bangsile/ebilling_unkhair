@@ -34,7 +34,8 @@
           <x-nav-link icon="nav-icon fas fa-university">
             Program Studi
           </x-nav-link>
-          <x-nav-link icon="nav-icon fas fa-users">
+          <x-nav-link icon="nav-icon fas fa-users" href="{{ route('pengguna.index') }}"
+            active="{{ Route::is('pengguna.*') }}">
             Pengguna
           </x-nav-link>
         @endif
