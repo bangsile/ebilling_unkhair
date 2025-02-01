@@ -23,8 +23,8 @@ Route::get('/tambah-billing', [BillingController::class, 'create_billing'])->mid
 Route::post('/tambah-billing', [BillingController::class, 'store_billing'])->middleware(['auth', 'role:admin'])->name('billing.store');
 
 Route::get('/billing-ukt', [BillingController::class, 'billing_ukt'])->middleware(['auth', "role:admin|spp|keuangan"])->name('billing.ukt');
-Route::get('/billing-ukt/edit/{id}', [BillingController::class, 'edit_billing_ukt'])->middleware(['auth', "role:admin|spp|keuangan"])->name('billing.ukt.edit');
-Route::patch('/billing-ukt/edit/{id}', [BillingController::class, 'update_billing_ukt'])->middleware(['auth', "role:admin|spp|keuangan"])->name('billing.ukt.update');
+Route::get('/billing-ukt/{id}', [BillingController::class, 'edit_billing_ukt'])->middleware(['auth', "role:admin|spp|keuangan"])->name('billing.ukt.edit');
+Route::patch('/billing-ukt/{id}', [BillingController::class, 'update_billing_ukt'])->middleware(['auth', "role:admin|spp|keuangan"])->name('billing.ukt.update');
 Route::post('/billing-ukt/lunas', [BillingController::class, 'set_lunas_billing'])->middleware(['auth', "role:admin|spp|keuangan"])->name('billing.ukt.lunas');
 Route::get('/billing-ukt/import-data', [DataImportController::class, 'import_data_ukt_form'])->middleware(['auth', "role:admin|spp|keuangan"])->name('ukt.import.form');
 Route::post('/billing-ukt/import-data', [DataImportController::class, 'import_data_ukt'])->middleware(['auth', "role:admin|spp|keuangan"])->name('ukt.import');
@@ -50,6 +50,8 @@ Route::post('/tahun-pembayaran', [TahunPembayaranController::class, 'store'])
 Route::get('/pengguna', [UserController::class, 'index'])->middleware(['auth', 'role:developper|admin'])->name('pengguna.index');
 Route::get('/pengguna/tambah', [UserController::class, 'create'])->middleware(['auth', 'role:developper|admin'])->name('pengguna.tambah');
 Route::post('/pengguna/tambah', [UserController::class, 'store'])->middleware(['auth', 'role:developper|admin'])->name('pengguna.store');
+Route::get('/pengguna/{id}', [UserController::class, 'edit'])->middleware(['auth', 'role:developper|admin'])->name('pengguna.edit');
+Route::patch('/pengguna/{id}', [UserController::class, 'update'])->middleware(['auth', 'role:developper|admin'])->name('pengguna.update');
 Route::delete('/pengguna/{id}', [UserController::class, 'destroy'])->middleware(['auth', 'role:developper|admin'])->name('pengguna.destroy');
 
 

@@ -50,25 +50,44 @@ class UserController extends Controller
         return redirect()->route('pengguna.index')->with('success', 'Pengguna berhasil ditambahkan');
     }
 
-    public function edit(User $user)
+    public function edit(Request $request)
     {
-        // return view('pages.pengguna.edit', compact('user'));
+        $user = User::find($request->id);
+        if (!$user) {
+            return back()->withErrors('error', 'Pengguna tidak ditemukan');
+        }
+        $roles = Role::all();
+        return view('pages.pengguna.edit', [
+            'roles' => $roles,
+            'user' => $user
+        ]);
     }
 
-    public function update(Request $request, User $user)
+    public function update(Request $request)
     {
-        //
+        $user = User::find($request->id);
+        if (!$user) {
+            return back()->withErrors('error', 'Pengguna tidak ditemukan');
+        }
+        $user->update([
+            "name" => $request->nama,
+            "username" => $request->username,
+            "password" => $request->password ? Hash::make($request->password) : $user->password
+        ]);
+        $user->syncRoles($request->role);
+        return redirect()->route('pengguna.index')->with('success', 'Berhasil Mengupdate Pengguna');
     }
+
 
     public function destroy(Request $request)
     {
         // dd($request->all());
         $request->route('id');
         $user = User::find($request->id);
-        if(!$user){
+        if (!$user) {
             return back()->withErrors('error', 'Pengguna tidak ditemukan');
         }
         $user->delete();
         return redirect()->route('pengguna.index')->with('success', 'Pengguna berhasil dihapus');
-    }   
+    }
 }

@@ -40,7 +40,7 @@
                       <td>{{ $user->username }}</td>
                       <td>{{ $user->getRoleNames()->first() }}</td>
                       <td>
-                        <a href="{{ '/' }}" class="btn btn-sm btn-warning"><i
+                        <a href="{{ route('pengguna.edit',$user->id) }}" class="btn btn-sm btn-warning"><i
                             class="fas fa-edit"></i></a>
                         <form id="delete-form-{{ $user->id }}" action="{{ route('pengguna.destroy', $user->id) }}"
                           method="POST" style="display: inline;">
