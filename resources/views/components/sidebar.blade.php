@@ -21,24 +21,36 @@
     <!-- Sidebar Menu -->
     <nav class="mt-2">
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-        <!-- Add icons to the links using the .nav-icon class
-            with font-awesome or any other icon font library -->
 
         <x-nav-link icon="nav-icon fas fa-tachometer-alt" href="{{ route('dashboard') }}"
           active="{{ Route::is('dashboard') }}">
           Dashboard
         </x-nav-link>
 
-        @if (Auth::user()->hasRole('admin'))
+        @if (Auth::user()->hasRole(['developper', 'admin']))
+          <x-nav-link icon="nav-icon fas fa-university">
+            Fakultas
+          </x-nav-link>
+          <x-nav-link icon="nav-icon fas fa-university">
+            Program Studi
+          </x-nav-link>
+          <x-nav-link icon="nav-icon fas fa-users">
+            Pengguna
+          </x-nav-link>
+        @endif
+
+        @if (Auth::user()->hasRole(['admin', 'spp', 'keuangan']))
           <x-nav-link icon="nav-icon fas fa-money-bill-wave" active="{{ Route::is('billing.*') }}">
             Billing
             <i class="right fas fa-angle-left"></i>
             <x-slot name="navtree">
               <ul class="nav nav-treeview">
-                <x-nav-link icon="far fa-circle nav-icon" href="{{ route('billing.pembayaran') }}"
-                  active="{{ Route::is('billing.pembayaran') }}">
-                  Billing Pembayaran
-                </x-nav-link>
+                @if (Auth::user()->hasRole('admin'))
+                  <x-nav-link icon="far fa-circle nav-icon" href="{{ route('billing.pembayaran') }}"
+                    active="{{ Route::is('billing.pembayaran') }}">
+                    Billing Pembayaran
+                  </x-nav-link>
+                @endif
                 <x-nav-link icon="far fa-circle nav-icon" href="{{ route('billing.ukt') }}"
                   active="{{ Route::is('billing.ukt') }}">
                   Billing UKT
@@ -50,19 +62,33 @@
               </ul>
             </x-slot>
           </x-nav-link>
+        @endif
 
-
+        @if (Auth::user()->hasRole(['developper', 'admin']))
           <x-nav-link icon="nav-icon fas fa-list-alt" href="{{ route('jenis-bayar') }}"
             active="{{ Route::is('jenis-bayar') }}">
             Jenis Bayar
           </x-nav-link>
-
           <x-nav-link icon="nav-icon fas fa-calendar-alt" href="{{ route('tahun-pembayaran') }}"
             active="{{ Route::is('tahun-pembayaran') }}">
             Tahun Pembayaran
           </x-nav-link>
         @endif
 
+        @if (Auth::user()->hasRole(['admin', 'spp', 'keuangan']))
+          <x-nav-link icon="nav-icon fas fa-th-list">
+            Laporan
+          </x-nav-link>
+        @endif
+
+        <li class="nav-item mt-4">
+          <form action="{{ route('logout') }}" method="POST" class="d-flex justify-content-center">
+            @csrf
+            <button type="submit" class="btn btn-outline-danger btn-block text-left">
+              <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+          </form>
+        </li>
 
       </ul>
     </nav>
