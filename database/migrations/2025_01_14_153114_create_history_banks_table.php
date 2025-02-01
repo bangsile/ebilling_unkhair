@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('history_banks', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('trx_id')->unique();
-            $table->string('no_va')->unique();
+            $table->string('trx_id');
+            $table->string('no_va');
             $table->integer('nominal');
             $table->string('nama');
             $table->string('metode_pembayaran');
