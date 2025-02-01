@@ -81,12 +81,12 @@
                               Set Lunas
                             </button>
                           @else
-                            <form id="delete-form-{{ $billing->id }}" action="{{ route('billing.ukt.lunas') }}"
+                            <form id="lunas-form-{{ $billing->id }}" action="{{ route('billing.ukt.lunas') }}"
                               method="POST" style="display: inline;">
                               @csrf
                               <input type="hidden" name="id" value="{{ $billing->id }}">
                               <button type="button" class="btn btn-sm btn-success"
-                                onclick="confirmDelete('{{ $billing->id }}')">
+                                onclick="confirmLunas('{{ $billing->id }}')">
                                 Set Lunas
                               </button>
                             </form>
@@ -146,7 +146,7 @@
     </script>
 
     <script>
-      function confirmDelete(id) {
+      function confirmLunas(id) {
         Swal.fire({
           // title: "Apakah Anda yakin?",
           text: "Apakah anda ingin mengset billing ini menjadi lunas?",
@@ -158,7 +158,7 @@
           cancelButtonText: "Batal"
         }).then((result) => {
           if (result.isConfirmed) {
-            document.getElementById('delete-form-' + id).submit();
+            document.getElementById('lunas-form-' + id).submit();
           }
         });
       }
