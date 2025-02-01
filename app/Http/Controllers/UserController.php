@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -16,7 +17,8 @@ class UserController extends Controller
 
     public function create()
     {
-        return view('pages.pengguna.create');
+        $roles = Role::all();
+        return view('pages.pengguna.create', compact('roles'));
     }
 
     public function store(Request $request)

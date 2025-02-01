@@ -47,10 +47,9 @@
                 <label>Role</label>
                 <select class="form-control select2bs4" style="width: 100%;" name="role">
                   <option selected="selected" value="" disabled>Pilih Role</option>
-                    <option value='developper'>Developper</option>
-                    <option value='admin'>Admin</option>
-                    <option value='spp'>SPP</option>
-                    <option value='keuangan'>Keuangan</option>
+                  @foreach ($roles as $role)
+                    <option value='{{ $role->name }}'>{{ $role->name }}</option>
+                  @endforeach
                 </select>
               </div>
 
