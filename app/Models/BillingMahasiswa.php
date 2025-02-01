@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
-class BillingUkt extends Model
+class BillingMahasiswa extends Model
 {
     use HasUuids;
     
@@ -30,14 +30,5 @@ class BillingUkt extends Model
     ];
 
     protected $keyType = 'string'; // Menentukan tipe primary key sebagai string
-    public $incrementing = false; // Menonaktifkan auto-increment
-
-    public function scopeSearch($query, $search): void
-    {
-        $query->where(
-            function ($query) use ($search) {
-                $query->where('nama', 'like', "%{$search}%");
-            }
-        );
-    }
+    public $incrementing = false;
 }

@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Billing;
-use App\Models\BillingUkt;
+use App\Models\BillingMahasiswa;
 use App\Models\HistoryBank;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -44,7 +44,7 @@ class HistoryBankJob implements ShouldQueue
             }
 
             $billing_pembayaran = Billing::where('trx_id', $this->data["trx_id"])->where('no_va', $this->data["no_va"])->first();
-            $billing_ukt = BillingUkt::where('trx_id', $this->data["trx_id"])->where('no_va', $this->data["no_va"])->first();
+            $billing_ukt = BillingMahasiswa::where('trx_id', $this->data["trx_id"])->where('no_va', $this->data["no_va"])->first();
             $billing = $billing_pembayaran ?? $billing_ukt;
             if ($billing) {
                 HistoryBank::create([

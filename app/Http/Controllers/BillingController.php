@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Billing;
-use App\Models\BillingUkt;
+use App\Models\BillingMahasiswa;
 use App\Models\DosenHasBilling;
 use App\Models\JenisBayar;
 use App\Models\TahunPembayaran;
 use App\Services\EcollService;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Exception;
 
 class BillingController extends Controller
 {
@@ -31,7 +31,6 @@ class BillingController extends Controller
     }
     public function store_billing(Request $request)
     {
-        // dd($request->all());
         $request->validate([
             'jenis_bayar' => 'required',
             'nama' => 'required',
@@ -87,21 +86,21 @@ class BillingController extends Controller
     public function billing_ukt()
     {
         $tahun_pembayaran = TahunPembayaran::first();
-        $billings = BillingUkt::where('tahun_akademik', $tahun_pembayaran?->tahun_akademik)->where('jenis_bayar', 'ukt')->get();
+        $billings = BillingMahasiswa::where('tahun_akademik', $tahun_pembayaran?->tahun_akademik)->where('jenis_bayar', 'ukt')->get();
         return view('pages.billing.billing-ukt', ["billings" => $billings]);
     }
 
     public function edit_billing_ukt(Request $request)
     {
         $id = $request->route('id');
-        $billing = BillingUkt::find($id);
+        $billing = BillingMahasiswa::find($id);
         return view('pages.billing.edit-billing-ukt', compact('billing'));
     }
 
     public function update_billing_ukt(Request $request)
     {
         $id = $request->route('id');
-        $billing = BillingUkt::find($id);
+        $billing = BillingMahasiswa::find($id);
 
         if(!$billing->trx_id || !$billing->no_va){
             $billing->update([
@@ -114,15 +113,15 @@ class BillingController extends Controller
             'trx_id' => $billing->trx_id,
             'no_va' => $billing->no_va,
             'nominal' => $request->nominal,
-            'tgl_expire' => $billing->tgl_expire, // expired_va 1 hari
+            'tgl_expire' => $billing->tgl_expire,
             'nama' => $billing->nama,
         ];
-        // dd($data);
+
         $response = $this->ecollService->updateVaBNI($data);
         if(!$response['response']){
             return back()->withErrors(['billing' => $response['message']]);
         }
-        // dd($response);
+
         $billing->update([
             'nominal' => $request->nominal
         ]);
@@ -131,7 +130,7 @@ class BillingController extends Controller
     public function set_lunas_billing(Request $request)
     {
         $id = $request->id;
-        $billing = BillingUkt::find($id);
+        $billing = BillingMahasiswa::find($id);
         $billing->update([
             'lunas' => 1
         ]);
@@ -140,7 +139,7 @@ class BillingController extends Controller
     public function billing_umb()
     {
         $tahun_akademik = TahunPembayaran::first();
-        $billings = BillingUkt::where('tahun_akademik', $tahun_akademik?->tahun_akademik)->where('jenis_bayar', 'umb')->get();
+        $billings = BillingMahasiswa::where('tahun_akademik', $tahun_akademik?->tahun_akademik)->where('jenis_bayar', 'umb')->get();
         return view('pages.billing.billing-umb', ["billings" => $billings]);
     }
     public function billing_dosen()

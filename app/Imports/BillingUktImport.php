@@ -2,7 +2,7 @@
 
 namespace App\Imports;
 
-use App\Models\BillingUkt;
+use App\Models\BillingMahasiswa;
 use Maatwebsite\Excel\Concerns\SkipsFailures;
 use Maatwebsite\Excel\Concerns\SkipsOnFailure;
 use Maatwebsite\Excel\Concerns\ToModel;
@@ -32,7 +32,7 @@ class BillingUktImport implements ToModel, WithHeadingRow, SkipsOnFailure, WithV
         }
         try {
             // Cek apakah data sudah ada berdasarkan email
-            $existingData = BillingUkt::where('no_identitas', $row['npm'])->first();
+            $existingData = BillingMahasiswa::where('no_identitas', $row['npm'])->first();
             $token = env('API_TOKEN_SIMAK', 'default_token');
             $response_mahasiswa = json_decode(get_data(str_curl('https://simak.unkhair.ac.id/apiv2/mahasiswa', ['token' => $token, 'nim' => $row['npm']])), TRUE);
             if (!$response_mahasiswa) {
@@ -65,7 +65,7 @@ class BillingUktImport implements ToModel, WithHeadingRow, SkipsOnFailure, WithV
                 ]);
                 // return null;
             } else {
-                BillingUkt::create([
+                BillingMahasiswa::create([
                     // 'trx_id' => '',
                     // 'no_va' => '',
                     'nama_bank' => 'BNI',
