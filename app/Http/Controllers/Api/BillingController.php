@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BillingResource;
-use App\Models\BillingUkt;
+use App\Models\BillingMahasiswa;
 use App\Models\TahunPembayaran;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -38,7 +38,7 @@ class BillingController extends Controller
             ], 402);
         }
 
-        $billing = BillingUkt::where('no_identitas', $request->npm)->where('tahun_akademik', $request->tahun_akademik)->first();
+        $billing = BillingMahasiswa::where('no_identitas', $request->npm)->where('tahun_akademik', $request->tahun_akademik)->first();
         if (!$billing) {
             return new BillingResource(false, 'Billing Tidak Ditemukan', null);
         }
@@ -75,7 +75,7 @@ class BillingController extends Controller
                 ], 402);
             }
             $tahun_pembayaran = TahunPembayaran::first();
-            $billing = BillingUkt::create([
+            $billing = BillingMahasiswa::create([
                 'trx_id' => $request->trx_id,
                 'no_va' => $request->no_va,
                 'nama_bank' => $request->nama_bank,
@@ -140,7 +140,7 @@ class BillingController extends Controller
                     'message' => $validator->errors(),
                 ], 402);
             }
-            $billing = BillingUkt::where('no_identitas', $request->npm)->where('tahun_akademik', $request->tahun_akademik)->first()->update([
+            $billing = BillingMahasiswa::where('no_identitas', $request->npm)->where('tahun_akademik', $request->tahun_akademik)->first()->update([
                 'trx_id' => $request->trx_id,
                 'no_va' => $request->no_va,
                 'nominal' => $request->nominal,
