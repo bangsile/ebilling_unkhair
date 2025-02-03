@@ -121,61 +121,61 @@ class BillingController extends Controller
             ], 402);
         }
     }
-    // public function update_billing_ukt(Request $request)
-    // {
-    //     $apiKey = $request->header('X-API-KEY');
+    public function update_billing_ukt(Request $request)
+    {
+        $apiKey = $request->header('X-API-KEY');
 
-    //     if (!$apiKey || $apiKey !== 'secret') {
-    //         return response()->json([
-    //             'response' => false,
-    //             'message' => 'Unauthorized: Invalid or missing API key.',
-    //         ], 401);
-    //     }
-    //     try {
-    //         $validator = Validator::make($request->all(), [
-    //             'npm' => 'required',
-    //             'tahun_akademik' => 'required|min:5|max:5',
-    //             'no_va' => 'required',
-    //             'trx_id' => 'required',
-    //             'nominal' => 'required|numeric',
-    //             'tgl_expire' => 'required',
-    //         ], [
-    //             'npm.required' => 'NPM wajib diisi',
-    //             'tahun_akademik.required' => 'Tahun akademik wajib diisi',
-    //             'tahun_akademik.min' => 'Tahun akademik harus terdiri dari 5 karakter',
-    //             'tahun_akademik.max' => 'Tahun akademik harus terdiri dari 5 karakter',
-    //             'no_va.required' => 'No VA wajib diisi',
-    //             'trx_id.required' => 'Trx ID wajib diisi',
-    //             'nominal.required' => 'Nominal wajib diisi',
-    //             'nominal.numeric' => 'Nominal harus berupa angka',
-    //             'tgl_expire.required' => 'Tanggal Expire wajib diisi',
-    //         ]);
+        if (!$apiKey || $apiKey !== 'secret') {
+            return response()->json([
+                'response' => false,
+                'message' => 'Unauthorized: Invalid or missing API key.',
+            ], 401);
+        }
+        try {
+            $validator = Validator::make($request->all(), [
+                'npm' => 'required',
+                'tahun_akademik' => 'required|min:5|max:5',
+                'no_va' => 'required',
+                'trx_id' => 'required',
+                'nominal' => 'required|numeric',
+                'tgl_expire' => 'required',
+            ], [
+                'npm.required' => 'NPM wajib diisi',
+                'tahun_akademik.required' => 'Tahun akademik wajib diisi',
+                'tahun_akademik.min' => 'Tahun akademik harus terdiri dari 5 karakter',
+                'tahun_akademik.max' => 'Tahun akademik harus terdiri dari 5 karakter',
+                'no_va.required' => 'No VA wajib diisi',
+                'trx_id.required' => 'Trx ID wajib diisi',
+                'nominal.required' => 'Nominal wajib diisi',
+                'nominal.numeric' => 'Nominal harus berupa angka',
+                'tgl_expire.required' => 'Tanggal Expire wajib diisi',
+            ]);
 
-    //         if ($validator->fails()) {
-    //             return response()->json([
-    //                 'response' => false,
-    //                 'message' => $validator->errors(),
-    //             ], 402);
-    //         }
-    //         $billing = BillingMahasiswa::where('no_identitas', $request->npm)
-    //             ->where('tahun_akademik', $request->tahun_akademik)->first();
-    //         if (!$billing) {
-    //             return new BillingResource(false, 'Billing Tidak Ditemukan', null);
-    //         }
-    //         $billing->update([
-    //             'trx_id' => $request->trx_id,
-    //             'no_va' => $request->no_va,
-    //             'nominal' => $request->nominal,
-    //             'tgl_expire' => $request->tgl_expire,
-    //         ]);
+            if ($validator->fails()) {
+                return response()->json([
+                    'response' => false,
+                    'message' => $validator->errors(),
+                ], 402);
+            }
+            $billing = BillingMahasiswa::where('no_identitas', $request->npm)
+                ->where('tahun_akademik', $request->tahun_akademik)->first();
+            if (!$billing) {
+                return new BillingResource(false, 'Billing Tidak Ditemukan', null);
+            }
+            $billing->update([
+                'trx_id' => $request->trx_id,
+                'no_va' => $request->no_va,
+                'nominal' => $request->nominal,
+                'tgl_expire' => $request->tgl_expire,
+            ]);
 
-    //         return new BillingResource(true, 'Berhasil Update Billing', $billing);
-    //     } catch (\Throwable $th) {
-    //         return response()->json([
-    //             'response' => false,
-    //             'message' => $th,
-    //         ], 402);
-    //         // throw $th;
-    //     }
-    // }
+            return new BillingResource(true, 'Berhasil Update Billing', $billing);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'response' => false,
+                'message' => $th,
+            ], 402);
+            // throw $th;
+        }
+    }
 }
