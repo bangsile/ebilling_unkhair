@@ -6,6 +6,7 @@ use App\Http\Controllers\DataImportController;
 use App\Http\Controllers\JenisBayarController;
 use App\Http\Controllers\TahunPembayaranController;
 use App\Http\Controllers\UserController;
+use App\Models\TahunPembayaran;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [AuthController::class, 'index'])->name('login');
@@ -13,7 +14,8 @@ Route::post('/login', [AuthController::class, 'store'])->name('login.store');
 Route::post('/logout', [AuthController::class, 'destroy'])->name('logout');
 
 Route::get('/dashboard', function () {
-    return view('pages.dashboard');
+    $tahun_pembayaran = TahunPembayaran::first();
+    return view('pages.dashboard', ['tahun_akademik' => $tahun_pembayaran->tahun_akademik ]);
 })->middleware(['auth'])->name('dashboard');
 
 // BILLING
