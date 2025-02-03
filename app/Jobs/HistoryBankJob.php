@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Models\Billing;
 use App\Models\BillingMahasiswa;
 use App\Models\HistoryBank;
+use App\Models\LogJob;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Validator;
@@ -61,11 +62,28 @@ class HistoryBankJob implements ShouldQueue
                 ]);
 
                 print("Billing Updated");
+                LogJob::create([
+                   "trx_id" => $billing->trx_id,
+                   "no_va" => $billing->no_va,
+                   "nama" => $billing->nama,
+                   "metode_pembayaran" => $billing->nama_bank,
+                   "job_result" => "Success, Billing Updated"
+                ]);
             } else {
                 print("Billing Not Found");
+                LogJob::create([
+                   "trx_id" => $this->data["trx_id"],
+                   "no_va" => $this->data["no_va"],
+                   "job_result" => "Failed, Billing Not Found"
+                ]);
             }
         } catch (\Throwable $th) {
             print($th->getMessage());
+            LogJob::create([
+                "trx_id" => $this->data["trx_id"],
+                "no_va" => $this->data["no_va"],
+                "job_result" => $th->getMessage()
+            ]);
         }
     }
 }
