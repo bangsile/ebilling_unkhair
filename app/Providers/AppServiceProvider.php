@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Foundation\AliasLoader;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -11,7 +12,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->register(\ComLaude\Amqp\AmqpServiceProvider::class);
+
+        $loader = AliasLoader::getInstance();
+        $loader->alias('Amqp', \ComLaude\Amqp\Facades\Amqp::class);
     }
 
     /**
