@@ -10,7 +10,7 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::post('/billing-ukt', [BillingController::class, 'store_billing_ukt']);
+Route::post('/billing-mahasiswa', [BillingController::class, 'store_billing_mahasiswa']);
 Route::post('/history-bank', [HistoryBankController::class, 'auto_lunas']);
 Route::post('/billing-ukt/detail', [BillingController::class, 'get_detail_ukt'])->withoutMiddleware(['throttle:api']);
 Route::patch('/billing-ukt/update', [BillingController::class, 'update_billing_ukt'])->withoutMiddleware(['throttle:api']);
