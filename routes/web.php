@@ -31,6 +31,10 @@ Route::post('/billing-ukt/import-data', [DataImportController::class, 'import_da
 
 Route::get('/billing-umb', [BillingController::class, 'billing_umb'])->middleware(['auth', 'role:admin|spp|keuangan'])->name('billing.umb');
 
+Route::get('/billing-ipi', [BillingController::class, 'billing_ipi'])->middleware(['auth', 'role:admin|spp|keuangan'])->name('billing.ipi');
+
+Route::get('/billing-pemkes', [BillingController::class, 'billing_pemkes'])->middleware(['auth', 'role:admin|spp|keuangan'])->name('billing.pemkes');
+
 Route::get('/billing-dosen', [BillingController::class, 'billing_dosen'])->middleware(['auth'])->name('billing.dosen');
 Route::get('/billing-dosen/tambah', [BillingController::class, 'create_billing_dosen'])->middleware(['auth'])->name('billing.dosen.tambah');
 Route::post('/billing-dosen/tambah', [BillingController::class, 'store_billing_dosen'])->middleware(['auth'])->name('billing.dosen.store');

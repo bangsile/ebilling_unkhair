@@ -60,6 +60,14 @@
                   active="{{ Route::is('billing.umb') }}">
                   Billing UMB
                 </x-nav-link>
+                <x-nav-link icon="far fa-circle nav-icon" href="{{ route('billing.ipi') }}"
+                  active="{{ Route::is('billing.ipi') }}">
+                  Billing IPI
+                </x-nav-link>
+                <x-nav-link icon="far fa-circle nav-icon" href="{{ route('billing.pemkes') }}"
+                  active="{{ Route::is('billing.pemkes') }}">
+                  Billing Pemkes
+                </x-nav-link>
               </ul>
             </x-slot>
           </x-nav-link>

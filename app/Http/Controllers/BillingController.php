@@ -142,6 +142,18 @@ class BillingController extends Controller
         $billings = BillingMahasiswa::where('tahun_akademik', $tahun_akademik?->tahun_akademik)->where('jenis_bayar', 'umb')->get();
         return view('pages.billing.billing-umb', ["billings" => $billings]);
     }
+    public function billing_ipi()
+    {
+        $tahun_akademik = TahunPembayaran::first();
+        $billings = BillingMahasiswa::where('tahun_akademik', $tahun_akademik?->tahun_akademik)->where('jenis_bayar', 'ipi')->get();
+        return view('pages.billing.billing-ipi', ["billings" => $billings]);
+    }
+    public function billing_pemkes()
+    {
+        $tahun_akademik = TahunPembayaran::first();
+        $billings = BillingMahasiswa::where('tahun_akademik', $tahun_akademik?->tahun_akademik)->where('jenis_bayar', 'pemkes')->get();
+        return view('pages.billing.billing-pemkes', ["billings" => $billings]);
+    }
     public function billing_dosen()
     {
         return view('pages.billing.billing-dosen');
