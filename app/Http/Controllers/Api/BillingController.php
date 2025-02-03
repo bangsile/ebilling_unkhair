@@ -139,6 +139,7 @@ class BillingController extends Controller
                 'trx_id' => 'required',
                 'nominal' => 'required|numeric',
                 'tgl_expire' => 'required',
+                'jenis_bayar' => 'required'
             ], [
                 'npm.required' => 'NPM wajib diisi',
                 'tahun_akademik.required' => 'Tahun akademik wajib diisi',
@@ -158,7 +159,8 @@ class BillingController extends Controller
                 ], 402);
             }
             $billing = BillingMahasiswa::where('no_identitas', $request->npm)
-                ->where('tahun_akademik', $request->tahun_akademik)->first();
+                ->where('tahun_akademik', $request->tahun_akademik)
+                ->where('jenis_bayar', $request->jenis_bayar)->first();
             if (!$billing) {
                 return new BillingResource(false, 'Billing Tidak Ditemukan', null);
             }
