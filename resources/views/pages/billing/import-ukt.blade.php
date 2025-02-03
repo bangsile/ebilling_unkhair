@@ -23,6 +23,7 @@
                   </div>
 
                 </div>
+                <p class="text-danger pt-2">Maksimal data yang dapat diupload per file adalah <span class="font-weight-bold">500 baris</span> </p>
                 {{-- <button type="submit" class="btn btn-primary float-right mt-3">Upload</button> --}}
               </div>
             </form>

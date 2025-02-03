@@ -26,8 +26,13 @@ class BillingUktImport implements ToModel, WithHeadingRow, SkipsOnFailure, WithV
      */
     public function model(array $row)
     {
+        $nomor = trim($row['no']);
+        $npm = trim($row['npm']);
+        $nominal = trim($row['nominal']);
+        $tahun_akademik = trim($row['tahun_akademik']);
+        $kategori_ukt = trim($row['kategori_ukt']);
         // if (empty($row['no']) && empty($row['npm']) && empty($row['nominal']) && empty($row['tahun_akademik']) && empty($row['kategori_ukt'])) {
-        if (!$row['no'] && !$row['npm'] && !$row['nominal'] && !$row['tahun_akademik'] && !$row['kategori_ukt']) {
+        if (!$nomor && (!$npm && strlen($npm) > 3) && !$nominal && !$tahun_akademik && !$kategori_ukt) {
             return null;
         }
         try {
@@ -127,7 +132,7 @@ class BillingUktImport implements ToModel, WithHeadingRow, SkipsOnFailure, WithV
      */
     public function limit(): int
     {
-        return 100; // Maksimal hanya 100 baris yang diproses
+        return 500; // Maksimal hanya 100 baris yang diproses
     }
 
     /**
