@@ -78,6 +78,8 @@
             active="{{ Route::is('jenis-bayar') }}">
             Jenis Bayar
           </x-nav-link>
+        @endif
+        @if (Auth::user()->hasRole(['developper', 'admin', 'spp', 'keuangan']))
           <x-nav-link icon="nav-icon fas fa-calendar-alt" href="{{ route('tahun-pembayaran') }}"
             active="{{ Route::is('tahun-pembayaran') }}">
             Tahun Pembayaran

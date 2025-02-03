@@ -48,9 +48,9 @@ Route::post('/jenis-bayar/tambah', [JenisBayarController::class, 'store'])->midd
 
 // TAHUN PEMBAYARAN
 Route::get('/tahun-pembayaran', [TahunPembayaranController::class, 'index'])
-    ->middleware(['auth', 'role:developper|admin'])->name('tahun-pembayaran');
+    ->middleware(['auth', 'role:developper|admin|spp|keuangan'])->name('tahun-pembayaran');
 Route::post('/tahun-pembayaran', [TahunPembayaranController::class, 'store'])
-    ->middleware(['auth', 'role:developper|admin'])->name('tahun-pembayaran.store');
+    ->middleware(['auth', 'role:developper|admin|spp|keuangan'])->name('tahun-pembayaran.store');
 
 // PENGGUNA
 Route::get('/pengguna', [UserController::class, 'index'])->middleware(['auth', 'role:developper|admin'])->name('pengguna.index');
