@@ -39,7 +39,6 @@
             Pengguna
           </x-nav-link>
         @endif
-
         @if (Auth::user()->hasRole(['admin', 'spp', 'keuangan']))
           <x-nav-link icon="nav-icon fas fa-money-bill-wave" active="{{ Route::is('billing.*') }}">
             Billing

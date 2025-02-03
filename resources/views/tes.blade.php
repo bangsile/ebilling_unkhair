@@ -2,6 +2,10 @@
   <x-slot name="head">
     <!-- yajra datatble css -->
     <link href="https://cdn.datatables.net/2.0.1/css/dataTables.dataTables.min.css" rel="stylesheet">
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="{{ asset('adminlte/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
+    <!-- Toastr CSS -->
+    <link rel="stylesheet" href="{{ asset('adminlte/plugins/toastr/toastr.min.css') }}">
 
   </x-slot>
   <x-page-header>Tables</x-page-header>
@@ -46,22 +50,39 @@
   </section>
   <!-- /.content -->
 
-  <footer class="main-footer">
-    <div class="float-right d-none d-sm-block">
-      <b>Version</b> 3.2.0
-    </div>
-    <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
-  </footer>
-
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
 
   <x-slot name="script">
     <!-- datatble js -->
     <script type="text/javascript" src="https://cdn.datatables.net/2.0.1/js/dataTables.min.js"></script>
+    <!-- Toastr JS -->
+    <script src="{{ asset('adminlte/plugins/toastr/toastr.min.js') }}"></script>
+    <!-- SweetAlert2 -->
+    <script src="{{ asset('adminlte/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+
+    <script>
+      function confirmLunas(id) {
+        Swal.fire({
+          // title: "Apakah Anda yakin?",
+          text: "Apakah anda ingin mengset billing ini menjadi lunas?",
+          // icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#28a745",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Ya",
+          cancelButtonText: "Batal"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            document.getElementById('lunas-form-' + id).submit();
+          }
+        });
+      }
+    </script>
+
+    @if (session('success'))
+      <script>
+        toastr.success('{{ session('success') }}', 'Berhasil');
+      </script>
+    @endif
 
     <script type="text/javascript">
       var table;
@@ -85,6 +106,7 @@
         });
       });
     </script>
+
 
   </x-slot>
 

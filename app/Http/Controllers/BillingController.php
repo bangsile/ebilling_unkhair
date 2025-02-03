@@ -84,11 +84,69 @@ class BillingController extends Controller
 
         return redirect()->route('billing.pembayaran')->with('success', 'Berhasil Membuat Billing');
     }
-    public function billing_ukt()
+    public function billing_ukt(Request $request)
     {
-        $tahun_pembayaran = TahunPembayaran::first();
-        $billings = BillingMahasiswa::where('tahun_akademik', $tahun_pembayaran?->tahun_akademik)->where('jenis_bayar', 'ukt')->get();
-        return view('pages.billing.billing-ukt', ["billings" => $billings]);
+        // $tahun_pembayaran = TahunPembayaran::first();
+        // $billings = BillingMahasiswa::where('tahun_akademik', $tahun_pembayaran?->tahun_akademik)->where('jenis_bayar', 'ukt')->get();
+        // return view('pages.billing.billing-ukt', ["billings" => $billings]);
+        if ($request->ajax()) {
+            $billings = BillingMahasiswa::select(['id', 'trx_id', 'no_va', 'no_identitas', 'nama', 'angkatan', 'kategori_ukt', 'nama_prodi', 'nominal', 'tgl_expire', 'lunas']);
+            return DataTables::of($billings)
+                ->addIndexColumn()
+                ->editColumn('nominal', function ($billing) {
+                    return formatRupiah($billing->nominal);
+                })
+                ->editColumn('status', function ($billing) {
+                    if ($billing->tgl_expire) {
+                        if ($billing->lunas) {
+                            return '<span class="badge badge-success" style="font-size: 1rem">Lunas</span>';
+                        } elseif ($billing->tgl_expire < now()) {
+                            return '<span class="badge badge-danger" style="font-size: 1rem">Expired</span>';
+                        } else {
+                            return '<span class="badge badge-warning" style="font-size: 1rem">Pending</span>';
+                        }
+                    }
+                    return '';
+                })
+                ->addColumn('action', function ($billing) {
+                    $editButton = $billing->lunas ? '<button type="button" class="btn btn-sm btn-warning disabled"><i class="fas fa-edit"></i></button>' :
+                        '<a href="' . route('billing.ukt.edit', $billing->id) . '" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>';
+                    $printButton = $billing->lunas ? '<button type="button" class="btn btn-sm btn-info disabled"><i class="fas fa-print"></i></button>' :
+                        '<a href="/" class="btn btn-sm btn-info"><i class="fas fa-print"></i></a>';
+                    $setLunasButton = !$billing->trx_id || !$billing->no_va ?
+                        '<button type="button" class="btn btn-sm btn-success disabled">Set Lunas</button>' :
+                        '<form id="lunas-form-' . $billing->id . '" action="' . route('billing.ukt.lunas') . '" method="POST" style="display: inline;">' .
+                        csrf_field() .
+                        '<input type="hidden" name="id" value="' . $billing->id . '">' .
+                        '<button type="button" class="btn btn-sm btn-success" onclick="confirmLunas(\'' . $billing->id . '\')">Set Lunas</button>' .
+                        '</form>';
+
+                    if (Auth::check() && Auth::user()->hasRole(['developper', 'admin'])) {
+                        return $editButton . ' ' . $printButton . ' ' . $setLunasButton;
+                    }
+                    return $editButton . ' ' . $printButton;
+                })
+                ->rawColumns(['status', 'action'])
+                ->make(true);
+        }
+        $data = [
+            'datatable' => [
+                'url' => route('billing.ukt'),
+                'id_table' => 'id-datatable',
+                'columns' => [
+                    ['data' => 'DT_RowIndex', 'name' => 'DT_RowIndex', 'orderable' => 'false', 'searchable' => 'false'],
+                    ['data' => 'no_identitas', 'name' => 'no_identitas', 'orderable' => 'false', 'searchable' => 'true'],
+                    ['data' => 'nama', 'name' => 'nama', 'orderable' => 'true', 'searchable' => 'true'],
+                    ['data' => 'angkatan', 'name' => 'angkatan', 'orderable' => 'true', 'searchable' => 'true'],
+                    ['data' => 'kategori_ukt', 'name' => 'kategori_ukt', 'orderable' => 'true', 'searchable' => 'false'],
+                    ['data' => 'nama_prodi', 'name' => 'nama_prodi', 'orderable' => 'false', 'searchable' => 'false'],
+                    ['data' => 'nominal', 'name' => 'nominal', 'orderable' => 'false', 'searchable' => 'false'],
+                    ['data' => 'status', 'name' => 'status', 'orderable' => 'false', 'searchable' => 'false'],
+                    ['data' => 'action', 'name' => 'action', 'orderable' => 'false', 'searchable' => 'false']
+                ]
+            ]
+        ];
+        return view('pages.billing.billing-ukt', $data);
     }
 
     public function edit_billing_ukt(Request $request)
@@ -231,7 +289,7 @@ class BillingController extends Controller
     public function billing_yajra(Request $request)
     {
         if ($request->ajax()) {
-            $billings = BillingMahasiswa::select(['id', 'no_identitas', 'nama', 'angkatan', 'kategori_ukt', 'nama_prodi', 'nominal', 'tgl_expire', 'lunas']);
+            $billings = BillingMahasiswa::select(['id', 'trx_id', 'no_va', 'no_identitas', 'nama', 'angkatan', 'kategori_ukt', 'nama_prodi', 'nominal', 'tgl_expire', 'lunas']);
             return DataTables::of($billings)
                 ->addIndexColumn()
                 ->editColumn('nominal', function ($billing) {
@@ -262,7 +320,10 @@ class BillingController extends Controller
                         '<button type="button" class="btn btn-sm btn-success" onclick="confirmLunas(\'' . $billing->id . '\')">Set Lunas</button>' .
                         '</form>';
 
-                    return $editButton . ' ' . $printButton . ' ' . $setLunasButton;
+                    if (Auth::check() && Auth::user()->hasRole(['developper', 'admin'])) {
+                        return $editButton . ' ' . $printButton . ' ' . $setLunasButton;
+                    }
+                    return $editButton . ' ' . $printButton;
                 })
                 ->rawColumns(['status', 'action'])
                 ->make(true);
