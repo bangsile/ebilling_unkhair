@@ -63,6 +63,4 @@ Route::delete('/pengguna/{id}', [UserController::class, 'destroy'])->middleware(
 
 
 
-Route::get('/tes', function () {
-    return view('tes');
-});
+Route::get('/tes', [BillingController::class, 'billing_yajra'])->middleware(['auth'])->name('tes');

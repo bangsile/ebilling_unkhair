@@ -11,6 +11,7 @@ use App\Services\EcollService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Exception;
+use Yajra\DataTables\DataTables;
 
 class BillingController extends Controller
 {
@@ -102,7 +103,7 @@ class BillingController extends Controller
         $id = $request->route('id');
         $billing = BillingMahasiswa::find($id);
 
-        if(!$billing->trx_id || !$billing->no_va){
+        if (!$billing->trx_id || !$billing->no_va) {
             $billing->update([
                 'nominal' => $request->nominal
             ]);
@@ -118,7 +119,7 @@ class BillingController extends Controller
         ];
 
         $response = $this->ecollService->updateVaBNI($data);
-        if(!$response['response']){
+        if (!$response['response']) {
             return back()->withErrors(['billing' => $response['message']]);
         }
 
@@ -135,7 +136,7 @@ class BillingController extends Controller
             'lunas' => 1
         ]);
         return redirect()->route('billing.ukt')->with('success', 'Berhasil Update Billing Lunas');
-    } 
+    }
     public function billing_umb()
     {
         $tahun_akademik = TahunPembayaran::first();
@@ -223,5 +224,66 @@ class BillingController extends Controller
         }
 
         return redirect()->route('billing.dosen')->with('success', 'Berhasil Membuat Billing');
+    }
+
+
+
+    public function billing_yajra(Request $request)
+    {
+        if ($request->ajax()) {
+            $billings = BillingMahasiswa::select(['id', 'no_identitas', 'nama', 'angkatan', 'kategori_ukt', 'nama_prodi', 'nominal', 'tgl_expire', 'lunas']);
+            return DataTables::of($billings)
+                ->addIndexColumn()
+                ->editColumn('nominal', function ($billing) {
+                    return formatRupiah($billing->nominal);
+                })
+                ->editColumn('status', function ($billing) {
+                    if ($billing->tgl_expire) {
+                        if ($billing->lunas) {
+                            return '<span class="badge badge-success" style="font-size: 1rem">Lunas</span>';
+                        } elseif ($billing->tgl_expire < now()) {
+                            return '<span class="badge badge-danger" style="font-size: 1rem">Expired</span>';
+                        } else {
+                            return '<span class="badge badge-warning" style="font-size: 1rem">Pending</span>';
+                        }
+                    }
+                    return '';
+                })
+                ->addColumn('action', function ($billing) {
+                    $editButton = $billing->lunas ? '<button type="button" class="btn btn-sm btn-warning disabled"><i class="fas fa-edit"></i></button>' :
+                        '<a href="' . route('billing.ukt.edit', $billing->id) . '" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>';
+                    $printButton = $billing->lunas ? '<button type="button" class="btn btn-sm btn-info disabled"><i class="fas fa-print"></i></button>' :
+                        '<a href="/" class="btn btn-sm btn-info"><i class="fas fa-print"></i></a>';
+                    $setLunasButton = !$billing->trx_id || !$billing->no_va ?
+                        '<button type="button" class="btn btn-sm btn-success disabled">Set Lunas</button>' :
+                        '<form id="lunas-form-' . $billing->id . '" action="' . route('billing.ukt.lunas') . '" method="POST" style="display: inline;">' .
+                        csrf_field() .
+                        '<input type="hidden" name="id" value="' . $billing->id . '">' .
+                        '<button type="button" class="btn btn-sm btn-success" onclick="confirmLunas(\'' . $billing->id . '\')">Set Lunas</button>' .
+                        '</form>';
+
+                    return $editButton . ' ' . $printButton . ' ' . $setLunasButton;
+                })
+                ->rawColumns(['status', 'action'])
+                ->make(true);
+        }
+        $data = [
+            'datatable' => [
+                'url' => route('tes'),
+                'id_table' => 'id-datatable',
+                'columns' => [
+                    ['data' => 'DT_RowIndex', 'name' => 'DT_RowIndex', 'orderable' => 'false', 'searchable' => 'false'],
+                    ['data' => 'no_identitas', 'name' => 'no_identitas', 'orderable' => 'false', 'searchable' => 'true'],
+                    ['data' => 'nama', 'name' => 'nama', 'orderable' => 'true', 'searchable' => 'true'],
+                    ['data' => 'angkatan', 'name' => 'angkatan', 'orderable' => 'true', 'searchable' => 'true'],
+                    ['data' => 'kategori_ukt', 'name' => 'kategori_ukt', 'orderable' => 'true', 'searchable' => 'false'],
+                    ['data' => 'nama_prodi', 'name' => 'nama_prodi', 'orderable' => 'false', 'searchable' => 'false'],
+                    ['data' => 'nominal', 'name' => 'nominal', 'orderable' => 'false', 'searchable' => 'false'],
+                    ['data' => 'status', 'name' => 'status', 'orderable' => 'false', 'searchable' => 'false'],
+                    ['data' => 'action', 'name' => 'action', 'orderable' => 'false', 'searchable' => 'false']
+                ]
+            ]
+        ];
+        return view('tes', $data);
     }
 }
