@@ -113,7 +113,7 @@ class BillingController extends Controller
                         '<a href="' . route('billing.ukt.edit', $billing->id) . '" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>';
                     $printButton = $billing->lunas ? '<button type="button" class="btn btn-sm btn-info disabled"><i class="fas fa-print"></i></button>' :
                         '<a href="/" class="btn btn-sm btn-info"><i class="fas fa-print"></i></a>';
-                    $setLunasButton = !$billing->trx_id || !$billing->no_va ?
+                    $setLunasButton = (!$billing->trx_id || $billing->lunas) ?
                         '<button type="button" class="btn btn-sm btn-success disabled">Set Lunas</button>' :
                         '<form id="lunas-form-' . $billing->id . '" action="' . route('billing.ukt.lunas') . '" method="POST" style="display: inline;">' .
                         csrf_field() .
