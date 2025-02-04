@@ -164,12 +164,19 @@ class BillingController extends Controller
             if (!$billing) {
                 return new BillingResource(false, 'Billing Tidak Ditemukan', null);
             }
-            $billing->update([
+
+            $value = [
                 'trx_id' => $request->trx_id,
                 'no_va' => $request->no_va,
                 'nominal' => $request->nominal,
                 'tgl_expire' => $request->tgl_expire,
-            ]);
+            ];
+
+            if ($request->nama_bank) {
+                $value += ['nama_bank' => $request->nama_bank];
+            }
+
+            $billing->update($value);
 
             return new BillingResource(true, 'Berhasil Update Billing', $billing);
         } catch (\Throwable $th) {
