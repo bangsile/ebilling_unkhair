@@ -40,8 +40,7 @@ class FakultasController extends Controller
     public function import()
     {
         $token = get_token();
-        dd($token);
-        if ($token['status'] != '200') {
+        if (!$token || $token['status'] != '200') {
             return redirect(route('fakultas.index'))->with('error', 'Terjadi kesalahan saat pembuatan token!');
         }
 

@@ -47,7 +47,7 @@ class ProdiController extends Controller
     public function import()
     {
         $token = get_token();
-        if ($token['status'] != '200') {
+        if (!$token || $token['status'] != '200') {
             return redirect(route('prodi.index'))->with('error', 'Terjadi kesalahan saat pembuatan token!');
         }
 
