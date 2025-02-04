@@ -2,11 +2,15 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\BillingController;
+use App\Http\Controllers\BillingMhsController;
 use App\Http\Controllers\DataImportController;
+use App\Http\Controllers\FakultasController;
 use App\Http\Controllers\JenisBayarController;
+use App\Http\Controllers\ProdiController;
 use App\Http\Controllers\TahunPembayaranController;
 use App\Http\Controllers\UserController;
 use App\Models\TahunPembayaran;
+use Illuminate\Routing\RouteGroup;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [AuthController::class, 'index'])->name('login');
@@ -18,49 +22,71 @@ Route::get('/dashboard', function () {
     return view('pages.dashboard', ['tahun_akademik' => $tahun_pembayaran->tahun_akademik]);
 })->middleware(['auth'])->name('dashboard');
 
-// BILLING
-Route::get('/billing-pembayaran', [BillingController::class, 'billing_pembayaran'])->middleware(['auth', 'role:admin'])->name('billing.pembayaran');
 
-Route::get('/tambah-billing', [BillingController::class, 'create_billing'])->middleware(['auth', 'role:admin'])->name('billing.tambah');
-Route::post('/tambah-billing', [BillingController::class, 'store_billing'])->middleware(['auth', 'role:admin'])->name('billing.store');
+// MANAJEMEN BILLING
+Route::controller(BillingController::class)->group(function () {
+    Route::get('/billing-pembayaran', 'billing_pembayaran')->name('billing.pembayaran');
+    Route::get('/tambah-billing', 'create_billing')->name('billing.tambah');
+    Route::post('/tambah-billing', 'store_billing')->name('billing.store');
 
-Route::get('/billing-ukt', [BillingController::class, 'billing_ukt'])->middleware(['auth', "role:admin|spp|keuangan"])->name('billing.ukt');
-Route::get('/billing-ukt/edit/{id}', [BillingController::class, 'edit_billing_ukt'])->middleware(['auth', "role:admin|spp|keuangan"])->name('billing.ukt.edit');
-Route::patch('/billing-ukt/edit/{id}', [BillingController::class, 'update_billing_ukt'])->middleware(['auth', "role:admin|spp|keuangan"])->name('billing.ukt.update');
-Route::post('/billing-ukt/lunas', [BillingController::class, 'set_lunas_billing'])->middleware(['auth', "role:admin|spp|keuangan"])->name('billing.ukt.lunas');
-Route::get('/billing-ukt/import-data', [DataImportController::class, 'import_data_ukt_form'])->middleware(['auth', "role:admin|spp|keuangan"])->name('ukt.import.form');
-Route::post('/billing-ukt/import-data', [DataImportController::class, 'import_data_ukt'])->middleware(['auth', "role:admin|spp|keuangan"])->name('ukt.import');
+    Route::get('/billing-dosen', 'billing_dosen')->name('billing.dosen');
+    Route::get('/billing-dosen/tambah', 'create_billing_dosen')->name('billing.dosen.tambah');
+    Route::post('/billing-dosen/tambah', 'store_billing_dosen')->name('billing.dosen.store');
+})->middleware(['auth']);
 
-Route::get('/billing-umb', [BillingController::class, 'billing_umb'])->middleware(['auth', 'role:admin|spp|keuangan'])->name('billing.umb');
 
-Route::get('/billing-ipi', [BillingController::class, 'billing_ipi'])->middleware(['auth', 'role:admin|spp|keuangan'])->name('billing.ipi');
+// BILLING MAHASISWA
+Route::controller(BillingMhsController::class)->group(function () {
+    Route::get('/billing-ukt', 'billing_ukt')->name('billing.ukt');
+    Route::get('/billing-ukt/edit/{id}', 'edit_billing_ukt')->name('billing.ukt.edit');
+    Route::patch('/billing-ukt/edit/{id}', 'update_billing_ukt')->name('billing.ukt.update');
+    Route::post('/billing-ukt/lunas', 'set_lunas_billing')->name('billing.ukt.lunas');
 
-Route::get('/billing-pemkes', [BillingController::class, 'billing_pemkes'])->middleware(['auth', 'role:admin|spp|keuangan'])->name('billing.pemkes');
+    Route::get('/billing-umb', 'billing_umb')->name('billing.umb');
+    Route::get('/billing-ipi', 'billing_ipi')->name('billing.ipi');
+    Route::get('/billing-pemkes', 'billing_pemkes')->name('billing.pemkes');
+})->middleware(['auth', 'role:admin|spp|keuangan']);
 
-Route::get('/billing-dosen', [BillingController::class, 'billing_dosen'])->middleware(['auth'])->name('billing.dosen');
-Route::get('/billing-dosen/tambah', [BillingController::class, 'create_billing_dosen'])->middleware(['auth'])->name('billing.dosen.tambah');
-Route::post('/billing-dosen/tambah', [BillingController::class, 'store_billing_dosen'])->middleware(['auth'])->name('billing.dosen.store');
+
+// IMPORT DATA UKT
+Route::controller(DataImportController::class)->group(function () {
+    Route::get('/billing-ukt/import-data', 'import_data_ukt_form')->name('ukt.import.form');
+    Route::post('/billing-ukt/import-data', 'import_data_ukt')->name('ukt.import');
+})->middleware(['auth', 'role:developper|admin|spp|keuangan']);
+
 
 // JENIS BAYAR
-Route::get('/jenis-bayar', [JenisBayarController::class, 'index'])->middleware(['auth', 'role:developper|admin'])->name('jenis-bayar');
-Route::get('/jenis-bayar/tambah', [JenisBayarController::class, 'create'])->middleware(['auth', 'role:developper|admin'])->name('jenis-bayar.tambah');
-Route::post('/jenis-bayar/tambah', [JenisBayarController::class, 'store'])->middleware(['auth', 'role:developper|admin'])->name('jenis-bayar.store');
+Route::controller(JenisBayarController::class)->group(function () {
+    Route::get('/jenis-bayar', 'index')->name('jenis-bayar');
+    Route::get('/jenis-bayar/tambah', 'create')->name('jenis-bayar.tambah');
+    Route::post('/jenis-bayar/tambah', 'store')->name('jenis-bayar.store');
+})->middleware(['auth', 'role:developper|admin']);
 
 // TAHUN PEMBAYARAN
-Route::get('/tahun-pembayaran', [TahunPembayaranController::class, 'index'])
-    ->middleware(['auth', 'role:developper|admin|spp|keuangan'])->name('tahun-pembayaran');
-Route::post('/tahun-pembayaran', [TahunPembayaranController::class, 'store'])
-    ->middleware(['auth', 'role:developper|admin|spp|keuangan'])->name('tahun-pembayaran.store');
+Route::controller(TahunPembayaranController::class)->group(function () {
+    Route::get('/tahun-pembayaran', 'index')->name('tahun-pembayaran');
+    Route::post('/tahun-pembayaran', 'store')->name('tahun-pembayaran.store');
+})->middleware(['auth', 'role:developper|admin|spp|keuangan']);
+
+// FAKULTAS
+Route::controller(FakultasController::class)->group(function () {
+    Route::get('/fakultas', 'index')->name('fakultas.index');
+    Route::get('/fakultas/import', 'import')->name('fakultas.import');
+})->middleware(['auth', 'role:developper|admin']);
+
+// PRODI
+Route::controller(ProdiController::class)->group(function () {
+    Route::get('/prodi', 'index')->name('prodi.index');
+    Route::get('/prodi/import', 'import')->name('prodi.import');
+})->middleware(['auth', 'role:developper|admin']);
+
 
 // PENGGUNA
-Route::get('/pengguna', [UserController::class, 'index'])->middleware(['auth', 'role:developper|admin'])->name('pengguna.index');
-Route::get('/pengguna/tambah', [UserController::class, 'create'])->middleware(['auth', 'role:developper|admin'])->name('pengguna.tambah');
-Route::post('/pengguna/tambah', [UserController::class, 'store'])->middleware(['auth', 'role:developper|admin'])->name('pengguna.store');
-Route::get('/pengguna/{id}', [UserController::class, 'edit'])->middleware(['auth', 'role:developper|admin'])->name('pengguna.edit');
-Route::patch('/pengguna/{id}', [UserController::class, 'update'])->middleware(['auth', 'role:developper|admin'])->name('pengguna.update');
-Route::delete('/pengguna/{id}', [UserController::class, 'destroy'])->middleware(['auth', 'role:developper|admin'])->name('pengguna.destroy');
-
-
-
-
-// Route::get('/tes', [BillingController::class, 'billing_yajra'])->middleware(['auth'])->name('tes');
+Route::controller(UserController::class)->group(function () {
+    Route::get('/pengguna', 'index')->name('pengguna.index');
+    Route::get('/pengguna/tambah', 'create')->name('pengguna.tambah');
+    Route::post('/pengguna/tambah', 'store')->name('pengguna.store');
+    Route::get('/pengguna/{id}', 'edit')->name('pengguna.edit');
+    Route::patch('/pengguna/{id}', 'update')->name('pengguna.update');
+    Route::delete('/pengguna/{id}', 'destroy')->name('pengguna.destroy');
+})->middleware(['auth', 'role:developper|admin']);

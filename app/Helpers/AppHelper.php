@@ -36,3 +36,14 @@ if (!function_exists('str_curl')) {
     return $url . '?' . http_build_query($data);
   }
 }
+
+if (!function_exists('get_token')) {
+  function get_token()
+  {
+    $username_admin = env('API_USERNAME_SIMAK');
+    $password_admin = env('API_PASSWORD_SIMAK');
+    $url_simak = env('API_URL_SIMAK');
+    $response  = post_data($url_simak . '/4pisim4k/index.php/token', ['username' => $username_admin, 'password' => $password_admin]);
+    return json_decode($response, true);
+  }
+}

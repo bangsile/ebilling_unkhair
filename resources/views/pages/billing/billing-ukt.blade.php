@@ -22,7 +22,7 @@
                         <!-- /.card-header -->
                         <div class="card-body">
                             <a href="{{ route('ukt.import.form') }}" class="btn btn-primary"><i
-                                    class="fa fa-cloud-upload mb-2"></i> Import Data UKT</a>
+                                    class="fa fa-download mb-2"></i> Import Data UKT</a>
                             <table id="{{ $datatable['id_table'] }}" class="table table-bordered table-hover">
                                 <thead>
                                     <tr>
