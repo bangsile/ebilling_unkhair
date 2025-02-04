@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\BillingMahasiswa;
 use App\Models\TahunPembayaran;
 use App\Services\EcollService;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 class BillingMhsController extends Controller
@@ -62,6 +64,7 @@ class BillingMhsController extends Controller
                 ->rawColumns(['status', 'action'])
                 ->make(true);
         }
+
         $data = [
             'judul' => 'Billing UKT',
             'datatable' => [
