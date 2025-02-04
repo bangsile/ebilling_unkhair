@@ -15,7 +15,7 @@ Route::post('/logout', [AuthController::class, 'destroy'])->name('logout');
 
 Route::get('/dashboard', function () {
     $tahun_pembayaran = TahunPembayaran::first();
-    return view('pages.dashboard', ['tahun_akademik' => $tahun_pembayaran->tahun_akademik ]);
+    return view('pages.dashboard', ['tahun_akademik' => $tahun_pembayaran->tahun_akademik]);
 })->middleware(['auth'])->name('dashboard');
 
 // BILLING

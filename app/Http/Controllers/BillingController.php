@@ -86,11 +86,11 @@ class BillingController extends Controller
     }
     public function billing_ukt(Request $request)
     {
-        // $tahun_pembayaran = TahunPembayaran::first();
-        // $billings = BillingMahasiswa::where('tahun_akademik', $tahun_pembayaran?->tahun_akademik)->where('jenis_bayar', 'ukt')->get();
-        // return view('pages.billing.billing-ukt', ["billings" => $billings]);
+        $tahun_akademik = TahunPembayaran::first();
+
         if ($request->ajax()) {
-            $billings = BillingMahasiswa::select(['id', 'trx_id', 'no_va', 'no_identitas', 'nama', 'angkatan', 'kategori_ukt', 'nama_prodi', 'nominal', 'tgl_expire', 'lunas']);
+            $billings = BillingMahasiswa::select(['id', 'trx_id', 'no_va', 'no_identitas', 'nama', 'angkatan', 'kategori_ukt', 'nama_prodi', 'nominal', 'tgl_expire', 'lunas'])
+                ->where('tahun_akademik', $tahun_akademik?->tahun_akademik)->where('jenis_bayar', 'ukt');
             return DataTables::of($billings)
                 ->addIndexColumn()
                 ->editColumn('nominal', function ($billing) {
@@ -130,6 +130,7 @@ class BillingController extends Controller
                 ->make(true);
         }
         $data = [
+            'judul' => 'Billing UKT',
             'datatable' => [
                 'url' => route('billing.ukt'),
                 'id_table' => 'id-datatable',
@@ -195,24 +196,154 @@ class BillingController extends Controller
         ]);
         return redirect()->route('billing.ukt')->with('success', 'Berhasil Update Billing Lunas');
     }
-    public function billing_umb()
+
+
+    // billing umb
+    public function billing_umb(Request $request)
     {
         $tahun_akademik = TahunPembayaran::first();
-        $billings = BillingMahasiswa::where('tahun_akademik', $tahun_akademik?->tahun_akademik)->where('jenis_bayar', 'umb')->get();
-        return view('pages.billing.billing-umb', ["billings" => $billings]);
+        if ($request->ajax()) {
+            $billings = BillingMahasiswa::where('tahun_akademik', $tahun_akademik?->tahun_akademik)->where('jenis_bayar', 'umb');
+            return DataTables::of($billings)
+                ->addIndexColumn()
+                ->editColumn('nominal', function ($billing) {
+                    return formatRupiah($billing->nominal);
+                })
+                ->editColumn('status', function ($billing) {
+                    if ($billing->tgl_expire) {
+                        if ($billing->lunas) {
+                            return '<span class="badge badge-success" style="font-size: 1rem">Lunas</span>';
+                        } elseif ($billing->tgl_expire < now()) {
+                            return '<span class="badge badge-danger" style="font-size: 1rem">Expired</span>';
+                        } else {
+                            return '<span class="badge badge-warning" style="font-size: 1rem">Pending</span>';
+                        }
+                    }
+                    return '';
+                })
+                ->editColumn('created_at', function ($billing) {
+                    return tgl_indo($billing->created_at);
+                })
+                ->rawColumns(['status', 'nominal', 'created_at'])
+                ->make(true);
+        }
+        $data = [
+            'judul' => 'Billing UMB',
+            'datatable' => [
+                'url' => route('billing.umb'),
+                'id_table' => 'id-datatable',
+                'columns' => [
+                    ['data' => 'DT_RowIndex', 'name' => 'DT_RowIndex', 'orderable' => 'false', 'searchable' => 'false'],
+                    ['data' => 'no_identitas', 'name' => 'no_identitas', 'orderable' => 'false', 'searchable' => 'true'],
+                    ['data' => 'nama', 'name' => 'nama', 'orderable' => 'true', 'searchable' => 'true'],
+                    ['data' => 'jalur', 'name' => 'jalur', 'orderable' => 'true', 'searchable' => 'true'],
+                    ['data' => 'kategori_ukt', 'name' => 'kategori_ukt', 'orderable' => 'true', 'searchable' => 'false'],
+                    ['data' => 'nama_prodi', 'name' => 'nama_prodi', 'orderable' => 'false', 'searchable' => 'false'],
+                    ['data' => 'nominal', 'name' => 'nominal', 'orderable' => 'false', 'searchable' => 'false'],
+                    ['data' => 'status', 'name' => 'status', 'orderable' => 'false', 'searchable' => 'false'],
+                    ['data' => 'created_at', 'name' => 'created_at', 'orderable' => 'false', 'searchable' => 'false'],
+                ]
+            ]
+        ];
+
+        return view('pages.billing.billing-umb', $data);
     }
-    public function billing_ipi()
+    public function billing_ipi(Request $request)
     {
         $tahun_akademik = TahunPembayaran::first();
-        $billings = BillingMahasiswa::where('tahun_akademik', $tahun_akademik?->tahun_akademik)->where('jenis_bayar', 'ipi')->get();
-        return view('pages.billing.billing-ipi', ["billings" => $billings]);
+        if ($request->ajax()) {
+            $billings = BillingMahasiswa::where('tahun_akademik', $tahun_akademik?->tahun_akademik)->where('jenis_bayar', 'ipi');
+            return DataTables::of($billings)
+                ->addIndexColumn()
+                ->editColumn('nominal', function ($billing) {
+                    return formatRupiah($billing->nominal);
+                })
+                ->editColumn('status', function ($billing) {
+                    if ($billing->tgl_expire) {
+                        if ($billing->lunas) {
+                            return '<span class="badge badge-success" style="font-size: 1rem">Lunas</span>';
+                        } elseif ($billing->tgl_expire < now()) {
+                            return '<span class="badge badge-danger" style="font-size: 1rem">Expired</span>';
+                        } else {
+                            return '<span class="badge badge-warning" style="font-size: 1rem">Pending</span>';
+                        }
+                    }
+                    return '';
+                })
+                ->editColumn('created_at', function ($billing) {
+                    return tgl_indo($billing->created_at);
+                })
+                ->rawColumns(['status', 'nominal', 'created_at'])
+                ->make(true);
+        }
+        $data = [
+            'judul' => 'Billing IPI',
+            'datatable' => [
+                'url' => route('billing.ipi'),
+                'id_table' => 'id-datatable',
+                'columns' => [
+                    ['data' => 'DT_RowIndex', 'name' => 'DT_RowIndex', 'orderable' => 'false', 'searchable' => 'false'],
+                    ['data' => 'no_identitas', 'name' => 'no_identitas', 'orderable' => 'false', 'searchable' => 'true'],
+                    ['data' => 'nama', 'name' => 'nama', 'orderable' => 'true', 'searchable' => 'true'],
+                    ['data' => 'jalur', 'name' => 'jalur', 'orderable' => 'true', 'searchable' => 'true'],
+                    ['data' => 'nama_prodi', 'name' => 'nama_prodi', 'orderable' => 'false', 'searchable' => 'false'],
+                    ['data' => 'nominal', 'name' => 'nominal', 'orderable' => 'false', 'searchable' => 'false'],
+                    ['data' => 'status', 'name' => 'status', 'orderable' => 'false', 'searchable' => 'false'],
+                    ['data' => 'created_at', 'name' => 'created_at', 'orderable' => 'false', 'searchable' => 'false'],
+                ]
+            ]
+        ];
+        return view('pages.billing.billing-ipi', $data);
     }
-    public function billing_pemkes()
+    public function billing_pemkes(Request $request)
     {
         $tahun_akademik = TahunPembayaran::first();
-        $billings = BillingMahasiswa::where('tahun_akademik', $tahun_akademik?->tahun_akademik)->where('jenis_bayar', 'pemkes')->get();
-        return view('pages.billing.billing-pemkes', ["billings" => $billings]);
+        if ($request->ajax()) {
+            $billings = BillingMahasiswa::where('tahun_akademik', $tahun_akademik?->tahun_akademik)->where('jenis_bayar', 'pemkes');
+            return DataTables::of($billings)
+                ->addIndexColumn()
+                ->editColumn('nominal', function ($billing) {
+                    return formatRupiah($billing->nominal);
+                })
+                ->editColumn('status', function ($billing) {
+                    if ($billing->tgl_expire) {
+                        if ($billing->lunas) {
+                            return '<span class="badge badge-success" style="font-size: 1rem">Lunas</span>';
+                        } elseif ($billing->tgl_expire < now()) {
+                            return '<span class="badge badge-danger" style="font-size: 1rem">Expired</span>';
+                        } else {
+                            return '<span class="badge badge-warning" style="font-size: 1rem">Pending</span>';
+                        }
+                    }
+                    return '';
+                })
+                ->editColumn('created_at', function ($billing) {
+                    return tgl_indo($billing->created_at);
+                })
+                ->rawColumns(['status', 'nominal', 'created_at'])
+                ->make(true);
+        }
+        $data = [
+            'judul' => 'Billing PEMKES',
+            'datatable' => [
+                'url' => route('billing.pemkes'),
+                'id_table' => 'id-datatable',
+                'columns' => [
+                    ['data' => 'DT_RowIndex', 'name' => 'DT_RowIndex', 'orderable' => 'false', 'searchable' => 'false'],
+                    ['data' => 'no_identitas', 'name' => 'no_identitas', 'orderable' => 'false', 'searchable' => 'true'],
+                    ['data' => 'nama', 'name' => 'nama', 'orderable' => 'true', 'searchable' => 'true'],
+                    ['data' => 'jalur', 'name' => 'jalur', 'orderable' => 'true', 'searchable' => 'true'],
+                    ['data' => 'nama_prodi', 'name' => 'nama_prodi', 'orderable' => 'false', 'searchable' => 'false'],
+                    ['data' => 'nominal', 'name' => 'nominal', 'orderable' => 'false', 'searchable' => 'false'],
+                    ['data' => 'status', 'name' => 'status', 'orderable' => 'false', 'searchable' => 'false'],
+                    ['data' => 'created_at', 'name' => 'created_at', 'orderable' => 'false', 'searchable' => 'false'],
+                ]
+            ]
+        ];
+        return view('pages.billing.billing-pemkes', $data);
     }
+
+
     public function billing_dosen()
     {
         return view('pages.billing.billing-dosen');
