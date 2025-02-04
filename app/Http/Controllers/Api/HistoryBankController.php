@@ -69,13 +69,13 @@ class HistoryBankController extends Controller
             $data = $request->all();
             $apiKey = $request->header('X-API-KEY');
             HistoryBankJob::dispatch($data, $apiKey);
-    
+
             return response()->json([
                 'response' => true,
                 'message' => 'Sedang Memproses Transaksi',
             ], status: 200);
         } catch (\Throwable $th) {
-            dd($th);
+            // dd($th);
             return response()->json([
                 'response' => false,
                 'message' => 'Internal Server Error',
