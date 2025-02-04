@@ -30,6 +30,13 @@ class TahunPembayaranController extends Controller
             'akhir_pembayaran.required' => 'Akhir pembayaran wajib diisi.',
         ]);
 
+        $token = env('API_TOKEN_SIMAK', 'default_token');
+        $response = json_decode(get_data(str_curl('https://simak.unkhair.ac.id/4pisim4k/kalender/cektahun', ['token' => $token, 'tahun' => $request->tahun_akademik])), TRUE);
+
+        if ($response['status'] != '200') {
+            return redirect()->route('tahun-pembayaran')->with('error', 'Tahun akademik ' . $request->tahun_akademik . ' tidak terdaftar di SIMAK, silahkan hubungi admin BAAKP.');
+        }
+
         $tahunPembayaran = TahunPembayaran::first();
         if (!$tahunPembayaran) {
             $tahunPembayaran = new TahunPembayaran();
@@ -40,5 +47,4 @@ class TahunPembayaranController extends Controller
         $tahunPembayaran->save();
         return redirect()->route('tahun-pembayaran')->with('success', 'Berhasil Mengupdate Tahun Pembayaran');
     }
-
 }

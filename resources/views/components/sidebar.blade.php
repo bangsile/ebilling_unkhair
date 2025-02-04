@@ -81,7 +81,7 @@
         @if (Auth::user()->hasRole(['developper', 'admin', 'spp', 'keuangan']))
           <x-nav-link icon="nav-icon fas fa-calendar-alt" href="{{ route('tahun-pembayaran') }}"
             active="{{ Route::is('tahun-pembayaran') }}">
-            Tahun Pembayaran
+            Periode Pembayaran
           </x-nav-link>
         @endif
 
