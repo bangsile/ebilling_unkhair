@@ -105,6 +105,10 @@
                 @endif
 
                 @if (Auth::user()->hasRole(['admin', 'spp', 'keuangan']))
+                    <x-nav-link icon="nav-icon fas fa-newspaper" href="" active="">
+                        Rekening Koran
+                    </x-nav-link>
+
                     <x-nav-link icon="nav-icon fas fa-file" active="{{ Route::is('laporan.*') }}">
                         Laporan
                         <i class="right fas fa-angle-left"></i>
