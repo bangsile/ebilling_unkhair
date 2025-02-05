@@ -10,7 +10,6 @@ use App\Http\Controllers\ProdiController;
 use App\Http\Controllers\TahunPembayaranController;
 use App\Http\Controllers\UserController;
 use App\Models\TahunPembayaran;
-use Illuminate\Routing\RouteGroup;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [AuthController::class, 'index'])->name('login');
@@ -22,6 +21,14 @@ Route::get('/dashboard', function () {
     return view('pages.dashboard', ['tahun_akademik' => $tahun_pembayaran->tahun_akademik]);
 })->middleware(['auth'])->name('dashboard');
 
+
+Livewire::setUpdateRoute(function ($handle) {
+    return Route::post('/ebilling_unkhair/public/livewire/update', $handle);
+});
+
+Livewire::setScriptRoute(function ($handle) {
+    return Route::get('/ebilling_unkhair/public/livewire/livewire.js', $handle);
+});
 
 // MANAJEMEN BILLING
 Route::controller(BillingController::class)->group(function () {
@@ -85,6 +92,7 @@ Route::controller(ProdiController::class)->group(function () {
 Route::controller(UserController::class)->group(function () {
     Route::get('/pengguna', 'index')->name('pengguna.index');
     Route::get('/pengguna/tambah', 'create')->name('pengguna.tambah');
+    Route::get('/pengguna/import', 'import')->name('pengguna.import');
     Route::post('/pengguna/tambah', 'store')->name('pengguna.store');
     Route::get('/pengguna/{id}', 'edit')->name('pengguna.edit');
     Route::patch('/pengguna/{id}', 'update')->name('pengguna.update');

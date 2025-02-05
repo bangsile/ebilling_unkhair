@@ -21,6 +21,14 @@ class UserController extends Controller
         return view('pages.pengguna.create', compact('roles'));
     }
 
+    public function import()
+    {
+        $data = [
+            'judul' => 'Import Pengguna SIMAK'
+        ];
+        return view('pages.pengguna.import', $data);
+    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -65,6 +73,19 @@ class UserController extends Controller
 
     public function update(Request $request)
     {
+        $request->validate([
+            'nama' => 'required',
+            'username' => 'required|unique:users,username,' . $request->id,
+            // 'password' => 'required',
+            'role' => 'required'
+        ], [
+            'nama.required' => 'Nama wajib diisi',
+            'username.required' => 'Username wajib diisi',
+            'username.unique' => 'Username sudah terdaftar',
+            // 'password.required' => 'Password wajib diisi',
+            'role.required' => 'Role wajib dipilih'
+        ]);
+
         $user = User::find($request->id);
         if (!$user) {
             return back()->withErrors('error', 'Pengguna tidak ditemukan');
@@ -72,7 +93,8 @@ class UserController extends Controller
         $user->update([
             "name" => $request->nama,
             "username" => $request->username,
-            "password" => $request->password ? Hash::make($request->password) : $user->password
+            "password" => $request->password ? Hash::make($request->password) : $user->password,
+            'is_active' => $request->is_active ? 1 : 0
         ]);
         $user->syncRoles($request->role);
         return redirect()->route('pengguna.index')->with('success', 'Berhasil Mengupdate Pengguna');

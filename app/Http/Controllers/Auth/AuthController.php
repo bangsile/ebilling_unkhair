@@ -32,59 +32,54 @@ class AuthController extends Controller
 			'password.required' => 'Password wajib diisi.',
 		]);
 
-		$token = env('API_TOKEN_SIMAK', 'default_token'); 
+		$token = get_token();
+		if (!$token || $token['status'] != '200') {
+			return back()->with('error', 'Terjadi kesalahan saat pembuatan token!');
+		}
+		$token = $token['data']['token'];
 
 		// Cek user di DB
 		$user = User::where('username', $request->username)->first();
 		if ($user) {
-			if (Hash::check($request->password, $user->password)) {
+			if (!$user->is_active) {
+				return back()->with('error', 'Akun anda sedang dinonaktifkan!!');
+			}
+
+			if (!$user->user_simak) {
+				if (!Hash::check($request->password, $user->password)) {
+					return back()->with('error', 'Login gagal. Silahkan coba lagi.');
+				}
+
 				Auth::login($user);
 				Session::regenerate();
 				return redirect()->intended(route('dashboard'));
-			} else {
+			}
+
+			$response = json_decode(get_data(str_curl(env('API_URL_SIMAK') . '/4pisim4k/index.php/admin', ['token' => $token, 'username' => $request->username])), TRUE);
+			// dd($token, $response);
+			if (!$response || $response['status'] != '200') {
+				return back()->with('error', 'Identitas ' . $request->username . ' tidak di kenali!');
+			}
+
+			$get = $response['data']['admin'];
+			if ($get['blokir'] == 'Y') {
+				return back()->with('error', 'Akun anda sedang dinonaktifkan!!');
+			}
+
+			if (!password_verify($request->password, $get['password'])) {
 				return back()->with('error', 'Login gagal. Silahkan coba lagi.');
 			}
+
+			Auth::login($user);
+			Session::regenerate();
+			return redirect()->intended(route('dashboard'));
 		} else {
 
 			// Login dengan API SIMAK
-			$response_admin = json_decode(get_data(str_curl('https://simak.unkhair.ac.id/apiv2/index.php/admin', ['token' => $token, 'username' => $request->username])), TRUE);
-			$response_dosen = json_decode(get_data(str_curl('https://simak.unkhair.ac.id/apiv2/index.php/dosen', ['token' => $token, 'nidn' => $request->username])), TRUE);
-
+			$response_dosen = json_decode(get_data(str_curl(env('API_URL_SIMAK') . '/4pisim4k/index.php/dosen', ['token' => $token, 'nidn' => $request->username])), TRUE);
 			// User Admin
-			if ($response_admin && $response_admin['status'] == 200) {
-				if (Hash::check($request->password, $response_admin['data']['admin']['password'])) {
-					User::updateOrCreate(
-						['username' => $response_admin['data']['admin']['username']],
-						[
-							// 'id_admin' => $response_admin['data']['admin']['id_admin'],
-							// 'username' => $response_admin['data']['admin']['username'],
-							'password' => $response_admin['data']['admin']['password'],
-							'name' => $response_admin['data']['admin']['nama_lengkap'],
-							'detail' => json_encode([
-								'id_admin' => $response_admin['data']['admin']['id_admin'],
-								'username' => $response_admin['data']['admin']['username'],
-								'password' => $response_admin['data']['admin']['password'],
-								'nama_lengkap' => $response_admin['data']['admin']['nama_lengkap'],
-								'no_telp' => $response_admin['data']['admin']['no_telp'] ?? '',
-								'email' => $response_admin['data']['admin']['email'] ?? '',
-								'blokir' => $response_admin['data']['admin']['blokir'],
-							]),
-						]
-					);
-					$user_admin = User::where('username', $response_admin['data']['admin']['username'])->first();
-					if(!$user_admin->hasRole('admin')) {
-						$user_admin->assignRole('admin');
-					}
-					Auth::login($user_admin);
-					Session::regenerate();
-					return redirect()->route('dashboard');
-				} else {
-					return back()->with('error', 'Login gagal. Silahkan coba lagi.');
-				}
-			}
-			// User Dosen
-			elseif ($response_dosen['status'] == 200) {
-				// if (Hash::check($request->password, $response_dosen['data']['dosen']['password'])) {
+			if ($response_dosen['status'] == 200) {
+				if (password_verify($request->password, $response_dosen['data']['dosen']['password'])) {
 					User::updateOrCreate(
 						['username' => $response_dosen['data']['dosen']['nidn']],
 						[
@@ -109,13 +104,13 @@ class AuthController extends Controller
 						]
 					);
 					$user_dosen = User::where('username', $response_dosen['data']['dosen']['nidn'])->first();
-					if(!$user_dosen->hasRole('dosen')) {
+					if (!$user_dosen->hasRole('dosen')) {
 						$user_dosen->assignRole('dosen');
 					}
 					Auth::login($user_dosen);
 					Session::regenerate();
 					return redirect()->route('dashboard');
-				// }
+				}
 				// return back()->with('error', 'Login gagal. Silahkan coba lagi.');
 			}
 			return back()->with('error', 'Login gagal. Silahkan coba lagi.');
