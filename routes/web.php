@@ -23,11 +23,11 @@ Route::get('/dashboard', function () {
 
 
 Livewire::setUpdateRoute(function ($handle) {
-    return Route::post('/ebilling_unkhair/public/livewire/update', $handle);
+    return Route::post('/' . env('SITE_NAME') . '/public/livewire/update', $handle);
 });
 
 Livewire::setScriptRoute(function ($handle) {
-    return Route::get('/ebilling_unkhair/public/livewire/livewire.js', $handle);
+    return Route::get('/' . env('SITE_NAME') . '/public/livewire/livewire.js', $handle);
 });
 
 // MANAJEMEN BILLING
