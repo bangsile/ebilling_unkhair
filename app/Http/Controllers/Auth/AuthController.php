@@ -32,12 +32,6 @@ class AuthController extends Controller
 			'password.required' => 'Password wajib diisi.',
 		]);
 
-		$token = get_token();
-		if (!$token || $token['status'] != '200') {
-			return back()->with('error', 'Terjadi kesalahan saat pembuatan token!');
-		}
-		$token = $token['data']['token'];
-
 		// Cek user di DB
 		$user = User::where('username', $request->username)->first();
 		if ($user) {
@@ -54,6 +48,12 @@ class AuthController extends Controller
 				Session::regenerate();
 				return redirect()->intended(route('dashboard'));
 			}
+
+			$token = get_token();
+			if (!$token || $token['status'] != '200') {
+				return back()->with('error', 'Terjadi kesalahan saat pembuatan token!');
+			}
+			$token = $token['data']['token'];
 
 			$response = json_decode(get_data(str_curl(env('API_URL_SIMAK') . '/4pisim4k/index.php/admin', ['token' => $token, 'username' => $request->username])), TRUE);
 			// dd($token, $response);
@@ -75,6 +75,11 @@ class AuthController extends Controller
 			return redirect()->intended(route('dashboard'));
 		} else {
 
+			$token = get_token();
+			if (!$token || $token['status'] != '200') {
+				return back()->with('error', 'Terjadi kesalahan saat pembuatan token!');
+			}
+			$token = $token['data']['token'];
 			// Login dengan API SIMAK
 			$response_dosen = json_decode(get_data(str_curl(env('API_URL_SIMAK') . '/4pisim4k/index.php/dosen', ['token' => $token, 'nidn' => $request->username])), TRUE);
 			// User Admin

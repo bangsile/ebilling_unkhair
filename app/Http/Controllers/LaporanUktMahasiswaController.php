@@ -8,7 +8,7 @@ use App\Models\Prodi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class LaporanUktMahasiswa extends Controller
+class LaporanUktMahasiswaController extends Controller
 {
     public function index(Request $request)
     {

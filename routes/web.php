@@ -6,8 +6,9 @@ use App\Http\Controllers\BillingMhsController;
 use App\Http\Controllers\DataImportController;
 use App\Http\Controllers\FakultasController;
 use App\Http\Controllers\JenisBayarController;
-use App\Http\Controllers\LaporanUktMahasiswa;
+use App\Http\Controllers\LaporanUktMahasiswaController;
 use App\Http\Controllers\ProdiController;
+use App\Http\Controllers\RekeningKoranController;
 use App\Http\Controllers\TahunPembayaranController;
 use App\Http\Controllers\UserController;
 use App\Models\TahunPembayaran;
@@ -55,8 +56,15 @@ Route::controller(BillingMhsController::class)->group(function () {
     Route::get('/billing-pemkes', 'billing_pemkes')->name('billing.pemkes');
 })->middleware(['auth', 'role:admin|spp|keuangan']);
 
+// REKENING KORAN
+Route::controller(RekeningKoranController::class)->group(function () {
+    Route::get('/rekening-koran', 'index')->name('rekening-koran.index');
+    Route::get('/rekening-koran/show', 'tampil')->name('rekening-koran.tampil');
+})->middleware(['auth', 'role:developper|admin|spp|keuangan']);
+
+
 // LAPORAN UKT MAHASISWA
-Route::controller(LaporanUktMahasiswa::class)->group(function () {
+Route::controller(LaporanUktMahasiswaController::class)->group(function () {
     Route::get('/laporan-ukt', 'index')->name('laporan.ukt');
     Route::post('/laporan-ukt/show', 'index')->name('laporan.ukt.tampil');
 })->middleware(['auth', 'role:developper|admin|spp|keuangan']);
