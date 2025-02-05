@@ -60,10 +60,15 @@ class RekeningKoranController extends Controller
                     return $billing->nama . '<br>NPM: ' . $billing->no_identitas;
                 })
                 ->editColumn('ket', function ($billing) {
-                    if ($billing->jenis_bayara == 'ukt') {
+                    if ($billing->jenis_bayar == 'ukt') {
                         return 'Pembayaran UKT ' . $billing->tahun_akademik;
                     }
-                    return 'Jalur ' . $billing->jalur;
+
+                    if (in_array($billing->jenis_bayar, ['umb', 'ipi', 'pemkes'])) {
+                        $ket = 'Pembayaran UKT ' . $billing->tahun_akademik;
+                        $ket .= '<br>Jalur ' . $billing->jalur;
+                        return $ket;
+                    }
                 })
                 ->filter(function ($instance) use ($request) {
                     $filter = false;
