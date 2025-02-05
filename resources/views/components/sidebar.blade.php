@@ -29,6 +29,10 @@
                 </x-nav-link>
 
                 @if (Auth::user()->hasRole(['developper', 'admin']))
+                    <x-nav-link icon="nav-icon fas fa-users" href="{{ route('pengguna.index') }}"
+                        active="{{ Route::is('pengguna.*') }}">
+                        Pengguna
+                    </x-nav-link>
                     <x-nav-link icon="nav-icon fas fa-university" href="{{ route('fakultas.index') }}"
                         active="{{ Route::is('fakultas.*') }}">
                         Fakultas
@@ -37,9 +41,16 @@
                         active="{{ Route::is('prodi.*') }}">
                         Program Studi
                     </x-nav-link>
-                    <x-nav-link icon="nav-icon fas fa-users" href="{{ route('pengguna.index') }}"
-                        active="{{ Route::is('pengguna.*') }}">
-                        Pengguna
+                    <x-nav-link icon="nav-icon fas fa-list-alt" href="{{ route('jenis-bayar') }}"
+                        active="{{ Route::is('jenis-bayar') }}">
+                        Jenis Pembayaran
+                    </x-nav-link>
+                @endif
+
+                @if (Auth::user()->hasRole(['developper', 'admin', 'spp', 'keuangan']))
+                    <x-nav-link icon="nav-icon fas fa-calendar-alt" href="{{ route('tahun-pembayaran') }}"
+                        active="{{ Route::is('tahun-pembayaran') }}">
+                        Periode Pembayaran
                     </x-nav-link>
                 @endif
 
@@ -93,22 +104,27 @@
                     </x-nav-link>
                 @endif
 
-                @if (Auth::user()->hasRole(['developper', 'admin']))
-                    <x-nav-link icon="nav-icon fas fa-list-alt" href="{{ route('jenis-bayar') }}"
-                        active="{{ Route::is('jenis-bayar') }}">
-                        Jenis Pembayaran
-                    </x-nav-link>
-                @endif
-                @if (Auth::user()->hasRole(['developper', 'admin', 'spp', 'keuangan']))
-                    <x-nav-link icon="nav-icon fas fa-calendar-alt" href="{{ route('tahun-pembayaran') }}"
-                        active="{{ Route::is('tahun-pembayaran') }}">
-                        Periode Pembayaran
-                    </x-nav-link>
-                @endif
-
                 @if (Auth::user()->hasRole(['admin', 'spp', 'keuangan']))
-                    <x-nav-link icon="nav-icon fas fa-file">
+                    <x-nav-link icon="nav-icon fas fa-file" active="{{ Route::is('laporan.*') }}">
                         Laporan
+                        <i class="right fas fa-angle-left"></i>
+                        <x-slot name="navtree">
+                            <ul class="nav nav-treeview">
+                                <x-nav-link icon="far fa-circle nav-icon" href="{{ route('laporan.ukt') }}"
+                                    active="{{ Route::is('laporan.ukt') || Route::is('laporan.ukt.*') }}">
+                                    Laporan UKT
+                                </x-nav-link>
+                                <x-nav-link icon="far fa-circle nav-icon" href="" active="">
+                                    Laporan UMB
+                                </x-nav-link>
+                                <x-nav-link icon="far fa-circle nav-icon" href="" active="">
+                                    Laporan IPI
+                                </x-nav-link>
+                                <x-nav-link icon="far fa-circle nav-icon" href="" active="">
+                                    Laporan Pemkes
+                                </x-nav-link>
+                            </ul>
+                        </x-slot>
                     </x-nav-link>
                 @endif
 

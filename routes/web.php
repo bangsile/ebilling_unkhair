@@ -6,6 +6,7 @@ use App\Http\Controllers\BillingMhsController;
 use App\Http\Controllers\DataImportController;
 use App\Http\Controllers\FakultasController;
 use App\Http\Controllers\JenisBayarController;
+use App\Http\Controllers\LaporanUktMahasiswa;
 use App\Http\Controllers\ProdiController;
 use App\Http\Controllers\TahunPembayaranController;
 use App\Http\Controllers\UserController;
@@ -54,6 +55,11 @@ Route::controller(BillingMhsController::class)->group(function () {
     Route::get('/billing-pemkes', 'billing_pemkes')->name('billing.pemkes');
 })->middleware(['auth', 'role:admin|spp|keuangan']);
 
+// LAPORAN UKT MAHASISWA
+Route::controller(LaporanUktMahasiswa::class)->group(function () {
+    Route::get('/laporan-ukt', 'index')->name('laporan.ukt');
+    Route::post('/laporan-ukt/show', 'index')->name('laporan.ukt.tampil');
+})->middleware(['auth', 'role:developper|admin|spp|keuangan']);
 
 // IMPORT DATA UKT
 Route::controller(DataImportController::class)->group(function () {

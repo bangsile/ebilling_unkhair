@@ -29,6 +29,13 @@ class Prodi extends Model
         return $this->hasOne(Fakultas::class, 'id', 'fakultas_id');
     }
 
+    public function scopeperfakultas($query, $value)
+    {
+        if ($value) {
+            $query->where('fakultas_id', $value);
+        }
+    }
+
     public function scopepencarian($query, $value)
     {
         if ($value) {

@@ -23,25 +23,23 @@
                         <div class="card-body">
                             <fieldset class="border p-2 mb-3 shadow-sm">
                                 <legend class="float-none w-auto p-2">Filter Data</legend>
-                                <form class="form-horizontal ml-2">
+                                <form action="{{ route('laporan.ukt.tampil') }}" method="post"
+                                    class="form-horizontal ml-2">
+                                    @csrf
+                                    @method('POST')
                                     <div class="form-group row">
                                         <label for="inputEmail3" class="col-sm-2 col-form-label">
-                                            Program Studi
+                                            Fakultas
                                         </label>
                                         <div class="col-sm-4">
-                                            <select class="form-control" id="prodi" name="prodi"
+                                            <select class="form-control" id="fakultas" name="fakultas"
                                                 style="width: 100%;">
                                                 <option value="">-- Pilih --</option>
                                                 @foreach ($fakultas as $row)
-                                                    <optgroup label="{{ $row->nama_fakultas }}">
-                                                        @foreach ($row->prodi as $prodi)
-                                                            <option value="{{ $prodi->kd_prodi }}"
-                                                                {{ request()->prodi == $prodi->kd_prodi ? 'selected' : '' }}>
-                                                                {{ $prodi->kd_prodi . ' - ' . $prodi->nm_prodi }}
-                                                                ({{ $prodi->jenjang }})
-                                                            </option>
-                                                        @endforeach
-                                                    </optgroup>
+                                                    <option value="{{ $row->id }}"
+                                                        {{ request()->fakultas == $row->id ? 'selected' : '' }}>
+                                                        {{ $row->nama_fakultas }}
+                                                    </option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -65,14 +63,21 @@
 
                                     <div class="form-group row">
                                         <label for="inputEmail3" class="col-sm-2 col-form-label">
-                                            Kategori UKT
+                                            Periode Pembayaran
                                         </label>
                                         <div class="col-sm-4">
-                                            <select class="form-control" id="kategori_ukt" name="kategori_ukt"
+                                            <select class="form-control" id="periode" name="periode"
                                                 style="width: 100%;">
                                                 <option value="">-- Pilih --</option>
-                                                @for ($kat = 1; $kat <= 8; $kat++)
-                                                    <option value="K{{ $kat }}">K{{ $kat }}</option>
+                                                @for ($tahun = date('Y'); $tahun >= 2023; $tahun--)
+                                                    <option value="{{ $tahun }}2"
+                                                        {{ request()->periode == $tahun . '2' ? 'selected' : '' }}>
+                                                        {{ $tahun . '/' . ($tahun + 1) }} Genap
+                                                    </option>
+                                                    <option value="{{ $tahun }}1"
+                                                        {{ request()->periode == $tahun . '1' ? 'selected' : '' }}>
+                                                        {{ $tahun . '/' . ($tahun + 1) }} Ganjil
+                                                    </option>
                                                 @endfor
                                             </select>
                                         </div>
@@ -80,38 +85,65 @@
 
                                     <div class="form-group row">
                                         <label for="inputEmail3" class="col-sm-2 col-form-label"></label>
-                                        <div class="col-sm-2">
-                                            <button type="button" id="btn-tampilkan" class="btn btn-block btn-primary">
+                                        <div class="col-sm-3">
+                                            <button type="submit" id="btn-tampilkan" class="btn btn-block btn-primary">
                                                 <i class="fa fa-search"></i> Tampilkan
                                             </button>
                                         </div>
-                                        <div class="col-sm-2">
-                                            <button type="button"
-                                                onclick="window.location='{{ route('ukt.import.form') }}'"
-                                                class="btn btn-block btn-info">
-                                                <i class="fa fa-download"></i> Import Data UKT
-                                            </button>
+                                        <div class="col-sm-1">
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-default">Export</button>
+                                                <button type="button"
+                                                    class="btn btn-default dropdown-toggle dropdown-icon"
+                                                    data-toggle="dropdown">
+                                                    <span class="sr-only">Toggle Dropdown</span>
+                                                </button>
+                                                <div class="dropdown-menu" role="menu">
+                                                    <a class="dropdown-item disabled" href="#" id="export-excel"
+                                                        target="_blank">Export Excel</a>
+                                                    <a class="dropdown-item disabled" href="#" id="export-pdf"
+                                                        target="_blank">Export PDF</a>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </form>
                             </fieldset>
 
-                            <table id="{{ $datatable['id_table'] }}" class="table table-bordered table-hover">
+                            <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th class="text-left">No</th>
-                                        <th class="text-left">NPM</th>
-                                        <th class="text-left">Nama</th>
-                                        <th class="text-left">Angkatan</th>
-                                        <th class="text-left">Kategori</th>
-                                        <th class="text-left">Prodi</th>
-                                        <th>Nominal</th>
-                                        <th>Status</th>
-                                        <th>Aksi</th>
+                                        <th>No</th>
+                                        <th>Program Studi</th>
+                                        <th>Angkatan</th>
+                                        <th colspan="2">Kategori UKT</th>
+                                        <th class="text-center">Jml. Mahasiswa</th>
+                                        <th class="text-right">Total</th>
                                     </tr>
                                 </thead>
-                                <tbody></tbody>
+                                <tbody>
+                                    @foreach ($result as $res)
+                                        @if ($res['data'])
+                                            <tr>
+                                                <td rowspan="{{ $res['jml_data'] }}">{{ $loop->index + 1 }}</td>
+                                                <td rowspan="{{ $res['jml_data'] }}">{{ $res['prodi'] }}</td>
+                                                <td rowspan="{{ $res['jml_data'] }}">{{ $res['angkatan'] }}</td>
+                                            </tr>
+                                            @foreach ($res['data'] as $row)
+                                                <tr>
+                                                    <td class="text-center">{{ $row->kategori_ukt }}</td>
+                                                    <td class="text-right">{{ formatRupiah($row->nominal) }}</td>
+                                                    <td class="text-center">{{ $row->jml_mahasiswa }}</td>
+                                                    <td class="text-right">
+                                                        {{ formatRupiah($row->nominal * $row->jml_mahasiswa) }}
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @endif
+                                    @endforeach
+                                </tbody>
                             </table>
+                            {{-- @dump($result) --}}
                         </div>
                         <!-- /.card-body -->
                     </div>
@@ -134,60 +166,15 @@
         <!-- SweetAlert2 -->
         <script src="{{ asset('adminlte/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
 
-        <script>
-            function confirmLunas(id) {
-                Swal.fire({
-                    // title: "Apakah Anda yakin?",
-                    text: "Apakah anda ingin mengset billing ini menjadi lunas?",
-                    // icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#28a745",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: "Ya",
-                    cancelButtonText: "Batal"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        document.getElementById('lunas-form-' + id).submit();
-                    }
-                });
-            }
-        </script>
-
         @if (session('success'))
             <script>
                 toastr.success('{{ session('success') }}', 'Berhasil');
             </script>
         @endif
 
-        <script type="text/javascript">
-            var table;
+        <script>
             $(function() {
-                table = $("#{{ $datatable['id_table'] }}").DataTable({
-                    processing: true,
-                    serverSide: true,
-                    ajax: {
-                        url: "{{ $datatable['url'] }}",
-                        data: function(d) {
-                            d.prodi = $('#prodi').val(),
-                                d.angkatan = $('#angkatan').val(),
-                                d.kategori_ukt = $('#kategori_ukt').val()
-                        }
-                    },
-                    columns: [
-                        @foreach ($datatable['columns'] as $row)
-                            {
-                                data: "{{ $row['data'] }}",
-                                name: "{{ $row['name'] }}",
-                                orderable: {{ $row['orderable'] }},
-                                searchable: {{ $row['searchable'] }}
-                            },
-                        @endforeach
-                    ]
-                });
-
-                $('#btn-tampilkan').on('click', function() {
-                    table.draw();
-                });
+                $('#id-datatable').DataTable();
             });
         </script>
     </x-slot>

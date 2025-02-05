@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BillingMahasiswa;
+use App\Models\Fakultas;
 use App\Models\TahunPembayaran;
 use App\Services\EcollService;
 use Illuminate\Contracts\Database\Query\Builder;
@@ -25,7 +26,8 @@ class BillingMhsController extends Controller
 
         if ($request->ajax()) {
             $billings = BillingMahasiswa::select(['id', 'trx_id', 'no_va', 'no_identitas', 'nama', 'angkatan', 'kategori_ukt', 'nama_prodi', 'nominal', 'tgl_expire', 'lunas'])
-                ->where('tahun_akademik', $tahun_akademik?->tahun_akademik)->where('jenis_bayar', 'ukt');
+                ->where('tahun_akademik', $tahun_akademik?->tahun_akademik)->where('jenis_bayar', 'ukt')
+                ->orderBy('nama_prodi', 'ASC')->orderBy('angkatan', 'ASC')->orderBy('kategori_ukt', 'ASC')->orderBy('no_identitas', 'ASC');
             return DataTables::of($billings)
                 ->addIndexColumn()
                 ->editColumn('nominal', function ($billing) {
@@ -61,12 +63,38 @@ class BillingMhsController extends Controller
                     }
                     return $editButton . ' ' . $printButton;
                 })
+                ->filter(function ($instance) use ($request) {
+                    if ($request->get('prodi')) {
+                        $instance->where('kode_prodi', '=', $request->get('prodi'));
+                    }
+                    if ($request->get('angkatan')) {
+                        $instance->where('angkatan', '=', $request->get('angkatan'));
+                    }
+                    if ($request->get('kategori_ukt')) {
+                        $instance->where('kategori_ukt', '=', $request->get('kategori_ukt'));
+                    }
+
+                    if (!empty($request->input('search.value'))) {
+                        $instance->where(function ($w) use ($request) {
+                            $search = $request->input('search.value');
+                            $w->where('no_identitas', 'LIKE', "%$search%")
+                                ->orWhere('nama', 'LIKE', "%$search%");
+                        });
+                    }
+                })
                 ->rawColumns(['status', 'action'])
                 ->make(true);
         }
 
+        $fakultas = Fakultas::with([
+            'prodi' => function (Builder $query) {
+                $query->orderBy('nm_prodi', 'ASC');
+            }
+        ])->orderBy('nama_fakultas', 'ASC')->get();
+
         $data = [
             'judul' => 'Billing UKT',
+            'fakultas' => $fakultas,
             'datatable' => [
                 'url' => route('billing.ukt'),
                 'id_table' => 'id-datatable',
