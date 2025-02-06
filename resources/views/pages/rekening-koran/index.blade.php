@@ -84,8 +84,8 @@
                                 </form>
                             </fieldset>
                             <div class="table-responsive">
-                                <table id="{{ $datatable['id_table'] }}" class="table table-sm"
-                                    style="width:100%; font-size:11px;">
+                                <table id="{{ $datatable['id_table'] }}" class="table table-sm table-bordered"
+                                    style="width:100%; font-size:12px;">
                                     <thead>
                                         <tr>
                                             <th class="text-left">Tanggal</th>
@@ -133,7 +133,13 @@
 
         <script>
             $(function() {
-                $('#tgl_transaksi').daterangepicker();
+                $('#tgl_transaksi').daterangepicker({
+                    locale: {
+                        format: 'YYYY-MM-DD',
+                        separator: " to "
+
+                    },
+                });
             });
         </script>
 
@@ -164,8 +170,36 @@
 
                 $('#btn-tampilkan').on('click', function() {
                     table.draw();
+                    aktif_tautan();
                 });
+                aktif_tautan();
             });
+
+            function aktif_tautan() {
+                var jenisbayar = $('#jenisbayar').val();
+                var tgl_transaksi = $('#tgl_transaksi').val();
+
+                var params = '';
+                if (tgl_transaksi) {
+                    params += 'date=' + tgl_transaksi;
+                }
+
+                if (jenisbayar) {
+                    if (params) {
+                        params += '&';
+                    }
+                    params += 'jb=' + jenisbayar;
+                }
+
+                if (params && jenisbayar) {
+                    var export_excel = "{{ route('rekening-koran.export-excel') }}?" + params;
+                    //alert(export_excel);
+                    $('#export-excel').attr("href", export_excel).removeClass("disabled");
+
+                    //var export_pdf = "{{ route('rekening-koran.export-pdf') }}?" + params;
+                    //$('#export-pdf').attr("href", export_pdf).removeClass("disabled");
+                }
+            }
         </script>
     </x-slot>
 </x-app-layout>

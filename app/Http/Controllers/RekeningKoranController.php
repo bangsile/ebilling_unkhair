@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\EbillingMahasiswa;
 use App\Models\BillingMahasiswa;
 use App\Models\JenisBayar;
 use App\Models\TahunPembayaran;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
 
 class RekeningKoranController extends Controller
@@ -42,7 +44,6 @@ class RekeningKoranController extends Controller
             $tahun_akademik = TahunPembayaran::first();
             $billings = BillingMahasiswa::periode($tahun_akademik?->tahun_akademik)
                 ->lunas(1)
-                ->where('tahun_akademik', $tahun_akademik?->tahun_akademik)
                 ->orderBy('updated_at', 'ASC')
                 ->orderBy('nama_prodi', 'ASC');
             return DataTables::of($billings)
@@ -77,7 +78,7 @@ class RekeningKoranController extends Controller
                         $filter = true;
                     }
                     if ($request->get('tgl_transaksi')) {
-                        $tgl_transaksi = explode('-', $request->get('tgl_transaksi'));
+                        $tgl_transaksi = explode('to', $request->get('tgl_transaksi'));
                         $tgl_awal = date('Y-m-d', strtotime(trim($tgl_transaksi[0])));
                         $tgl_akhir = date('Y-m-d', strtotime(trim($tgl_transaksi[1])));
                         $instance->whereBetween('updated_at', [$tgl_awal . " 00:00:00", $tgl_akhir . " 23:59:59"]);
@@ -103,5 +104,31 @@ class RekeningKoranController extends Controller
                 ->rawColumns(['nominal', 'updated_at', 'prodi', 'mahasiswa', 'ket'])
                 ->make(true);
         }
+    }
+
+    public function excel(Request $request)
+    {
+        // dd($request);
+
+        if (!trim($request->date) || trim($request->date) == 'to') {
+            abort(500);
+        }
+        if (!trim($request->jb)) {
+            abort(500);
+        }
+
+
+
+        $tanggal = explode('to', $request->date);
+        $jenisbayar = $request->jb;
+
+        $nama_file = time() . ' - Export Ebilling Mahasiswa.xlsx';
+        $params = [
+            'tgl_mulai' => trim($tanggal[0]),
+            'tgl_akhir' => trim($tanggal[1]),
+            'jenisbayar' => $jenisbayar
+        ];
+
+        return Excel::download(new EbillingMahasiswa($params), $nama_file);
     }
 }

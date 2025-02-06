@@ -60,6 +60,8 @@ Route::controller(BillingMhsController::class)->group(function () {
 Route::controller(RekeningKoranController::class)->group(function () {
     Route::get('/rekening-koran', 'index')->name('rekening-koran.index');
     Route::get('/rekening-koran/show', 'tampil')->name('rekening-koran.tampil');
+    Route::get('/rekening-koran/export-excel', 'excel')->name('rekening-koran.export-excel');
+    Route::get('/rekening-koran/export-pdf', 'pdf')->name('rekening-koran.export-pdf');
 })->middleware(['auth', 'role:developper|admin|spp|keuangan']);
 
 
