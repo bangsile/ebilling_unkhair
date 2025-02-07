@@ -10,6 +10,7 @@ use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\Facades\DataTables;
 
 class BillingMhsController extends Controller
@@ -128,6 +129,8 @@ class BillingMhsController extends Controller
         $id = $request->route('id');
         $billing = BillingMahasiswa::find($id);
 
+        abort(404);
+        //
         if (!$billing->trx_id || !$billing->no_va) {
             $billing->update([
                 'nominal' => $request->nominal
@@ -158,9 +161,19 @@ class BillingMhsController extends Controller
     {
         $id = $request->id;
         $billing = BillingMahasiswa::find($id);
+
         $billing->update([
             'lunas' => 1
         ]);
+
+        // create log
+        $user = auth()->user()->name;
+        $aksi = "Set Lunas";
+        $data = $billing->no_identitas . ' - ' . $billing->nama . ' - ' . formatRupiah($billing->nominal) . ' - ' . $billing->tahun_akademik;
+        $log = $aksi . " | " . $user . " | " . $data;
+        Log::channel('monthly')->info($log);
+
+
         return redirect()->route('billing.ukt')->with('success', 'Berhasil Update Billing Lunas');
     }
 

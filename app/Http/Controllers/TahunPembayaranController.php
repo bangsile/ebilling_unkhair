@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\TahunPembayaran;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class TahunPembayaranController extends Controller
 {
@@ -41,10 +42,22 @@ class TahunPembayaranController extends Controller
         if (!$tahunPembayaran) {
             $tahunPembayaran = new TahunPembayaran();
         }
+        $periode_old = $tahunPembayaran->tahun_akademik . ' [' . date('Y-m-d', strtotime($tahunPembayaran->awal_pembayaran)) . ' - ' . date('Y-m-d', strtotime($tahunPembayaran->akhir_pembayaran)) . ']';
+
         $tahunPembayaran->tahun_akademik = $request->tahun_akademik;
         $tahunPembayaran->awal_pembayaran = $request->awal_pembayaran;
         $tahunPembayaran->akhir_pembayaran = $request->akhir_pembayaran;
         $tahunPembayaran->save();
+
+        $periode_new = $request->tahun_akademik . ' [' . $request->awal_pembayaran . ' - ' . $request->akhir_pembayaran . ']';
+
+        // create log
+        $user = auth()->user()->name;
+        $aksi = "Edit Periode";
+        $data = $periode_old . ' update ' . $periode_new;
+        $log = $aksi . " | " . $user . " | " . $data;
+        Log::channel('monthly')->info($log);
+
         return redirect()->route('tahun-pembayaran')->with('success', 'Berhasil Mengupdate Tahun Pembayaran');
     }
 }
