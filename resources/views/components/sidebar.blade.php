@@ -134,7 +134,7 @@
                 @endif
 
                 @if (Auth::user()->hasRole(['developper']))
-                    <x-nav-link icon="nav-icon fas fa-newspaper" href="{{ route('log.index') }}"
+                    <x-nav-link icon="nav-icon fas fa-history" href="{{ route('log.index') }}"
                         active="{{ Route::is('log.*') }}">
                         Log Aplikasi
                     </x-nav-link>
