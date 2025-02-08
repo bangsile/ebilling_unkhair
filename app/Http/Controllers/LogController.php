@@ -51,7 +51,7 @@ class LogController extends Controller
         }
 
         try {
-            $logPath = storage_path("logs/" . $file);
+            $logPath = base_path("storage/logs/" . $file);
             $logContent = File::get($logPath);
 
             echo "<pre>";
