@@ -51,9 +51,14 @@ class LogController extends Controller
         }
 
         try {
-            $logPath = base_path("storage/logs/" . $file);
-            $logContent = File::get($logPath);
+            $logPath = storage_path("logs/" . $file);
+            $publicPath = public_path("log_temp.log");
 
+            if (File::exists($logPath)) {
+                File::copy($logPath, $publicPath);
+            }
+
+            $logContent = File::get($publicPath);
             echo "<pre>";
             echo $logContent;
             echo "</pre>";
