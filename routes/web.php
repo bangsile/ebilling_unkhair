@@ -7,6 +7,7 @@ use App\Http\Controllers\DataImportController;
 use App\Http\Controllers\FakultasController;
 use App\Http\Controllers\JenisBayarController;
 use App\Http\Controllers\LaporanUktMahasiswaController;
+use App\Http\Controllers\LogController;
 use App\Http\Controllers\ProdiController;
 use App\Http\Controllers\RekeningKoranController;
 use App\Http\Controllers\TahunPembayaranController;
@@ -114,3 +115,9 @@ Route::controller(UserController::class)->group(function () {
     Route::patch('/pengguna/{id}', 'update')->name('pengguna.update');
     Route::delete('/pengguna/{id}', 'destroy')->name('pengguna.destroy');
 })->middleware(['auth', 'role:developper|admin']);
+
+// LOG
+Route::controller(LogController::class)->group(function () {
+    Route::get('/log', 'index')->name('log.index');
+    Route::get('/log/view', 'detail')->name('log.lihat');
+})->middleware(['auth', 'role:developper']);

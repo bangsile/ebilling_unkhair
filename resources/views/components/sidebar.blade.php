@@ -133,6 +133,13 @@
                     </x-nav-link>
                 @endif
 
+                @if (Auth::user()->hasRole(['developper']))
+                    <x-nav-link icon="nav-icon fas fa-newspaper" href="{{ route('log.index') }}"
+                        active="{{ Route::is('log.*') }}">
+                        Log Aplikasi
+                    </x-nav-link>
+                @endif
+
                 <li class="nav-item mt-4">
                     <form action="{{ route('logout') }}" method="POST" class="d-flex justify-content-center">
                         @csrf

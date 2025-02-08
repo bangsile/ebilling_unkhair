@@ -169,8 +169,16 @@ class BillingMhsController extends Controller
         // create log
         $user = auth()->user()->name;
         $aksi = "Set Lunas";
-        $data = $billing->no_identitas . ' - ' . $billing->nama . ' - ' . formatRupiah($billing->nominal) . ' - ' . $billing->tahun_akademik;
-        $log = $aksi . " | " . $user . " | " . $data;
+        $thn_akademik = $billing->tahun_akademik;
+        $data = $billing->no_identitas . ' - ' . $billing->nama . ' - ' . formatRupiah($billing->nominal);
+
+        $log = sprintf(
+            "%-15s | %-20s | %-7s | %s",
+            $aksi,
+            $user,
+            $thn_akademik,
+            $data
+        );
         Log::channel('monthly')->info($log);
 
 

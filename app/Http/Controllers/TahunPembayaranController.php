@@ -54,8 +54,14 @@ class TahunPembayaranController extends Controller
         // create log
         $user = auth()->user()->name;
         $aksi = "Edit Periode";
-        $data = $periode_old . ' update ' . $periode_new;
-        $log = $aksi . " | " . $user . " | " . $data;
+        $data = $periode_old . ' update to ' . $periode_new;
+        $log = sprintf(
+            "%-15s | %-20s | %-7s | %s",
+            $aksi,
+            $user,
+            "-",
+            $data
+        );
         Log::channel('monthly')->info($log);
 
         return redirect()->route('tahun-pembayaran')->with('success', 'Berhasil Mengupdate Tahun Pembayaran');
