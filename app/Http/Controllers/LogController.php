@@ -97,7 +97,7 @@ class LogController extends Controller
                 $result[] = [
                     'index' => $no,
                     'nama' => $nama,
-                    'nominal' => $nominal,
+                    'nominal' => formatRupiah($nominal),
                     'bank' => $bank,
                     'created_at' => tgl_indo($row->created_at)
                 ];
