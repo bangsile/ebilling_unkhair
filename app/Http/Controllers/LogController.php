@@ -105,12 +105,11 @@ class LogController extends Controller
             }
         }
 
-        /*
         $str = [];
         foreach ($result as $row) {
             $billingukt = BillingMahasiswa::where('nama_bank', $row['bank'])
                 ->where('nama', $row['nama'])
-                ->where('nominal', $nominal)
+                ->where('nominal', $row['nominal'])
                 ->where('lunas', 0)
                 ->where('tahun_akademik', $tahun_akademik?->tahun_akademik)
                 ->first();
@@ -124,9 +123,10 @@ class LogController extends Controller
                 ];
             }
         }
-        */
 
         echo "<pre>";
+        print_r($str);
+        echo "<br>";
         print_r($result);
         echo "</pre>";
     }
