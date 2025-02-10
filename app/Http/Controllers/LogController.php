@@ -77,7 +77,7 @@ class LogController extends Controller
     {
         $tahun_akademik = TahunPembayaran::first();
         $log_ecoll = LogJob::where('job_result', 'Failed, Billing Not Found')
-            ->orderBy('created_at', 'ASC')->get();
+            ->orderBy('created_at', 'DESC')->get();
 
         $result = [];
         foreach ($log_ecoll as $row) {
@@ -96,31 +96,12 @@ class LogController extends Controller
                 $result[] = [
                     'nama' => $nama,
                     'nominal' => $nominal,
-                    'bank' => $bank
+                    'bank' => $bank,
+                    'created_at' => tgl_indo($row->created_at)
                 ];
             }
         }
 
-        $str = '';
-        foreach ($result as $row) {
-            $billingukt = BillingMahasiswa::where('nama_bank', $row['bank'])
-                ->where('nama', $row['nama'])
-                ->where('nominal', $nominal)
-                ->where('lunas', 0)
-                ->where('tahun_akademik', $tahun_akademik?->tahun_akademik)
-                ->first();
-            if ($billingukt) {
-                $result[] = [
-                    'npm' => $billingukt->no_identitas,
-                    'nama' => $billingukt->nama,
-                    'nominal' => $billingukt->nominal,
-                    'prodi' => $billingukt->nama_prodi,
-                    'lunas' => $billingukt->lunas
-                ];
-                $str .= $billingukt->no_identitas . ' | ' . $billingukt->nama . '<br>';
-            }
-        }
-
-        echo $str;
+        echo json_encode($result);
     }
 }
