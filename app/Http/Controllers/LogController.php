@@ -126,8 +126,6 @@ class LogController extends Controller
 
         echo "<pre>";
         print_r($str);
-        echo "<br>";
-        print_r($result);
         echo "</pre>";
     }
 }
