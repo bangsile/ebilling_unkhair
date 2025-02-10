@@ -97,7 +97,7 @@ class LogController extends Controller
                 $result[] = [
                     'index' => $no,
                     'nama' => $nama,
-                    'nominal' => formatRupiah($nominal),
+                    'nominal' => $nominal,
                     'bank' => $bank,
                     'created_at' => tgl_indo($row->created_at)
                 ];
@@ -105,8 +105,28 @@ class LogController extends Controller
             }
         }
 
+
+        $str = [];
+        foreach ($result as $row) {
+            $billingukt = BillingMahasiswa::where('nama_bank', $row['bank'])
+                ->where('nama', $row['nama'])
+                ->where('nominal', $nominal)
+                ->where('lunas', 0)
+                ->where('tahun_akademik', $tahun_akademik?->tahun_akademik)
+                ->first();
+            if ($billingukt) {
+                $str[] = [
+                    'npm' => $billingukt->no_identitas,
+                    'nama' => $billingukt->nama,
+                    'nominal' => $billingukt->nominal,
+                    'tahun_akademik' => $billingukt->tahun_akademik,
+                    'lunas' => $billingukt->lunas ? 'Y' : 'N'
+                ];
+            }
+        }
+
         echo "<pre>";
-        print_r($result);
+        print_r($str);
         echo "</pre>";
     }
 }
