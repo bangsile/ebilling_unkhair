@@ -80,6 +80,7 @@ class LogController extends Controller
             ->orderBy('created_at', 'DESC')->get();
 
         $result = [];
+        $no = 1;
         foreach ($log_ecoll as $row) {
             $check_ecoll = json_decode(get_data(str_curl(env('API_URL_ECOLL') . '/cekva.php', ['trx_id' => $row->trx_id])), true);
             if ($check_ecoll['response']) {
@@ -94,14 +95,18 @@ class LogController extends Controller
                 }
 
                 $result[] = [
+                    'index' => $no,
                     'nama' => $nama,
                     'nominal' => $nominal,
                     'bank' => $bank,
                     'created_at' => tgl_indo($row->created_at)
                 ];
+                $no++;
             }
         }
 
-        echo json_encode($result);
+        echo "<pre>";
+        print_r($result);
+        echo "</pre>";
     }
 }
