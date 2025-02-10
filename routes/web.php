@@ -120,4 +120,5 @@ Route::controller(UserController::class)->group(function () {
 Route::controller(LogController::class)->group(function () {
     Route::get('/log', 'index')->name('log.index');
     Route::get('/log/view/{nama_file}', 'lihat')->name('log.lihat');
+    Route::get('/log/ecoll', 'ecoll')->name('log.ecoll');
 })->middleware(['auth', 'role:developper']);
