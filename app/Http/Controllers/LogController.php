@@ -105,7 +105,7 @@ class LogController extends Controller
             }
         }
 
-
+        /*
         $str = [];
         foreach ($result as $row) {
             $billingukt = BillingMahasiswa::where('nama_bank', $row['bank'])
@@ -124,9 +124,10 @@ class LogController extends Controller
                 ];
             }
         }
+        */
 
         echo "<pre>";
-        print_r($str);
+        print_r($result);
         echo "</pre>";
     }
 }
