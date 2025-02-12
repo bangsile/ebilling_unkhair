@@ -129,7 +129,7 @@ class LogController extends Controller
         echo "</pre>";
     }
 
-    public function failed_set_lunas()
+    public function failed_set_lunas_ukt()
     {
         $tahun_akademik = TahunPembayaran::first();
         $billingukt = BillingMahasiswa::join('history_banks', 'billing_mahasiswas.trx_id', '=', 'history_banks.trx_id')
@@ -147,6 +147,7 @@ class LogController extends Controller
                     'va' => $row->no_va,
                     'npm' => $row->no_identitas,
                     'nama' => $row->nama,
+                    'ukt' => $row->kategori_ukt,
                     'nominal' => formatRupiah($row->nominal),
                     'prodi' => $row->kode_prodi . ' - ' . $row->nama_prodi,
                     'tahun_akademik' => $row->tahun_akademik,
@@ -155,8 +156,11 @@ class LogController extends Controller
             }
         }
 
-        echo "<pre>";
-        print_r($result);
-        echo "</pre>";
+        $data = [
+            'judul' => 'Log Gagal Pelunasan UKT ' . $tahun_akademik?->tahun_akademik,
+            'result' => $result
+        ];
+
+        return view('pages.log.failed-pelunasan-ukt', $data);
     }
 }
