@@ -146,6 +146,7 @@ class LogController extends Controller
                 'npm' => $row->no_identitas,
                 'nama' => $row->nama,
                 'nominal' => formatRupiah($row->nominal),
+                'prodi' => $row->kode_prodi . ' - ' . $row->nama_prodi,
                 'tahun_akademik' => $row->tahun_akademik,
                 'lunas' => $row->lunas ? 'Y' : 'N'
             ];
