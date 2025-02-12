@@ -9,7 +9,7 @@ use App\Models\TahunPembayaran;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class BillingController extends Controller
+class BillingMhsController extends Controller
 {
     public function get_detail_ukt(Request $request)
     {
@@ -44,6 +44,7 @@ class BillingController extends Controller
         }
         return new BillingResource(true, 'Billing Ditemukan', $billing);
     }
+
     public function store_billing_mahasiswa(Request $request)
     {
         $apiKey = $request->header('X-API-KEY');
@@ -117,10 +118,11 @@ class BillingController extends Controller
         } catch (\Throwable $th) {
             return response()->json([
                 'response' => false,
-                'message' => $th,
+                'message' => $th->getMessage(),
             ], 402);
         }
     }
+
     public function update_billing_ukt(Request $request)
     {
         $apiKey = $request->header('X-API-KEY');
@@ -182,7 +184,7 @@ class BillingController extends Controller
         } catch (\Throwable $th) {
             return response()->json([
                 'response' => false,
-                'message' => $th,
+                'message' => $th->getMessage(),
             ], 402);
             // throw $th;
         }

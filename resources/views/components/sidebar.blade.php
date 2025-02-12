@@ -82,11 +82,15 @@
                 @endif
 
                 @if (Auth::user()->hasRole(['admin', 'keuangan']))
-                    <x-nav-link icon="nav-icon fas fa-money-bill-wave" active="">
+                    <x-nav-link icon="nav-icon fas fa-money-bill-wave" active="{{ Route::is('billing-pmb.*') }}">
                         Manajemen E-Billing
                         <i class="right fas fa-angle-left"></i>
                         <x-slot name="navtree">
                             <ul class="nav nav-treeview">
+                                <x-nav-link icon="far fa-circle nav-icon" href="{{ route('billing-pmb.index') }}"
+                                    active="{{ Route::is('billing-pmb.*') }}">
+                                    Pembayaran PMB S1/D3
+                                </x-nav-link>
                                 <x-nav-link icon="far fa-circle nav-icon" href="" active="">
                                     Pembayaran Mhs PPG
                                 </x-nav-link>

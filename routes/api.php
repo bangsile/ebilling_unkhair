@@ -1,7 +1,9 @@
 <?php
 
-use App\Http\Controllers\Api\BillingController;
+use App\Http\Controllers\Api\BillingPaymentController;
+use App\Http\Controllers\Api\BillingMhsController;
 use App\Http\Controllers\Api\HistoryBankController;
+use App\Models\JenisBayar;
 use App\Models\TahunPembayaran;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -10,11 +12,7 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::post('/billing-mahasiswa', [BillingController::class, 'store_billing_mahasiswa']);
 Route::post('/history-bank', [HistoryBankController::class, 'auto_lunas']);
-Route::post('/billing-mahasiswa/detail', [BillingController::class, 'get_detail_ukt'])->withoutMiddleware(['throttle:api']);
-Route::patch('/billing-mahasiswa/update', [BillingController::class, 'update_billing_ukt'])->withoutMiddleware(['throttle:api']);
-
 Route::get('/tahun-pembayaran', function (Request $request) {
     $apiKey = $request->header('X-API-KEY');
 
@@ -41,3 +39,22 @@ Route::get('/tahun-pembayaran', function (Request $request) {
         ], 404);
     }
 });
+
+// E-Billing Mahasiswa
+Route::post('/billing-mahasiswa', [BillingMhsController::class, 'store_billing_mahasiswa'])->withoutMiddleware(['throttle:api']);
+Route::post('/billing-mahasiswa/detail', [BillingMhsController::class, 'get_detail_ukt'])->withoutMiddleware(['throttle:api']);
+Route::patch('/billing-mahasiswa/update', [BillingMhsController::class, 'update_billing_ukt'])->withoutMiddleware(['throttle:api']);
+
+// Manajemen E-Billing
+Route::get('/billing', function () {
+    $jenis_pembayaran = JenisBayar::select(['kode', 'keterangan', 'bank'])->orderBy('bank', 'ASC')->get()->toArray();
+    return response()->json([
+        'response' => true,
+        'jenis-pembayaran' => $jenis_pembayaran,
+    ]);
+});
+
+Route::post('/billing-detail', [BillingPaymentController::class, 'detail_billing'])->withoutMiddleware(['throttle:api']);
+Route::post('/billing-store', [BillingPaymentController::class, 'store_billing'])->withoutMiddleware(['throttle:api']);
+Route::patch('/billing-update', [BillingPaymentController::class, 'update_billing'])->withoutMiddleware(['throttle:api']);
+Route::delete('/billing-delete', [BillingPaymentController::class, 'delete_billing'])->withoutMiddleware(['throttle:api']);

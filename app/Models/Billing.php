@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Billing extends Model
 {
     use HasFactory, HasUuids;
-    
+
     protected $fillable = [
         'trx_id',
         'no_va',
@@ -30,12 +30,24 @@ class Billing extends Model
         return $this->hasMany(DosenHasBilling::class, 'billing_id');
     }
 
-    public function scopeSearch($query, $search): void
+    public function scopetahun($query, $value)
     {
-        $query->where(
-            function ($query) use ($search) {
-                $query->where('jenis_bayar', 'like', "%{$search}%");
-            }
-        );
+        if ($value) {
+            $query->whereYear('billings.created_at', $value);
+        }
+    }
+
+    public function scopepembayaran($query, $value): void
+    {
+        if ($value) {
+            $query->where('jenis_bayar', '=', $value);
+        }
+    }
+
+    public function scopelunas($query, $value): void
+    {
+        if ($value) {
+            $query->where('lunas', '=', $value);
+        }
     }
 }

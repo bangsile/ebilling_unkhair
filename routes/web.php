@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\BillingController;
 use App\Http\Controllers\BillingMhsController;
+use App\Http\Controllers\BillingPmbController;
 use App\Http\Controllers\DataImportController;
 use App\Http\Controllers\FakultasController;
 use App\Http\Controllers\JenisBayarController;
@@ -123,3 +124,9 @@ Route::controller(LogController::class)->group(function () {
     Route::get('/log/ecoll', 'ecoll')->name('log.ecoll');
     Route::get('/log/failed-pelunasan-ukt', 'failed_set_lunas_ukt')->name('log.failed-pelunasan-ukt');
 })->middleware(['auth', 'role:developper']);
+
+
+// BILLING PMB
+Route::controller(BillingPmbController::class)->group(function () {
+    Route::get('/billing-pmb', 'index')->name('billing-pmb.index');
+})->middleware(['auth', 'role:admin|keuangan']);
