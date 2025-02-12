@@ -133,7 +133,7 @@ class LogController extends Controller
     {
         $tahun_akademik = TahunPembayaran::first();
         $billingukt = BillingMahasiswa::join('history_banks', 'billing_mahasiswas.trx_id', '=', 'history_banks.trx_id')
-            ->select('billing_mahasiswas.*')
+            ->select(['billing_mahasiswas.*'])
             ->where('billing_mahasiswas.lunas', 0)
             ->where('billing_mahasiswas.tahun_akademik', $tahun_akademik?->tahun_akademik)
             ->get();
@@ -141,13 +141,13 @@ class LogController extends Controller
         $result = [];
         foreach ($billingukt as $row) {
             $result[] = [
-                'trx_id' => $billingukt->trx_id,
-                'va' => $billingukt->no_va,
-                'npm' => $billingukt->no_identitas,
-                'nama' => $billingukt->nama,
-                'nominal' => formatRupiah($billingukt->nominal),
-                'tahun_akademik' => $billingukt->tahun_akademik,
-                'lunas' => $billingukt->lunas ? 'Y' : 'N'
+                'trx_id' => $row->trx_id,
+                'va' => $row->no_va,
+                'npm' => $row->no_identitas,
+                'nama' => $row->nama,
+                'nominal' => formatRupiah($row->nominal),
+                'tahun_akademik' => $row->tahun_akademik,
+                'lunas' => $row->lunas ? 'Y' : 'N'
             ];
         }
 
