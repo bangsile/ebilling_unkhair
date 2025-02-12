@@ -128,4 +128,31 @@ class LogController extends Controller
         print_r($str);
         echo "</pre>";
     }
+
+    public function failed_set_lunas()
+    {
+        $tahun_akademik = TahunPembayaran::first();
+        $billingukt = BillingMahasiswa::join('history_banks', 'billing_mahasiswas.trx_id', '=', 'history_banks.trx_id')
+            ->select('billing_mahasiswas.*')
+            ->where('billing_mahasiswas.lunas', 0)
+            ->where('billing_mahasiswas.tahun_akademik', $tahun_akademik?->tahun_akademik)
+            ->get();
+
+        $result = [];
+        foreach ($billingukt as $row) {
+            $result[] = [
+                'trx_id' => $billingukt->trx_id,
+                'va' => $billingukt->no_va,
+                'npm' => $billingukt->no_identitas,
+                'nama' => $billingukt->nama,
+                'nominal' => formatRupiah($billingukt->nominal),
+                'tahun_akademik' => $billingukt->tahun_akademik,
+                'lunas' => $billingukt->lunas ? 'Y' : 'N'
+            ];
+        }
+
+        echo "<pre>";
+        print_r($result);
+        echo "</pre>";
+    }
 }

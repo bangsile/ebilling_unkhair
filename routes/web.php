@@ -121,4 +121,5 @@ Route::controller(LogController::class)->group(function () {
     Route::get('/log', 'index')->name('log.index');
     Route::get('/log/view/{nama_file}', 'lihat')->name('log.lihat');
     Route::get('/log/ecoll', 'ecoll')->name('log.ecoll');
+    Route::get('/log/failed-lunas', 'failed_set_lunas')->name('log.failed-lunas');
 })->middleware(['auth', 'role:developper']);
