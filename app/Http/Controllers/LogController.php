@@ -132,7 +132,7 @@ class LogController extends Controller
     public function failed_set_lunas()
     {
         $tahun_akademik = TahunPembayaran::first();
-        $billingukt = BillingMahasiswa::join('history_bankss', 'billing_mahasiswas.trx_id', '=', 'history_banks.trx_id')
+        $billingukt = BillingMahasiswa::join('history_banks', 'billing_mahasiswas.trx_id', '=', 'history_banks.trx_id')
             ->select(['billing_mahasiswas.*'])
             ->where('billing_mahasiswas.lunas', 0)
             ->where('billing_mahasiswas.tahun_akademik', $tahun_akademik?->tahun_akademik)
