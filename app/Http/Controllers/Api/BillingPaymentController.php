@@ -44,6 +44,50 @@ class BillingPaymentController extends Controller
         return new BillingResource(true, 'Billing Ditemukan', $billing);
     }
 
+    public function repayment_billing(Request $request)
+    {
+        $apiKey = $request->header('X-API-KEY');
+
+        if (!$apiKey || $apiKey !== 'secret') {
+            return response()->json([
+                'response' => false,
+                'message' => 'Unauthorized: Invalid or missing API key.',
+            ], 401);
+        }
+
+        // dd($request->all());
+        try {
+            $validator = Validator::make($request->all(), [
+                'billing_id' => 'required|exists:billings,id'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'response' => false,
+                    'message' => $validator->errors(),
+                ], 402);
+            }
+
+            $billing = Billing::where('id', $request->billing_id)->update([
+                'lunas' => 1
+            ]);
+            if (!$billing) {
+                return new BillingResource(false, 'Gagal Pelunasan Billing', null);
+            }
+
+            $values = [
+                'billing_id' => $request->billing_id
+            ];
+
+            return new BillingResource(true, 'Berhasil Pelunasan Billing', $values);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'response' => false,
+                'message' => $th->getMessage(),
+            ], 402);
+        }
+    }
+
     public function store_billing(Request $request)
     {
         $apiKey = $request->header('X-API-KEY');

@@ -55,6 +55,7 @@ Route::get('/billing', function () {
 });
 
 Route::post('/billing-detail', [BillingPaymentController::class, 'detail_billing'])->withoutMiddleware(['throttle:api']);
+Route::post('/billing-repayment', [BillingPaymentController::class, 'repayment_billing'])->withoutMiddleware(['throttle:api']);
 Route::post('/billing-store', [BillingPaymentController::class, 'store_billing'])->withoutMiddleware(['throttle:api']);
 Route::patch('/billing-update', [BillingPaymentController::class, 'update_billing'])->withoutMiddleware(['throttle:api']);
 Route::delete('/billing-delete', [BillingPaymentController::class, 'delete_billing'])->withoutMiddleware(['throttle:api']);
