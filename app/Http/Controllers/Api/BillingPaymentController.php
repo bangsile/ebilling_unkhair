@@ -64,7 +64,7 @@ class BillingPaymentController extends Controller
                 'nominal' => 'required|numeric',
                 'nama' => 'required|string',
                 'tgl_expire' => 'required',
-                'detail' => 'required|json',
+                'detail' => 'required|array',
             ]);
 
             if ($validator->fails()) {
@@ -76,11 +76,6 @@ class BillingPaymentController extends Controller
 
             // dd($request->detail);
 
-            $detail = [];
-            if ($request->detail) {
-                $detail = json_decode($request->detail, true);
-            }
-
             $values = [
                 'trx_id' =>  $request->trx_id,
                 'no_va' => $request->no_va,
@@ -89,7 +84,7 @@ class BillingPaymentController extends Controller
                 'nama' => $request->nama,
                 'jenis_bayar' => $request->jenis_bayar,
                 'tgl_expire' => $request->tgl_expire,
-                'detail' => json_encode($detail),
+                'detail' => json_encode($request->detail),
             ];
 
             $billing = Billing::updateOrCreate(
@@ -106,7 +101,7 @@ class BillingPaymentController extends Controller
             $values += [
                 'billing_id' => $billing->id
             ];
-            $values['detail'] = $detail;
+            $values['detail'] = $request->detail;
 
             return new BillingResource(true, 'Berhasil Create Billing', $values);
         } catch (\Throwable $th) {
@@ -128,7 +123,7 @@ class BillingPaymentController extends Controller
             ], 401);
         }
 
-        dd($request->all());
+        // dd($request->all());
         try {
             $validator = Validator::make($request->all(), [
                 'billing_id' => 'required|exists:billings,id',
@@ -139,7 +134,7 @@ class BillingPaymentController extends Controller
                 'nominal' => 'required|numeric',
                 'nama' => 'required|string',
                 'tgl_expire' => 'required',
-                'detail' => 'required|json',
+                'detail' => 'required|array',
             ]);
 
             if ($validator->fails()) {
@@ -151,11 +146,6 @@ class BillingPaymentController extends Controller
 
             // dd($request->detail);
 
-            $detail = [];
-            if ($request->detail) {
-                $detail = json_decode($request->detail, true);
-            }
-
             $values = [
                 'trx_id' =>  $request->trx_id,
                 'no_va' => $request->no_va,
@@ -164,7 +154,7 @@ class BillingPaymentController extends Controller
                 'nama' => $request->nama,
                 'jenis_bayar' => $request->jenis_bayar,
                 'tgl_expire' => $request->tgl_expire,
-                'detail' => json_encode($detail),
+                'detail' => json_encode($request->detail),
             ];
 
             $billing = Billing::where('id', $request->billing_id)->update(
@@ -177,7 +167,7 @@ class BillingPaymentController extends Controller
             $values += [
                 'billing_id' => $request->billing_id
             ];
-            $values['detail'] = $detail;
+            $values['detail'] = $request->detail;
 
             return new BillingResource(true, 'Berhasil Update Billing', $values);
         } catch (\Throwable $th) {
