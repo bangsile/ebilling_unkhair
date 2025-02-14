@@ -61,7 +61,7 @@
                         <x-slot name="navtree">
                             <ul class="nav nav-treeview">
                                 <x-nav-link icon="far fa-circle nav-icon" href="{{ route('billing.ukt') }}"
-                                    active="{{ Route::is('billing.ukt') }}">
+                                    active="{{ Route::is(['billing.ukt', 'billing.ukt.*']) }}">
                                     Billing UKT
                                 </x-nav-link>
                                 <x-nav-link icon="far fa-circle nav-icon" href="{{ route('billing.umb') }}"
@@ -69,7 +69,7 @@
                                     Billing UMB
                                 </x-nav-link>
                                 <x-nav-link icon="far fa-circle nav-icon" href="{{ route('billing.ipi') }}"
-                                    active="{{ Route::is('billing.ipi') }}">
+                                    active="{{ Route::is(['billing.ipi', 'billing.ipi.*']) }}">
                                     Billing IPI
                                 </x-nav-link>
                                 <x-nav-link icon="far fa-circle nav-icon" href="{{ route('billing.pemkes') }}"

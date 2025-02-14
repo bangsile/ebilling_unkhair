@@ -27,6 +27,7 @@
                                         <th class="text-left">No</th>
                                         <th class="text-left">Nama</th>
                                         <th class="text-left">Bank</th>
+                                        <th class="text-left">Trx ID</th>
                                         <th class="text-left">Nomor VA</th>
                                         <th>Nominal</th>
                                         <th>Expire</th>

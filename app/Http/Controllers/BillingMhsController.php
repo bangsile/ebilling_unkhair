@@ -49,8 +49,10 @@ class BillingMhsController extends Controller
                 ->addColumn('action', function ($billing) {
                     $editButton = $billing->lunas ? '<button type="button" class="btn btn-sm btn-warning disabled"><i class="fas fa-edit"></i></button>' :
                         '<a href="' . route('billing.ukt.edit', $billing->id) . '" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>';
+
                     $printButton = $billing->lunas ? '<button type="button" class="btn btn-sm btn-info disabled"><i class="fas fa-print"></i></button>' :
                         '<a href="/" class="btn btn-sm btn-info"><i class="fas fa-print"></i></a>';
+
                     $setLunasButton = (!$billing->trx_id || $billing->lunas) ?
                         '<button type="button" class="btn btn-sm btn-success disabled">Set Lunas</button>' :
                         '<form id="lunas-form-' . $billing->id . '" action="' . route('billing.ukt.lunas') . '" method="POST" style="display: inline;">' .
@@ -60,11 +62,11 @@ class BillingMhsController extends Controller
                         '</form>';
 
                     if (Auth::check() && Auth::user()->hasRole(['developper', 'admin'])) {
-                        return $printButton . ' ' . $setLunasButton;
-                        // return $editButton . ' ' . $printButton . ' ' . $setLunasButton;
+                        // return $printButton . ' ' . $setLunasButton;
+                        return $editButton . ' ' . $printButton . ' ' . $setLunasButton;
                     }
-                    return $printButton;
-                    // return $editButton . ' ' . $printButton;
+                    // return $printButton;
+                    return $editButton . ' ' . $printButton;
                 })
                 ->filter(function ($instance) use ($request) {
                     if ($request->get('prodi')) {
@@ -117,6 +119,14 @@ class BillingMhsController extends Controller
         return view('pages.billing.billing-ukt', $data);
     }
 
+    public function create_billing_ukt()
+    {
+        $data = [
+            'judul' => 'Buat Billing UKT',
+        ];
+        return view('pages.billing.create-billing-ukt', $data);
+    }
+
 
 
     public function edit_billing_ukt(Request $request)
@@ -126,35 +136,15 @@ class BillingMhsController extends Controller
         return view('pages.billing.edit-billing-ukt', compact('billing'));
     }
 
-    public function update_billing_ukt(Request $request)
+    public function update_billing_ukt(Request $request, $id)
     {
-        $id = $request->route('id');
         $billing = BillingMahasiswa::find($id);
 
-        abort(404);
-        //
-        if (!$billing->trx_id || !$billing->no_va) {
-            $billing->update([
-                'nominal' => $request->nominal
-            ]);
-            return redirect()->route('billing.ukt')->with('success', 'Berhasil Update Billing');
-        }
-
-        $data = [
-            'trx_id' => $billing->trx_id,
-            'no_va' => $billing->no_va,
-            'nominal' => $request->nominal,
-            'tgl_expire' => $billing->tgl_expire,
-            'nama' => $billing->nama,
-        ];
-
-        $response = $this->ecollService->updateVaBNI($data);
-        if (!$response['response']) {
-            return back()->withErrors(['billing' => $response['message']]);
-        }
-
         $billing->update([
-            'nominal' => $request->nominal
+            'trx_id' => NULL,
+            'no_va' => NULL,
+            'nominal' => $request->nominal,
+            'tgl_expire' => NULL,
         ]);
         return redirect()->route('billing.ukt')->with('success', 'Berhasil Update Billing');
     }
@@ -238,6 +228,7 @@ class BillingMhsController extends Controller
 
         return view('pages.billing.billing-umb', $data);
     }
+
     public function billing_ipi(Request $request)
     {
         $tahun_akademik = TahunPembayaran::first();
@@ -275,8 +266,9 @@ class BillingMhsController extends Controller
                     ['data' => 'DT_RowIndex', 'name' => 'DT_RowIndex', 'orderable' => 'false', 'searchable' => 'false'],
                     ['data' => 'no_identitas', 'name' => 'no_identitas', 'orderable' => 'false', 'searchable' => 'true'],
                     ['data' => 'nama', 'name' => 'nama', 'orderable' => 'true', 'searchable' => 'true'],
-                    ['data' => 'jalur', 'name' => 'jalur', 'orderable' => 'true', 'searchable' => 'true'],
                     ['data' => 'nama_prodi', 'name' => 'nama_prodi', 'orderable' => 'false', 'searchable' => 'false'],
+                    ['data' => 'trx_id', 'name' => 'trx_id', 'orderable' => 'true', 'searchable' => 'true'],
+                    ['data' => 'no_va', 'name' => 'no_va', 'orderable' => 'true', 'searchable' => 'true'],
                     ['data' => 'nominal', 'name' => 'nominal', 'orderable' => 'false', 'searchable' => 'false'],
                     ['data' => 'status', 'name' => 'status', 'orderable' => 'false', 'searchable' => 'false'],
                     ['data' => 'created_at', 'name' => 'created_at', 'orderable' => 'false', 'searchable' => 'false'],
@@ -285,6 +277,16 @@ class BillingMhsController extends Controller
         ];
         return view('pages.billing.billing-ipi', $data);
     }
+
+    public function create_billing_ipi()
+    {
+        $data = [
+            'judul' => 'Buat Billing IPI',
+        ];
+        return view('pages.billing.create-billing-ipi', $data);
+    }
+
+
     public function billing_pemkes(Request $request)
     {
         $tahun_akademik = TahunPembayaran::first();

@@ -62,6 +62,7 @@ class BillingPmbController extends Controller
                     ['data' => 'DT_RowIndex', 'name' => 'DT_RowIndex', 'orderable' => 'false', 'searchable' => 'false'],
                     ['data' => 'nama', 'name' => 'nama', 'orderable' => 'true', 'searchable' => 'true'],
                     ['data' => 'nama_bank', 'name' => 'nama_bank', 'orderable' => 'true', 'searchable' => 'false'],
+                    ['data' => 'trx_id', 'name' => 'trx_id', 'orderable' => 'true', 'searchable' => 'false'],
                     ['data' => 'no_va', 'name' => 'no_va', 'orderable' => 'true', 'searchable' => 'false'],
                     ['data' => 'nominal', 'name' => 'nominal', 'orderable' => 'false', 'searchable' => 'false'],
                     ['data' => 'tgl_expire', 'name' => 'tgl_expire', 'orderable' => 'false', 'searchable' => 'false'],
@@ -70,6 +71,14 @@ class BillingPmbController extends Controller
                 ]
             ]
         ];
-        return view('pages.billing.billing-pmb', $data);
+        return view('pages.billing.pmb.index', $data);
+    }
+
+    public function create()
+    {
+        $data = [
+            'judul' => 'Buat Billing PMB',
+        ];
+        return view('pages.billing.pmb.create', $data);
     }
 }

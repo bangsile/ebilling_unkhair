@@ -49,12 +49,16 @@ Route::controller(BillingController::class)->group(function () {
 // BILLING MAHASISWA
 Route::controller(BillingMhsController::class)->group(function () {
     Route::get('/billing-ukt', 'billing_ukt')->name('billing.ukt');
+    Route::get('/billing-ukt/create', 'create_billing_ukt')->name('billing.ukt.create');
     Route::get('/billing-ukt/edit/{id}', 'edit_billing_ukt')->name('billing.ukt.edit');
     Route::patch('/billing-ukt/edit/{id}', 'update_billing_ukt')->name('billing.ukt.update');
     Route::post('/billing-ukt/lunas', 'set_lunas_billing')->name('billing.ukt.lunas');
 
     Route::get('/billing-umb', 'billing_umb')->name('billing.umb');
+
     Route::get('/billing-ipi', 'billing_ipi')->name('billing.ipi');
+    Route::get('/billing-ipi/create', 'create_billing_ipi')->name('billing.ipi.create');
+
     Route::get('/billing-pemkes', 'billing_pemkes')->name('billing.pemkes');
 })->middleware(['auth', 'role:admin|spp|keuangan']);
 
@@ -129,4 +133,5 @@ Route::controller(LogController::class)->group(function () {
 // BILLING PMB
 Route::controller(BillingPmbController::class)->group(function () {
     Route::get('/billing-pmb', 'index')->name('billing-pmb.index');
+    Route::get('/billing-pmb/create', 'create')->name('billing-pmb.create');
 })->middleware(['auth', 'role:admin|keuangan']);

@@ -23,8 +23,9 @@
                                         <th>No</th>
                                         <th>No. Peserta</th>
                                         <th>Nama</th>
-                                        <th>Jalur</th>
                                         <th>Prodi</th>
+                                        <th>Trx ID</th>
+                                        <th>Nomor VA</th>
                                         <th>Nominal</th>
                                         <th>Status</th>
                                         <th>Created At</th>
