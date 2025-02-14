@@ -60,9 +60,11 @@ class BillingMhsController extends Controller
                         '</form>';
 
                     if (Auth::check() && Auth::user()->hasRole(['developper', 'admin'])) {
-                        return $editButton . ' ' . $printButton . ' ' . $setLunasButton;
+                        return $printButton . ' ' . $setLunasButton;
+                        // return $editButton . ' ' . $printButton . ' ' . $setLunasButton;
                     }
-                    return $editButton . ' ' . $printButton;
+                    return $printButton;
+                    // return $editButton . ' ' . $printButton;
                 })
                 ->filter(function ($instance) use ($request) {
                     if ($request->get('prodi')) {
