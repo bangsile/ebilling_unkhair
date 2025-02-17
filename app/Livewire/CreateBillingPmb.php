@@ -30,7 +30,7 @@ class CreateBillingPmb extends Component
             'demo' => false,
             'expired_va' => 5, // expired_va
             'apikey' => $api_key,
-            'kode_payment' => '007',
+            'kode_payment' => '004',
             'jenis_payment' => 'Pembayaran PMB',
             'prefix_trx' => 'PMB',
             'nama' => $this->nama,
