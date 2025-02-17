@@ -60,7 +60,7 @@ class CreateBillingIpi extends Component
             'deskripsi' => 'Pembayaran IPI Tahun ' . $tahun_akademik->tahun_akademik,
         ];
 
-        dd($params);
+        // dd($params);
         $response = json_decode(post_data("{$api_url}/btn/createva.php", $params), TRUE);
 
         // dd($response);
