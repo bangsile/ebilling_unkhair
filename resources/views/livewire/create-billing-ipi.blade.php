@@ -29,7 +29,7 @@
                     </optgroup>
                 @endforeach
             </select>
-            @error('nama')
+            @error('prodi')
                 <span class="text-danger">{{ $message }}</span>
             @enderror
         </div>
@@ -42,7 +42,7 @@
                         {{ $tahun }}</option>
                 @endfor
             </select>
-            @error('nama')
+            @error('angkatan')
                 <span class="text-danger">{{ $message }}</span>
             @enderror
         </div>
