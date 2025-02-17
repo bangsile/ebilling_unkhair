@@ -89,6 +89,7 @@ class HistoryBankJob implements ShouldQueue
 
         } catch (\Throwable $th) {
             print($th->getMessage());
+            DB::rollBack();
             LogJob::create([
                 "trx_id" => $this->data["trx_id"],
                 "no_va" => $this->data["no_va"],

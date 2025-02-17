@@ -75,7 +75,7 @@ class BillingMhsController extends Controller
             }
             // $tahun_pembayaran = TahunPembayaran::first();
             $billing = BillingMahasiswa::where('no_identitas', $request->no_identitas)->where('jenis_bayar', $request->jenis_bayar)->where('tahun_akademik', $request->tahun_akademik)->first();
-            if ($billing) {
+            if ($billing && $billing->lunas == 0) {
                 $billing->update([
                     'trx_id' =>  $request->trx_id ?? $billing->trx_id ?? null,
                     'no_va' => $request->no_va ?? $billing->no_va ?? null,
