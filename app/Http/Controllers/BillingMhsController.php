@@ -151,12 +151,16 @@ class BillingMhsController extends Controller
 
     public function set_lunas_billing(Request $request)
     {
+        DB::beginTransaction(); // Mulai transaksi
+
         $id = $request->id;
         $billing = BillingMahasiswa::find($id);
 
         $billing->update([
             'lunas' => 1
         ]);
+
+        DB::commit(); // Commit perubahan ke database
 
         // create log
         $user = auth()->user()->name;

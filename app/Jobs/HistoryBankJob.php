@@ -8,6 +8,7 @@ use App\Models\HistoryBank;
 use App\Models\LogJob;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class HistoryBankJob implements ShouldQueue
@@ -43,6 +44,8 @@ class HistoryBankJob implements ShouldQueue
                 print($validator->errors());
                 return response()->json($validator->errors(), 422);
             }
+
+            DB::beginTransaction(); // Mulai transaksi
 
             $billing_pembayaran = Billing::where('trx_id', $this->data["trx_id"])->where('no_va', $this->data["no_va"])->first();
             $billing_ukt = BillingMahasiswa::where('trx_id', $this->data["trx_id"])->where('no_va', $this->data["no_va"])->first();
@@ -81,6 +84,9 @@ class HistoryBankJob implements ShouldQueue
                     "job_result" => "Failed, Billing Not Found"
                 ]);
             }
+
+            DB::commit(); // Commit perubahan ke database
+
         } catch (\Throwable $th) {
             print($th->getMessage());
             LogJob::create([
