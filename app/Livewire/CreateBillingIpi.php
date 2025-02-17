@@ -56,7 +56,7 @@ class CreateBillingIpi extends Component
             'jenis_payment' => 'Pembayaran IPI',
             'prefix_trx' => 'IPI',
             'nama' => $this->nama,
-            'nominal' => $this->nama,
+            'nominal' => $this->nominal,
             'deskripsi' => 'Pembayaran IPI Tahun ' . $tahun_akademik->tahun_akademik,
         ];
 

@@ -34,7 +34,7 @@ class CreateBillingPmb extends Component
             'jenis_payment' => 'Pembayaran PMB',
             'prefix_trx' => 'PMB',
             'nama' => $this->nama,
-            'nominal' => $this->nama,
+            'nominal' => $this->nominal,
             'deskripsi' => 'Pembayaran PMB Tahun ' . date('Y'),
         ];
 

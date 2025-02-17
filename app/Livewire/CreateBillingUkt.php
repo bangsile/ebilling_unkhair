@@ -58,7 +58,7 @@ class CreateBillingUkt extends Component
             'jenis_payment' => 'Pembayaran UKT',
             'prefix_trx' => 'UKT',
             'nama' => $this->nama,
-            'nominal' => $this->nama,
+            'nominal' => $this->nominal,
             'deskripsi' => 'Pembayaran UKT Tahun ' . $tahun_akademik->tahun_akademik,
         ];
 
