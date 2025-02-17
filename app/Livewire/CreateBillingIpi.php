@@ -63,7 +63,7 @@ class CreateBillingIpi extends Component
         // dd($params);
         $response = json_decode(post_data("{$api_url}/btn/createva.php", $params), TRUE);
 
-        // dd($response);
+        dd($response);
 
         if (!$response['response']) {
             $this->dispatch('alert', type: 'error', title: 'Oppss!', message: $response['pesan']);
