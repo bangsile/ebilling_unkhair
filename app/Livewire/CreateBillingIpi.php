@@ -41,7 +41,7 @@ class CreateBillingIpi extends Component
             'angkatan' => 'required'
         ]);
 
-        dd($this);
+        // dd($this);
 
         $api_key = env('API_KEY_ECOLL');
         $api_url = env('API_URL_ECOLL');
@@ -63,7 +63,7 @@ class CreateBillingIpi extends Component
         // dd($params);
         $response = json_decode(post_data("{$api_url}/btn/createva.php", $params), TRUE);
 
-        dd($params, $response);
+        // dd($params, $response);
 
         if (!$response['response']) {
             $this->dispatch('alert', type: 'error', title: 'Oppss!', message: $response['pesan']);
