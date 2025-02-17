@@ -41,7 +41,7 @@ class CreateBillingIpi extends Component
             'angkatan' => 'required'
         ]);
 
-        // dd($this);
+        dd($this);
 
         $api_key = env('API_KEY_ECOLL');
         $api_url = env('API_URL_ECOLL');
