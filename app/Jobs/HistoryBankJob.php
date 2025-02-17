@@ -56,10 +56,12 @@ class HistoryBankJob implements ShouldQueue
                     "metode_pembayaran" => $billing->nama_bank,
                 ]);
 
-                //auto lunas
-                $billing->update([
-                    "lunas" => 1
-                ]);
+                if ($billing->lunas == 0) {
+                    //auto lunas
+                    $billing->update([
+                        "lunas" => 1
+                    ]);
+                }
 
                 // print("Billing Updated");
                 if ($history->wasRecentlyCreated) {
