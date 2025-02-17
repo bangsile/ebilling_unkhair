@@ -68,7 +68,7 @@ class CreateBillingUkt extends Component
         // dd($response);
 
         if (!$response['response']) {
-            $this->dispatch('alert', type: 'error', title: 'Oppss!|', message: $response['message']);
+            $this->dispatch('alert', type: 'error', title: 'Oppss!', message: $response['message']);
         } else {
             $bank = $response['data'];
             $message = 'Berhasil Membuat Virtual Account BANK BTN';

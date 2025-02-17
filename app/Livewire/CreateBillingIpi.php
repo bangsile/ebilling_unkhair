@@ -63,10 +63,10 @@ class CreateBillingIpi extends Component
         // dd($params);
         $response = json_decode(post_data("{$api_url}/btn/createva.php", $params), TRUE);
 
-        // dd($response);
+        dd($response);
 
         if (!$response['response']) {
-            $this->dispatch('alert', type: 'error', title: 'Oppss!|', message: $response['message']);
+            $this->dispatch('alert', type: 'error', title: 'Oppss!', message: $response['message']);
         } else {
             $bank = $response['data'];
             $message = 'Berhasil Membuat Virtual Account BANK BTN';
