@@ -30,7 +30,7 @@ class CreateBillingPmb extends Component
             'demo' => false,
             'expired_va' => 5, // expired_va
             'apikey' => $api_key,
-            'kode_payment' => '004',
+            'kode_payment' => '009',
             'jenis_payment' => 'Pembayaran PMB',
             'prefix_trx' => 'PMB',
             'nama' => $this->nama,
@@ -44,7 +44,7 @@ class CreateBillingPmb extends Component
         // dd($response);
 
         if (!$response['response']) {
-            $this->dispatch('alert', type: 'error', title: 'Oppss!', message: $response['message']);
+            $this->dispatch('alert', type: 'error', title: 'Oppss!', message: $response['pesan']);
         } else {
             $bank = $response['data'];
             $message = 'Berhasil Membuat Virtual Account BANK BTN';

@@ -60,13 +60,13 @@ class CreateBillingIpi extends Component
             'deskripsi' => 'Pembayaran IPI Tahun ' . $tahun_akademik->tahun_akademik,
         ];
 
-        // dd($params);
+        dd($params);
         $response = json_decode(post_data("{$api_url}/btn/createva.php", $params), TRUE);
 
-        dd($response);
+        // dd($response);
 
         if (!$response['response']) {
-            $this->dispatch('alert', type: 'error', title: 'Oppss!', message: $response['message']);
+            $this->dispatch('alert', type: 'error', title: 'Oppss!', message: $response['pesan']);
         } else {
             $bank = $response['data'];
             $message = 'Berhasil Membuat Virtual Account BANK BTN';
