@@ -8,6 +8,7 @@ use App\Models\TahunPembayaran;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 
 class LogController extends Controller
 {
@@ -133,7 +134,7 @@ class LogController extends Controller
     {
         $tahun_akademik = TahunPembayaran::first();
         $billingukt = BillingMahasiswa::join('history_banks', 'billing_mahasiswas.trx_id', '=', 'history_banks.trx_id')
-            ->select(['billing_mahasiswas.*'])
+            ->select(['billing_mahasiswas.*', 'history_banks.created_at AS created_at_history_bank'])
             ->where('billing_mahasiswas.lunas', 0)
             ->where('billing_mahasiswas.tahun_akademik', $tahun_akademik?->tahun_akademik)
             ->get();
@@ -151,7 +152,8 @@ class LogController extends Controller
                     'nominal' => formatRupiah($row->nominal),
                     'prodi' => $row->kode_prodi . ' - ' . $row->nama_prodi,
                     'tahun_akademik' => $row->tahun_akademik,
-                    'lunas' => $row->lunas ? 'Y' : 'N'
+                    'lunas' => $row->lunas ? 'Y' : 'N',
+                    'created_at_history_bank' => $row->created_at_history_bank
                 ];
             }
         }
@@ -162,5 +164,39 @@ class LogController extends Controller
         ];
 
         return view('pages.log.failed-pelunasan-ukt', $data);
+    }
+
+    public function set_lunas_ukt(Request $request)
+    {
+        DB::beginTransaction(); // Mulai transaksi
+
+        $trx_id = $request->trx_id;
+        $created_at_history_bank = $request->created_at_history_bank;
+        $billing = BillingMahasiswa::where('trx_id', $trx_id)->first();
+
+        $billing->update([
+            'lunas' => 1,
+            'updated_at' => $created_at_history_bank
+        ]);
+
+        DB::commit(); // Commit perubahan ke database
+
+        // create log
+        $user = auth()->user()->name;
+        $aksi = "Set Lunas";
+        $thn_akademik = $billing->tahun_akademik;
+        $data = $billing->no_identitas . ' - ' . $billing->nama . ' - ' . formatRupiah($billing->nominal);
+
+        $log = sprintf(
+            "%-15s | %-20s | %-7s | %s",
+            $aksi,
+            $user,
+            $thn_akademik,
+            $data
+        );
+        Log::channel('monthly')->info($log);
+
+
+        return redirect()->back()->with('success', 'Berhasil Update Billing Lunas');
     }
 }

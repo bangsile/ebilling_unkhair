@@ -127,6 +127,7 @@ Route::controller(LogController::class)->group(function () {
     Route::get('/log/view/{nama_file}', 'lihat')->name('log.lihat');
     Route::get('/log/ecoll', 'ecoll')->name('log.ecoll');
     Route::get('/log/failed-pelunasan-ukt', 'failed_set_lunas_ukt')->name('log.failed-pelunasan-ukt');
+    Route::post('/log/set-pelunasan-ukt', 'set_lunas_ukt')->name('log.set-pelunasan-ukt');
 })->middleware(['auth', 'role:developper']);
 
 

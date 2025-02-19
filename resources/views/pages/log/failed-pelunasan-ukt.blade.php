@@ -7,8 +7,6 @@
         <!-- Toastr CSS -->
         <link rel="stylesheet" href="{{ asset('adminlte/plugins/toastr/toastr.min.css') }}">
 
-        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-
     </x-slot>
     <x-page-header>{{ $judul }}</x-page-header>
 
@@ -46,7 +44,22 @@
                                                 <td>{{ $row['ukt'] }}</td>
                                                 <td>{{ $row['nominal'] }}</td>
                                                 <td>{{ $row['prodi'] }}</td>
-                                                <td></td>
+                                                <td>
+                                                    <form id="lunas-ukt-{{ $row['trx_id'] }}"
+                                                        action="{{ route('log.set-pelunasan-ukt') }}" method="POST"
+                                                        style="display: inline;">
+                                                        @csrf
+                                                        <input type="hidden" name="trx_id"
+                                                            value="{{ $row['trx_id'] }}">
+                                                        <input type="hidden" name="created_at_history_bank"
+                                                            value="{{ $row['created_at_history_bank'] }}">
+                                                        <button type="button"
+                                                            onclick="confirmLunas('{{ $row['trx_id'] }}')"
+                                                            class="btn btn-sm btn-success">
+                                                            Set Lunas
+                                                        </button>
+                                                    </form>
+                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -66,17 +79,39 @@
     <!-- /.content -->
 
     <x-slot name="script">
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/2.0.1/js/dataTables.min.js"></script>
+        <!-- Toastr JS -->
+        <script src="{{ asset('adminlte/plugins/toastr/toastr.min.js') }}"></script>
+        <!-- SweetAlert2 -->
+        <script src="{{ asset('adminlte/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+
         <!-- datatble js -->
         <script type="text/javascript" src="https://cdn.datatables.net/2.0.1/js/dataTables.min.js"></script>
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 
         @if (session('success'))
             <script>
                 toastr.success('{{ session('success') }}', 'Berhasil');
             </script>
         @endif
+
+        <script>
+            function confirmLunas(trx_id) {
+                Swal.fire({
+                    // title: "Apakah Anda yakin?",
+                    text: "Apakah anda ingin mengset billing ini menjadi lunas?",
+                    // icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#28a745",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Ya",
+                    cancelButtonText: "Batal"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById('lunas-ukt-' + trx_id).submit();
+                    }
+                });
+            }
+        </script>
 
         <script>
             $(function() {
