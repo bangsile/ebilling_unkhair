@@ -51,7 +51,12 @@ class HistoryBankJob implements ShouldQueue
             $billing_ukt = BillingMahasiswa::where('trx_id', $this->data["trx_id"])->where('no_va', $this->data["no_va"])->first();
             $billing = $billing_pembayaran ?? $billing_ukt;
             if ($billing) {
-                $history = HistoryBank::create([
+                $history = HistoryBank::updateOrCreate(
+                [
+                    "trx_id" => $billing->trx_id,
+                    "no_va" => $billing->no_va,
+                ],
+                [
                     "trx_id" => $billing->trx_id,
                     "no_va" => $billing->no_va,
                     "nominal" => $billing->nominal,
@@ -67,15 +72,13 @@ class HistoryBankJob implements ShouldQueue
                 }
 
                 // print("Billing Updated");
-                if ($history->wasRecentlyCreated) {
-                    LogJob::create([
-                        "trx_id" => $billing->trx_id,
-                        "no_va" => $billing->no_va,
-                        "nama" => $billing->nama,
-                        "metode_pembayaran" => $billing->nama_bank,
-                        "job_result" => "Success, Billing Updated"
-                    ]);
-                }
+                LogJob::create([
+                    "trx_id" => $billing->trx_id,
+                    "no_va" => $billing->no_va,
+                    "nama" => $billing->nama,
+                    "metode_pembayaran" => $billing->nama_bank,
+                    "job_result" => "Success, Billing Updated"
+                ]);
             } else {
                 print("Billing Not Found");
                 LogJob::create([
