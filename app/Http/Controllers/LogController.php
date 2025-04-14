@@ -130,6 +130,54 @@ class LogController extends Controller
         echo "</pre>";
     }
 
+    public function log_ecoll(Request $request)
+    {
+        $msg = $request->get('msg');
+        $prefix_trx = $request->get('trx');
+        if ($msg) {
+            abort(404, 'Parameter wajib di isi');
+        }
+
+        $tahun_akademik = TahunPembayaran::first();
+        $log_ecoll = LogJob::where('job_result', $msg);
+        if ($prefix_trx) {
+            $log_ecoll->where('trx_id', 'like', $prefix_trx . '%');
+        }
+        $log_ecoll->orderBy('created_at', 'DESC');
+
+        $res_log_ecoll = $log_ecoll->get();
+
+        $result = [];
+        $no = 1;
+        foreach ($res_log_ecoll as $row) {
+            $check_ecoll = json_decode(get_data(str_curl(env('API_URL_ECOLL') . '/cekva.php', ['trx_id' => $row->trx_id])), true);
+            if ($check_ecoll['response']) {
+                $data = $check_ecoll['data'][0];
+                $bank = 'BTN';
+                $nama = trim($data['nama']);
+                $nominal = trim($data['nominal']);
+
+                if (trim($data['metode']) == 'Virtual Account (VA) BNI') {
+                    $bank = 'BNI';
+                    $nama = trim(str_replace('RPL 062 UNKHAIR OPS PENERIMAAN-', '', $nama));
+                }
+
+                $result[] = [
+                    'index' => $no,
+                    'nama' => $nama,
+                    'nominal' => $nominal,
+                    'bank' => $bank,
+                    'created_at' => tgl_indo($row->created_at)
+                ];
+                $no++;
+            }
+        }
+
+        echo "<pre>";
+        print_r($result);
+        echo "</pre>";
+    }
+
     public function failed_set_lunas_ukt()
     {
         $tahun_akademik = TahunPembayaran::first();
