@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Validator;
 
 class BillingMhsController extends Controller
 {
-    public function get_detail_ukt(Request $request)
+    public function get_detail_mahasiswa(Request $request)
     {
         $apiKey = $request->header('X-API-KEY');
 
@@ -123,7 +123,7 @@ class BillingMhsController extends Controller
         }
     }
 
-    public function update_billing_ukt(Request $request)
+    public function update_billing_mahasiswa(Request $request)
     {
         $apiKey = $request->header('X-API-KEY');
 

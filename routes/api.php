@@ -43,7 +43,7 @@ Route::get('/tahun-pembayaran', function (Request $request) {
 // E-Billing Mahasiswa
 Route::post('/billing-mahasiswa', [BillingMhsController::class, 'store_billing_mahasiswa'])->withoutMiddleware(['throttle:api']);
 Route::post('/billing-mahasiswa/detail', [BillingMhsController::class, 'get_detail_ukt'])->withoutMiddleware(['throttle:api']);
-Route::patch('/billing-mahasiswa/update', [BillingMhsController::class, 'update_billing_ukt'])->withoutMiddleware(['throttle:api']);
+Route::patch('/billing-mahasiswa/update', [BillingMhsController::class, 'update_billing_mahasiswa'])->withoutMiddleware(['throttle:api']);
 
 // Manajemen E-Billing
 Route::get('/billing', function () {
