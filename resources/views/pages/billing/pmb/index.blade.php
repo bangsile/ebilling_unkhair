@@ -25,14 +25,12 @@
                                 <thead>
                                     <tr>
                                         <th class="text-left">No</th>
-                                        <th class="text-left">Nama</th>
-                                        <th class="text-left">Bank</th>
-                                        <th class="text-left">Trx ID</th>
                                         <th class="text-left">Nomor VA</th>
+                                        <th class="text-left">Nama Lengkap</th>
+                                        <th class="text-left">Bank</th>
                                         <th>Nominal</th>
-                                        <th>Expire</th>
+                                        <th>Deskripsi</th>
                                         <th>Status</th>
-                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>

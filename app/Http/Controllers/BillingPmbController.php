@@ -34,11 +34,8 @@ class BillingPmbController extends Controller
                     }
                     return '';
                 })
-                ->editColumn('tgl_expire', function ($billing) {
-                    return tgl_indo($billing->tgl_expire, false);
-                })
-                ->addColumn('action', function ($billing) {
-                    return '';
+                ->editColumn('deskripsi', function ($billing) {
+                    return json_decode($billing->detail)->deskripsi ?? '-';
                 })
                 ->filter(function ($instance) use ($request) {
                     if (!empty($request->input('search.value'))) {
@@ -49,7 +46,7 @@ class BillingPmbController extends Controller
                         });
                     }
                 })
-                ->rawColumns(['status', 'tgl_expire', 'action'])
+                ->rawColumns(['nominal', 'status', 'deskripsi'])
                 ->make(true);
         }
 
@@ -60,14 +57,12 @@ class BillingPmbController extends Controller
                 'id_table' => 'id-datatable',
                 'columns' => [
                     ['data' => 'DT_RowIndex', 'name' => 'DT_RowIndex', 'orderable' => 'false', 'searchable' => 'false'],
+                    ['data' => 'no_va', 'name' => 'no_va', 'orderable' => 'true', 'searchable' => 'false'],
                     ['data' => 'nama', 'name' => 'nama', 'orderable' => 'true', 'searchable' => 'true'],
                     ['data' => 'nama_bank', 'name' => 'nama_bank', 'orderable' => 'true', 'searchable' => 'false'],
-                    ['data' => 'trx_id', 'name' => 'trx_id', 'orderable' => 'true', 'searchable' => 'false'],
-                    ['data' => 'no_va', 'name' => 'no_va', 'orderable' => 'true', 'searchable' => 'false'],
                     ['data' => 'nominal', 'name' => 'nominal', 'orderable' => 'false', 'searchable' => 'false'],
-                    ['data' => 'tgl_expire', 'name' => 'tgl_expire', 'orderable' => 'false', 'searchable' => 'false'],
-                    ['data' => 'status', 'name' => 'status', 'orderable' => 'false', 'searchable' => 'false'],
-                    ['data' => 'action', 'name' => 'action', 'orderable' => 'false', 'searchable' => 'false']
+                    ['data' => 'deskripsi', 'name' => 'deskripsi', 'orderable' => 'false', 'searchable' => 'false'],
+                    ['data' => 'status', 'name' => 'status', 'orderable' => 'false', 'searchable' => 'false']
                 ]
             ]
         ];
