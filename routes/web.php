@@ -65,12 +65,12 @@ Route::controller(BillingMhsController::class)->group(function () {
 })->middleware(['auth', 'role:admin|spp|keuangan']);
 
 // REKENING KORAN MAHASISWA
-// Route::controller(RekeningKoranController::class)->group(function () {
-//     Route::get('/rekening-koran', 'index')->name('rekening-koran.index');
-//     Route::get('/rekening-koran/show', 'tampil')->name('rekening-koran.tampil');
-//     Route::get('/rekening-koran/export-excel', 'excel')->name('rekening-koran.export-excel');
-//     Route::get('/rekening-koran/export-pdf', 'pdf')->name('rekening-koran.export-pdf');
-// })->middleware(['auth', 'role:developper|admin|spp|keuangan']);
+Route::controller(RekeningKoranController::class)->group(function () {
+    Route::get('/rekening-koran', 'index')->name('rekening-koran.index');
+    Route::get('/rekening-koran/show', 'tampil')->name('rekening-koran.tampil');
+    Route::get('/rekening-koran/export-excel', 'excel')->name('rekening-koran.export-excel');
+    Route::get('/rekening-koran/export-pdf', 'pdf')->name('rekening-koran.export-pdf');
+})->middleware(['auth', 'role:developper|admin|spp|keuangan']);
 
 // REKENING KORAN MANAJEMEN E-BILLING
 Route::controller(RekeningKoran2Controller::class)->group(function () {
