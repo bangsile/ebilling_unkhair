@@ -109,8 +109,13 @@
                 @endif
 
                 @if (Auth::user()->hasRole(['admin', 'spp', 'keuangan']))
-                    <x-nav-link icon="nav-icon fas fa-newspaper" href="{{ route('rekening-koran.index') }}"
+                    {{-- <x-nav-link icon="nav-icon fas fa-newspaper" href="{{ route('rekening-koran.index') }}"
                         active="{{ Route::is('rekening-koran.*') }}">
+                        Rekening Koran
+                    </x-nav-link> --}}
+
+                    <x-nav-link icon="nav-icon fas fa-newspaper" href="{{ route('rekeningkoran.index') }}"
+                        active="{{ Route::is('rekeningkoran.*') }}">
                         Rekening Koran
                     </x-nav-link>
 

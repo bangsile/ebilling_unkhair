@@ -16,7 +16,7 @@ class RekeningKoranController extends Controller
     {
         $jenisbayara = JenisBayar::orderBy('bank', 'ASC')->get();
         $data = [
-            'judul' => 'Rekening Koran',
+            'judul' => 'Rekening Koran - E-Billing Mahasiswa',
             'jenisbayara' => $jenisbayara,
             'datatable' => [
                 'url' => route('rekening-koran.tampil'),

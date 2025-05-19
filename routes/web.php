@@ -10,6 +10,7 @@ use App\Http\Controllers\JenisBayarController;
 use App\Http\Controllers\LaporanUktMahasiswaController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\ProdiController;
+use App\Http\Controllers\RekeningKoran2Controller;
 use App\Http\Controllers\RekeningKoranController;
 use App\Http\Controllers\TahunPembayaranController;
 use App\Http\Controllers\UserController;
@@ -63,12 +64,23 @@ Route::controller(BillingMhsController::class)->group(function () {
     Route::get('/billing-pemkes', 'billing_pemkes')->name('billing.pemkes');
 })->middleware(['auth', 'role:admin|spp|keuangan']);
 
-// REKENING KORAN
-Route::controller(RekeningKoranController::class)->group(function () {
-    Route::get('/rekening-koran', 'index')->name('rekening-koran.index');
-    Route::get('/rekening-koran/show', 'tampil')->name('rekening-koran.tampil');
-    Route::get('/rekening-koran/export-excel', 'excel')->name('rekening-koran.export-excel');
-    Route::get('/rekening-koran/export-pdf', 'pdf')->name('rekening-koran.export-pdf');
+// REKENING KORAN MAHASISWA
+// Route::controller(RekeningKoranController::class)->group(function () {
+//     Route::get('/rekening-koran', 'index')->name('rekening-koran.index');
+//     Route::get('/rekening-koran/show', 'tampil')->name('rekening-koran.tampil');
+//     Route::get('/rekening-koran/export-excel', 'excel')->name('rekening-koran.export-excel');
+//     Route::get('/rekening-koran/export-pdf', 'pdf')->name('rekening-koran.export-pdf');
+// })->middleware(['auth', 'role:developper|admin|spp|keuangan']);
+
+// REKENING KORAN MANAJEMEN E-BILLING
+Route::controller(RekeningKoran2Controller::class)->group(function () {
+    Route::get('/rekeningkoran', 'index')->name('rekeningkoran.index');
+    Route::get('/rekeningkoran/{jenisbayar}', 'index')->name('rekeningkoran.pilih-jenisbayar');
+    Route::get('/rekeningkoran/ebilling-mahasiswa/{jenisbayar}', 'ebilling_mahasiswa')->name('rekeningkoran.ebilling-mahasiswa');
+    Route::get('/rekeningkoran/manajemen-ebilling/{jenisbayar}', 'manajemen_ebilling')->name('rekeningkoran.manajemen_ebilling');
+
+
+    Route::get('/rekeningkoran/export-excel', 'excel')->name('rekeningkoran.export-excel');
 })->middleware(['auth', 'role:developper|admin|spp|keuangan']);
 
 

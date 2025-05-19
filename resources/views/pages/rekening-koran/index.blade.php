@@ -142,7 +142,6 @@
                 });
             });
         </script>
-
         <script type="text/javascript">
             var table;
             $(function() {
