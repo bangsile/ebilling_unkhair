@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Exports\Billings;
 use App\Exports\EbillingMahasiswa;
+
 use App\Models\Billing;
 use App\Models\BillingMahasiswa;
 use App\Models\JenisBayar;
 use App\Models\TahunPembayaran;
+
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
@@ -176,7 +178,7 @@ class RekeningKoran2Controller extends Controller
 
     public function excel(Request $request)
     {
-        dd($request);
+        // dd($request);
 
         if (!trim($request->date) || trim($request->date) == 'to') {
             abort(500);

@@ -25,8 +25,9 @@ class Billings implements FromView
             ->pembayaran($this->jenisbayar)
             ->whereBetween('updated_at', [$this->tgl_mulai . " 00:00:00", $this->tgl_akhir . " 23:59:59"])
             ->orderBy('updated_at', 'ASC')
-            ->orderBy('nama_prodi', 'ASC')
             ->get();
+
+        // dd($billings);
         return view('exports.ebilling-unkhair', [
             'tgl_transaksi' => str_range_tanggal($this->tgl_mulai, $this->tgl_akhir),
             'result' => $billings

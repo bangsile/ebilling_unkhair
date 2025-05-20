@@ -74,11 +74,10 @@ Route::controller(RekeningKoranController::class)->group(function () {
 
 // REKENING KORAN MANAJEMEN E-BILLING
 Route::controller(RekeningKoran2Controller::class)->group(function () {
-    Route::get('/rekeningkoran', 'index')->name('rekeningkoran.index');
-    Route::get('/rekeningkoran/{jenisbayar}', 'index')->name('rekeningkoran.pilih-jenisbayar');
+    Route::get('/rekeningkoran/index', 'index')->name('rekeningkoran.index');
+    Route::get('/rekeningkoran/show/{jenisbayar}', 'index')->name('rekeningkoran.pilih-jenisbayar');
     Route::get('/rekeningkoran/ebilling-mahasiswa/{jenisbayar}', 'ebilling_mahasiswa')->name('rekeningkoran.ebilling-mahasiswa');
     Route::get('/rekeningkoran/manajemen-ebilling/{jenisbayar}', 'manajemen_ebilling')->name('rekeningkoran.manajemen_ebilling');
-
 
     Route::get('/rekeningkoran/export-excel', 'excel')->name('rekeningkoran.export-excel');
 })->middleware(['auth', 'role:developper|admin|spp|keuangan']);
