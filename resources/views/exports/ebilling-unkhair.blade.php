@@ -18,7 +18,7 @@
                 <td>{{ $billing->trx_id }}</td>
                 <td style="text-align:left;mso-number-format:'@';">&nbsp;{{ $billing->no_va }}</td>
                 <td>{{ $billing->nama_bank }}</td>
-                <td style="text-align:right;">{{ formatRupiah($billing->nominal) }}</td>
+                <td style="text-align:right;">{{ $billing->nominal }}</td>
                 <td>{{ ucwords(strtolower($billing->nama)) }}</td>
                 <td>
                     @php
