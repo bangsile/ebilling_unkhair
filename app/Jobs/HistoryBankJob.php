@@ -52,17 +52,18 @@ class HistoryBankJob implements ShouldQueue
             $billing = $billing_pembayaran ?? $billing_ukt;
             if ($billing) {
                 $history = HistoryBank::updateOrCreate(
-                [
-                    "trx_id" => $billing->trx_id,
-                    "no_va" => $billing->no_va,
-                ],
-                [
-                    "trx_id" => $billing->trx_id,
-                    "no_va" => $billing->no_va,
-                    "nominal" => $billing->nominal,
-                    "nama" => $billing->nama,
-                    "metode_pembayaran" => $billing->nama_bank,
-                ]);
+                    [
+                        "trx_id" => $billing->trx_id,
+                        "no_va" => $billing->no_va,
+                    ],
+                    [
+                        "trx_id" => $billing->trx_id,
+                        "no_va" => $billing->no_va,
+                        "nominal" => $billing->nominal,
+                        "nama" => $billing->nama,
+                        "metode_pembayaran" => $billing->nama_bank,
+                    ]
+                );
 
                 if ($billing->lunas == 0) {
                     //auto lunas
@@ -72,13 +73,19 @@ class HistoryBankJob implements ShouldQueue
                 }
 
                 // print("Billing Updated");
-                LogJob::create([
-                    "trx_id" => $billing->trx_id,
-                    "no_va" => $billing->no_va,
-                    "nama" => $billing->nama,
-                    "metode_pembayaran" => $billing->nama_bank,
-                    "job_result" => "Success, Billing Updated"
-                ]);
+                LogJob::updateOrCreate(
+                    [
+                        "trx_id" => $billing->trx_id,
+                        "no_va" => $billing->no_va,
+                    ],
+                    [
+                        "trx_id" => $billing->trx_id,
+                        "no_va" => $billing->no_va,
+                        "nama" => $billing->nama,
+                        "metode_pembayaran" => $billing->nama_bank,
+                        "job_result" => "Success, Billing Updated"
+                    ]
+                );
             } else {
                 print("Billing Not Found");
                 LogJob::create([

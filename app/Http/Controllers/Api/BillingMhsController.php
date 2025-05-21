@@ -98,6 +98,8 @@ class BillingMhsController extends Controller
             }
 
             $billing = BillingMahasiswa::create([
+                'trx_id' =>  $request->trx_id ?? $billing->trx_id ?? null,
+                'no_va' => $request->no_va ?? $billing->no_va ?? null,
                 'nama_bank' => $request->nama_bank,
                 'nominal' => $request->nominal,
                 'tgl_expire' => $request->tgl_expire,
