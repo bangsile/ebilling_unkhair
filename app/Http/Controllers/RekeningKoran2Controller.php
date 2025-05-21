@@ -94,7 +94,10 @@ class RekeningKoran2Controller extends Controller
                     return $billing->kode_prodi . ' - ' . $billing->nama_prodi;
                 })
                 ->editColumn('mahasiswa', function ($billing) {
-                    return $billing->nama . '<br>NPM: ' . $billing->no_identitas;
+                    if ($billing->jenis_bayar == 'ukt') {
+                        return $billing->nama . '<br>NPM: ' . $billing->no_identitas;
+                    }
+                    return $billing->nama . '<br>No. Peserta: ' . $billing->no_identitas;
                 })
                 ->editColumn('ket', function ($billing) {
                     if ($billing->jenis_bayar == 'ukt') {
