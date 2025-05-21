@@ -88,11 +88,17 @@ class HistoryBankJob implements ShouldQueue
                 );
             } else {
                 print("Billing Not Found");
-                LogJob::create([
-                    "trx_id" => $this->data["trx_id"],
-                    "no_va" => $this->data["no_va"],
-                    "job_result" => "Failed, Billing Not Found"
-                ]);
+                LogJob::updateOrCreate(
+                    [
+                        "trx_id" => $billing->trx_id,
+                        "no_va" => $billing->no_va,
+                    ],
+                    [
+                        "trx_id" => $this->data["trx_id"],
+                        "no_va" => $this->data["no_va"],
+                        "job_result" => "Failed, Billing Not Found"
+                    ]
+                );
             }
 
             DB::commit(); // Commit perubahan ke database
