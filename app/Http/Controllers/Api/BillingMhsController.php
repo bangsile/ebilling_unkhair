@@ -162,11 +162,19 @@ class BillingMhsController extends Controller
                     'message' => $validator->errors(),
                 ], 402);
             }
+
             $billing = BillingMahasiswa::where('no_identitas', $request->npm)
                 ->where('tahun_akademik', $request->tahun_akademik)
                 ->where('jenis_bayar', $request->jenis_bayar)->first();
+
             if (!$billing) {
                 return new BillingResource(false, 'Billing Tidak Ditemukan', null);
+            }
+
+            $detail = $request->detail ?? [];
+            if ($billing->detail) {
+                $detail_old = json_decode($billing->detail, true);
+                $detail += $detail_old;
             }
 
             $value = [
@@ -174,11 +182,77 @@ class BillingMhsController extends Controller
                 'no_va' => $request->no_va,
                 'nominal' => $request->nominal,
                 'tgl_expire' => $request->tgl_expire,
+                'detail' => json_encode($detail)
             ];
 
             if ($request->nama_bank) {
                 $value += ['nama_bank' => $request->nama_bank];
             }
+
+            $billing->update($value);
+
+            return new BillingResource(true, 'Berhasil Update Billing', $billing);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'response' => false,
+                'message' => $th->getMessage(),
+            ], 402);
+            // throw $th;
+        }
+    }
+
+
+    public function update_detail_billing(Request $request)
+    {
+        $apiKey = $request->header('X-API-KEY');
+
+        if (!$apiKey || $apiKey !== 'secret') {
+            return response()->json([
+                'response' => false,
+                'message' => 'Unauthorized: Invalid or missing API key.',
+            ], 401);
+        }
+        try {
+            $validator = Validator::make($request->all(), [
+                'npm' => 'required',
+                'tahun_akademik' => 'required|min:5|max:5',
+                'jenis_bayar' => 'required',
+                'detail' => 'required|array'
+            ], [
+                'npm.required' => 'Nomor Identitas wajib diisi',
+                'tahun_akademik.required' => 'Tahun akademik wajib diisi',
+                'tahun_akademik.min' => 'Tahun akademik harus terdiri dari 5 karakter',
+                'tahun_akademik.max' => 'Tahun akademik harus terdiri dari 5 karakter',
+                'jenis_bayar.required' => 'Jenis Pembayaran wajib diisi',
+                'detail.required' => 'Detail wajib diisi',
+                'detail.array' => 'Detail pembayaran harus tipe data array',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'response' => false,
+                    'message' => $validator->errors(),
+                ], 402);
+            }
+
+            $billing = BillingMahasiswa::where('no_identitas', $request->npm)
+                ->where('tahun_akademik', $request->tahun_akademik)
+                ->where('jenis_bayar', $request->jenis_bayar)->first();
+
+            if (!$billing) {
+                return new BillingResource(false, 'Billing Tidak Ditemukan', null);
+            }
+
+            $detail = $request->detail ?? [];
+            if ($billing->detail) {
+                $detail_old = json_decode($billing->detail, true);
+                $detail += $detail_old;
+            }
+
+            $value = [
+                'detail' => json_encode($detail),
+                'updated_at' => $billing->updated_at
+            ];
 
             $billing->update($value);
 
