@@ -7,6 +7,7 @@ use App\Http\Resources\BillingResource;
 use App\Models\BillingMahasiswa;
 use App\Models\TahunPembayaran;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class BillingMhsController extends Controller
@@ -254,7 +255,7 @@ class BillingMhsController extends Controller
                 'updated_at' => $billing->updated_at
             ];
 
-            $billing->update($value);
+            DB::table('billing_mahasiswas')->where('id', $billing->id)->update($value);
 
             return new BillingResource(true, 'Berhasil Update Billing', $billing);
         } catch (\Throwable $th) {
