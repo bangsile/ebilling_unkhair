@@ -251,8 +251,7 @@ class BillingMhsController extends Controller
             }
 
             $value = [
-                'detail' => json_encode($detail),
-                'updated_at' => $billing->updated_at
+                'detail' => json_encode($detail)
             ];
 
             DB::table('billing_mahasiswas')->where('id', $billing->id)->update($value);
