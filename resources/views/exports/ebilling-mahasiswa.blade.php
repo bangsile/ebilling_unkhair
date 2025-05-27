@@ -30,10 +30,10 @@
                             echo $billing->no_identitas;
                         } else {
                             if ($billing->detail) {
-                                $detail = json_decode($billing->detail);
-                                echo $detail->npm ?? '-';
+                                $npm = json_decode($billing->detail)->npm ?? '-';
+                                echo $npm;
                             } else {
-                                echo $billing->no_identitas;
+                                echo '-';
                             }
                         }
                     @endphp
