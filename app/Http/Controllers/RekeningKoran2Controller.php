@@ -99,8 +99,8 @@ class RekeningKoran2Controller extends Controller
                     }
 
                     if ($billing->detail) {
-                        $detail = json_decode($billing->detail);
-                        return $billing->nama . '<br>NPM: ' . $detail->npm ?? '-';
+                        $npm = json_decode($billing->detail)->npm ?? '-';
+                        return $billing->nama . '<br>NPM: ' . $npm;
                     }
 
                     return $billing->nama . '<br>NPM: -';
