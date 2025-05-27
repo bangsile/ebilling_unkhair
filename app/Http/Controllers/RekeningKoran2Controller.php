@@ -97,7 +97,13 @@ class RekeningKoran2Controller extends Controller
                     if ($billing->jenis_bayar == 'ukt') {
                         return $billing->nama . '<br>NPM: ' . $billing->no_identitas;
                     }
-                    return $billing->nama . '<br>No. Peserta: ' . $billing->no_identitas;
+
+                    if ($billing->detail) {
+                        $detail = json_decode($billing->detail);
+                        return $billing->nama . '<br>NPM: ' . $detail->npm ?? '-';
+                    }
+
+                    return $billing->nama . '<br>NPM: -';
                 })
                 ->editColumn('ket', function ($billing) {
                     if ($billing->jenis_bayar == 'ukt') {

@@ -8,7 +8,7 @@
             <th>Bank</th>
             <th style="text-align:right;">Nominal</th>
             <th>UKT</th>
-            <th>NPM</th>
+            <th>NPM / Nomor Peserta</th>
             <th>Nama Mahasiswa</th>
             <th style="text-align:left;">Angkatan</th>
             <th>Prodi</th>
@@ -24,7 +24,20 @@
                 <td>{{ $billing->nama_bank }}</td>
                 <td style="text-align:right;">{{ $billing->nominal }}</td>
                 <td>{{ $billing->kategori_ukt }}</td>
-                <td>{{ $billing->no_identitas }}</td>
+                <td>
+                    @php
+                        if ($billing->jenis_bayar == 'ukt') {
+                            echo $billing->no_identitas;
+                        } else {
+                            if ($billing->detail) {
+                                $detail = json_decode($billing->detail);
+                                echo $detail->npm ?? '-';
+                            } else {
+                                echo $billing->no_identitas;
+                            }
+                        }
+                    @endphp
+                </td>
                 <td>{{ ucwords(strtolower($billing->nama)) }}</td>
                 <td style="text-align:left;">{{ $billing->angkatan }}</td>
                 <td>{{ $billing->kode_prodi . ' - ' . $billing->nama_prodi }}</td>
