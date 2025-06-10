@@ -217,7 +217,7 @@ class LogController extends Controller
 
     public function error_logjob($prefix_trx = 'PMB')
     {
-        $billings = Billing::where('trx_id', 'like', $prefix_trx . '%')->where('job_result', 'Attempt to read property "trx_id" on null')
+        $billings = LogJob::where('trx_id', 'like', $prefix_trx . '%')->where('job_result', 'Attempt to read property "trx_id" on null')
             ->get();
 
         $result = [];
