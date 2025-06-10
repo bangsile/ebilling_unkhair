@@ -45,7 +45,7 @@ class HistoryBankJob implements ShouldQueue
                 return response()->json($validator->errors(), 422);
             }
 
-            DB::beginTransaction(); // Mulai transaksi
+            // DB::beginTransaction(); // Mulai transaksi
 
             $billing_pembayaran = Billing::where('trx_id', $this->data["trx_id"])->where('no_va', $this->data["no_va"])->first();
             $billing_ukt = BillingMahasiswa::where('trx_id', $this->data["trx_id"])->where('no_va', $this->data["no_va"])->first();
@@ -101,11 +101,11 @@ class HistoryBankJob implements ShouldQueue
                 );
             }
 
-            DB::commit(); // Commit perubahan ke database
+            // DB::commit(); // Commit perubahan ke database
 
         } catch (\Throwable $th) {
             print($th->getMessage());
-            DB::rollBack();
+            // DB::rollBack();
             LogJob::create([
                 "trx_id" => $this->data["trx_id"],
                 "no_va" => $this->data["no_va"],
