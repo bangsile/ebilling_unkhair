@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Billing;
 use App\Models\BillingMahasiswa;
 use App\Models\LogJob;
 use App\Models\TahunPembayaran;
@@ -212,6 +213,26 @@ class LogController extends Controller
         ];
 
         return view('pages.log.failed-pelunasan-ukt', $data);
+    }
+
+    public function error_logjob($prefix_trx = 'PMB')
+    {
+        $billings = Billing::where('trx_id', 'like', $prefix_trx . '%')->where('job_result', 'Attempt to read property "trx_id" on null')
+            ->get();
+
+        $result = [];
+        foreach ($billings as $row) {
+            $check_ecoll = json_decode(get_data(str_curl(env('API_URL_ECOLL') . '/cekva.php', ['trx_id' => $row->trx_id])), true);
+            if ($check_ecoll['response']) {
+                $result[] = [
+                    'trx_id' => $row->trx_id,
+                    'va' => $row->no_va,
+                    'data_ecoll' => $check_ecoll
+                ];
+            }
+        }
+
+        dd($result);
     }
 
     public function set_lunas_ukt(Request $request)
