@@ -227,7 +227,7 @@ class LogController extends Controller
                 $result[] = [
                     'trx_id' => $row->trx_id,
                     'va' => $row->no_va,
-                    'data_ecoll' => $check_ecoll
+                    'data_ecoll' => $check_ecoll['data'][0]
                 ];
             }
         }
