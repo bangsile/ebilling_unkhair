@@ -119,7 +119,7 @@ class RekeningKoran2Controller extends Controller
                     }
 
                     if (in_array($billing->jenis_bayar, ['umb', 'ipi', 'pemkes'])) {
-                        $ket = 'Pembayaran UKT ' . $billing->tahun_akademik;
+                        $ket = 'Pembayaran ' . strtoupper($billing->jenis_bayar) . ' ' . $billing->tahun_akademik;
                         $ket .= '<br>Jalur ' . $billing->jalur;
                         return $ket;
                     }
