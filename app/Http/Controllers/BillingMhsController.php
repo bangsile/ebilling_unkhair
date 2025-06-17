@@ -185,9 +185,9 @@ class BillingMhsController extends Controller
     // billing umb
     public function billing_umb(Request $request)
     {
-        $tahun_akademik = TahunPembayaran::first();
+        $tahun_akademik = date('Y');
         if ($request->ajax()) {
-            $billings = BillingMahasiswa::where('tahun_akademik', $tahun_akademik?->tahun_akademik)->where('jenis_bayar', 'umb');
+            $billings = BillingMahasiswa::where('tahun', $tahun_akademik)->where('jenis_bayar', 'umb');
             return DataTables::of($billings)
                 ->addIndexColumn()
                 ->editColumn('nominal', function ($billing) {
@@ -235,9 +235,9 @@ class BillingMhsController extends Controller
 
     public function billing_ipi(Request $request)
     {
-        $tahun_akademik = TahunPembayaran::first();
+        $tahun_akademik = date('Y');
         if ($request->ajax()) {
-            $billings = BillingMahasiswa::where('tahun_akademik', $tahun_akademik?->tahun_akademik)->where('jenis_bayar', 'ipi');
+            $billings = BillingMahasiswa::where('tahun_akademik', $tahun_akademik)->where('jenis_bayar', 'ipi');
             return DataTables::of($billings)
                 ->addIndexColumn()
                 ->editColumn('nominal', function ($billing) {
@@ -293,9 +293,9 @@ class BillingMhsController extends Controller
 
     public function billing_pemkes(Request $request)
     {
-        $tahun_akademik = TahunPembayaran::first();
+        $tahun_akademik = date('Y');
         if ($request->ajax()) {
-            $billings = BillingMahasiswa::where('tahun_akademik', $tahun_akademik?->tahun_akademik)->where('jenis_bayar', 'pemkes');
+            $billings = BillingMahasiswa::where('tahun_akademik', $tahun_akademik)->where('jenis_bayar', 'pemkes');
             return DataTables::of($billings)
                 ->addIndexColumn()
                 ->editColumn('nominal', function ($billing) {

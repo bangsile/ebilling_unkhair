@@ -32,6 +32,13 @@ class BillingMahasiswa extends Model
     protected $keyType = 'string'; // Menentukan tipe primary key sebagai string
     public $incrementing = false;
 
+    public function scopetahun($query, $value)
+    {
+        if ($value) {
+            $query->whereYear('created_at', $value);
+        }
+    }
+
     public function scopejenisbayar($query, $value)
     {
         if ($value) {

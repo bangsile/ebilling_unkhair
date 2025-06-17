@@ -77,11 +77,19 @@ class RekeningKoran2Controller extends Controller
     public function ebilling_mahasiswa(Request $request, $jenisbayara = NULL)
     {
         if ($request->ajax()) {
-            $tahun_akademik = TahunPembayaran::first();
-            $billings = BillingMahasiswa::periode($tahun_akademik?->tahun_akademik)->jenisbayar($jenisbayara)
-                ->lunas(1)
-                ->orderBy('updated_at', 'ASC')
-                ->orderBy('nama_prodi', 'ASC');
+            if (in_array($jenisbayara, ['umb', 'ipi', 'pemkes'])) {
+                $tahun_akademik = date('Y');
+                $billings = BillingMahasiswa::tahun($tahun_akademik)->jenisbayar($jenisbayara)
+                    ->lunas(1)
+                    ->orderBy('updated_at', 'ASC')
+                    ->orderBy('nama_prodi', 'ASC');
+            } else {
+                $tahun_akademik = TahunPembayaran::first();
+                $billings = BillingMahasiswa::periode($tahun_akademik?->tahun_akademik)->jenisbayar($jenisbayara)
+                    ->lunas(1)
+                    ->orderBy('updated_at', 'ASC')
+                    ->orderBy('nama_prodi', 'ASC');
+            }
             return DataTables::of($billings)
                 ->addIndexColumn()
                 ->editColumn('nominal', function ($billing) {
