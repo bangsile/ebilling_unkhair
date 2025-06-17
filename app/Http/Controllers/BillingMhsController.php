@@ -187,7 +187,7 @@ class BillingMhsController extends Controller
     {
         $tahun_akademik = date('Y');
         if ($request->ajax()) {
-            $billings = BillingMahasiswa::where('tahun', $tahun_akademik)->where('jenis_bayar', 'umb');
+            $billings = BillingMahasiswa::tahun($tahun_akademik)->where('jenis_bayar', 'umb');
             return DataTables::of($billings)
                 ->addIndexColumn()
                 ->editColumn('nominal', function ($billing) {
@@ -237,7 +237,7 @@ class BillingMhsController extends Controller
     {
         $tahun_akademik = date('Y');
         if ($request->ajax()) {
-            $billings = BillingMahasiswa::where('tahun_akademik', $tahun_akademik)->where('jenis_bayar', 'ipi');
+            $billings = BillingMahasiswa::tahun($tahun_akademik)->where('jenis_bayar', 'ipi');
             return DataTables::of($billings)
                 ->addIndexColumn()
                 ->editColumn('nominal', function ($billing) {
@@ -295,7 +295,7 @@ class BillingMhsController extends Controller
     {
         $tahun_akademik = date('Y');
         if ($request->ajax()) {
-            $billings = BillingMahasiswa::where('tahun_akademik', $tahun_akademik)->where('jenis_bayar', 'pemkes');
+            $billings = BillingMahasiswa::tahun($tahun_akademik)->where('jenis_bayar', 'pemkes');
             return DataTables::of($billings)
                 ->addIndexColumn()
                 ->editColumn('nominal', function ($billing) {
