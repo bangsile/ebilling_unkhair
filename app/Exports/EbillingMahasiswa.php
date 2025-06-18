@@ -23,9 +23,9 @@ class EbillingMahasiswa implements FromView
     public function view(): View
     {
 
-        if (in_array($this->jenisbayara, ['umb', 'ipi', 'pemkes'])) {
+        if (in_array($this->jenisbayar, ['umb', 'ipi', 'pemkes'])) {
             $tahun_akademik = date('Y');
-            $billings = BillingMahasiswa::tahun($tahun_akademik)->jenisbayar($this->jenisbayara)
+            $billings = BillingMahasiswa::tahun($tahun_akademik)->jenisbayar($this->jenisbayar)
                 ->lunas(1)
                 ->whereBetween('updated_at', [$this->tgl_mulai . " 00:00:00", $this->tgl_akhir . " 23:59:59"])
                 ->orderBy('updated_at', 'ASC')
@@ -33,7 +33,7 @@ class EbillingMahasiswa implements FromView
                 ->get();
         } else {
             $tahun_akademik = TahunPembayaran::first();
-            $billings = BillingMahasiswa::periode($tahun_akademik?->tahun_akademik)->jenisbayar($jenisbayara)
+            $billings = BillingMahasiswa::periode($tahun_akademik?->tahun_akademik)->jenisbayar($jenisbayar)
                 ->lunas(1)
                 ->whereBetween('updated_at', [$this->tgl_mulai . " 00:00:00", $this->tgl_akhir . " 23:59:59"])
                 ->orderBy('updated_at', 'ASC')
