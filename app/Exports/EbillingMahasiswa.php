@@ -22,14 +22,25 @@ class EbillingMahasiswa implements FromView
 
     public function view(): View
     {
-        $tahun_akademik = TahunPembayaran::first();
-        $billings = BillingMahasiswa::periode($tahun_akademik?->tahun_akademik)
-            ->lunas(1)
-            ->jenisbayar($this->jenisbayar)
-            ->whereBetween('updated_at', [$this->tgl_mulai . " 00:00:00", $this->tgl_akhir . " 23:59:59"])
-            ->orderBy('updated_at', 'ASC')
-            ->orderBy('nama_prodi', 'ASC')
-            ->get();
+
+        if (in_array($this->jenisbayara, ['umb', 'ipi', 'pemkes'])) {
+            $tahun_akademik = date('Y');
+            $billings = BillingMahasiswa::tahun($tahun_akademik)->jenisbayar($this->jenisbayara)
+                ->lunas(1)
+                ->whereBetween('updated_at', [$this->tgl_mulai . " 00:00:00", $this->tgl_akhir . " 23:59:59"])
+                ->orderBy('updated_at', 'ASC')
+                ->orderBy('nama_prodi', 'ASC')
+                ->get();
+        } else {
+            $tahun_akademik = TahunPembayaran::first();
+            $billings = BillingMahasiswa::periode($tahun_akademik?->tahun_akademik)->jenisbayar($jenisbayara)
+                ->lunas(1)
+                ->whereBetween('updated_at', [$this->tgl_mulai . " 00:00:00", $this->tgl_akhir . " 23:59:59"])
+                ->orderBy('updated_at', 'ASC')
+                ->orderBy('nama_prodi', 'ASC')
+                ->get();
+        }
+
         return view('exports.ebilling-mahasiswa', [
             'tgl_transaksi' => str_range_tanggal($this->tgl_mulai, $this->tgl_akhir),
             'result' => $billings
