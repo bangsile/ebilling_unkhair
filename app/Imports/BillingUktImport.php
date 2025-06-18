@@ -37,7 +37,7 @@ class BillingUktImport implements ToModel, WithHeadingRow, SkipsOnFailure, WithV
         }
         try {
             // Cek apakah data sudah ada berdasarkan email
-            $existingData = BillingMahasiswa::where('no_identitas', $row['npm'])->first();
+            $existingData = BillingMahasiswa::where('no_identitas', $row['npm'])->where('tahun_akademik', $row['tahun_akademik'])->first();
             $token = env('API_TOKEN_SIMAK', 'default_token');
             $response_mahasiswa = json_decode(get_data(str_curl('https://simak.unkhair.ac.id/apiv2/mahasiswa', ['token' => $token, 'nim' => $row['npm']])), TRUE);
             if (!$response_mahasiswa) {
