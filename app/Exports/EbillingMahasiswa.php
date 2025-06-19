@@ -33,7 +33,7 @@ class EbillingMahasiswa implements FromView
                 ->get();
         } else {
             $tahun_akademik = TahunPembayaran::first();
-            $billings = BillingMahasiswa::periode($tahun_akademik?->tahun_akademik)->jenisbayar($jenisbayar)
+            $billings = BillingMahasiswa::periode($tahun_akademik?->tahun_akademik)->jenisbayar($this->jenisbayar)
                 ->lunas(1)
                 ->whereBetween('updated_at', [$this->tgl_mulai . " 00:00:00", $this->tgl_akhir . " 23:59:59"])
                 ->orderBy('updated_at', 'ASC')
