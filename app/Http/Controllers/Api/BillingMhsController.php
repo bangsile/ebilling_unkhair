@@ -237,7 +237,7 @@ class BillingMhsController extends Controller
             }
 
             $billing = BillingMahasiswa::where('no_identitas', $request->npm)
-                ->where('tahun_akademik', $request->tahun_akademik)
+                // ->where('tahun_akademik', $request->tahun_akademik)
                 ->where('jenis_bayar', $request->jenis_bayar)->first();
 
             if (!$billing) {
