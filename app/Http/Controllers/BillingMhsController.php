@@ -35,10 +35,10 @@ class BillingMhsController extends Controller
                     return formatRupiah($billing->nominal);
                 })
                 ->editColumn('status', function ($billing) {
-                    if ($billing->tgl_expire) {
-                        if ($billing->lunas) {
-                            return '<span class="badge badge-success" style="font-size: 1rem">Lunas</span>';
-                        } elseif ($billing->tgl_expire < now()) {
+                    if ($billing->lunas) {
+                        return '<span class="badge badge-success" style="font-size: 1rem">Lunas</span>';
+                    } else {
+                        if ($billing->tgl_expire && $billing->tgl_expire < now()) {
                             return '<span class="badge badge-danger" style="font-size: 1rem">Expired</span>';
                         } else {
                             return '<span class="badge badge-warning" style="font-size: 1rem">Pending</span>';
