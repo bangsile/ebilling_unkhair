@@ -50,7 +50,7 @@ class BillingMhsController extends Controller
                     $editButton = $billing->lunas ? '<button type="button" class="btn btn-sm btn-warning disabled"><i class="fas fa-edit"></i></button>' :
                         '<a href="' . route('billing.ukt.edit', $billing->id) . '" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>';
 
-                    $printResetVa = $billing->lunas ? '<button type="button" class="btn btn-sm btn-secondary disabled">Reset VA</button>' :
+                    $printResetVa = ($billing->lunas || empty($billing->trx_id)) ? '<button type="button" class="btn btn-sm btn-secondary disabled">Reset VA</button>' :
                         '<a href="' . route('billing.ukt.resetva', $billing->id) . '" class="btn btn-sm btn-secondary">Reset VA</a>';
 
                     $setLunasButton = ($billing->lunas) ?
