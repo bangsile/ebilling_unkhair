@@ -53,7 +53,7 @@ class BillingMhsController extends Controller
                     $printResetVa = ($billing->lunas || empty($billing->trx_id)) ? '<button type="button" class="btn btn-sm btn-secondary disabled">Reset VA</button>' :
                         '<a href="' . route('billing.ukt.resetva', $billing->id) . '" class="btn btn-sm btn-secondary">Reset VA</a>';
 
-                    $setLunasButton = ($billing->lunas) ?
+                    $setLunasButton = ($billing->lunas || empty($billing->trx_id)) ?
                         '<button type="button" class="btn btn-sm btn-success disabled">Set Lunas</button>' :
                         '<form id="lunas-form-' . $billing->id . '" action="' . route('billing.ukt.lunas') . '" method="POST" style="display: inline;">' .
                         csrf_field() .
@@ -61,12 +61,12 @@ class BillingMhsController extends Controller
                         '<button type="button" class="btn btn-sm btn-success" onclick="confirmLunas(\'' . $billing->id . '\')">Set Lunas</button>' .
                         '</form>';
 
-                    if (Auth::check() && Auth::user()->hasRole(['developper', 'admin'])) {
-                        // return $printButton . ' ' . $setLunasButton;
-                        return $editButton . ' ' . $printResetVa . ' ' . $setLunasButton;
-                    }
-                    // return $printButton;
-                    return $editButton . ' ' . $printResetVa;
+                    // if (Auth::check() && Auth::user()->hasRole(['developper', 'admin'])) {
+                    //     // return $printButton . ' ' . $setLunasButton;
+                    //     return $editButton . ' ' . $printResetVa . ' ' . $setLunasButton;
+                    // }
+
+                    return $editButton . ' ' . $printResetVa . ' ' . $setLunasButton;
                 })
                 ->filter(function ($instance) use ($request) {
                     if ($request->get('prodi')) {
