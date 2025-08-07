@@ -53,7 +53,7 @@ class BillingUktImport implements ToModel, WithHeadingRow, SkipsOnFailure, WithV
             if ($existingData) {
                 // Jika data sudah ada, lakukan update
                 $existingData->update([
-                    'nama_bank' => 'BTN',
+                    'nama_bank' => 'BNI',
                     'jenis_bayar' => 'ukt',
                     'nominal' => $row['nominal'],
                     // 'tgl_expire' => '',
@@ -73,7 +73,7 @@ class BillingUktImport implements ToModel, WithHeadingRow, SkipsOnFailure, WithV
                 BillingMahasiswa::create([
                     // 'trx_id' => '',
                     // 'no_va' => '',
-                    'nama_bank' => 'BTN',
+                    'nama_bank' => 'BNI',
                     'jenis_bayar' => 'ukt',
                     'nominal' => $row['nominal'],
                     // 'tgl_expire' => '',

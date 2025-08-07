@@ -117,6 +117,8 @@ class LogController extends Controller
                 ->first();
             if ($billingukt) {
                 $str[] = [
+                    'bank' => $billingukt->nama_bank,
+                    'trx' => $billingukt->trx_id,
                     'npm' => $billingukt->no_identitas,
                     'nama' => $billingukt->nama,
                     'nominal' => $billingukt->nominal,
