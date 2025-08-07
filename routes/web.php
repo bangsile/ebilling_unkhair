@@ -53,6 +53,7 @@ Route::controller(BillingMhsController::class)->group(function () {
     Route::get('/billing-ukt', 'billing_ukt')->name('billing.ukt');
     Route::get('/billing-ukt/create', 'create_billing_ukt')->name('billing.ukt.create');
     Route::get('/billing-ukt/edit/{id}', 'edit_billing_ukt')->name('billing.ukt.edit');
+    Route::get('/billing-ukt/resetva/{id}', 'reset_billing_ukt')->name('billing.ukt.resetva');
     Route::patch('/billing-ukt/edit/{id}', 'update_billing_ukt')->name('billing.ukt.update');
     Route::post('/billing-ukt/lunas', 'set_lunas_billing')->name('billing.ukt.lunas');
 

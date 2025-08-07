@@ -50,8 +50,8 @@ class BillingMhsController extends Controller
                     $editButton = $billing->lunas ? '<button type="button" class="btn btn-sm btn-warning disabled"><i class="fas fa-edit"></i></button>' :
                         '<a href="' . route('billing.ukt.edit', $billing->id) . '" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>';
 
-                    $printButton = $billing->lunas ? '<button type="button" class="btn btn-sm btn-info disabled"><i class="fas fa-print"></i></button>' :
-                        '<a href="/" class="btn btn-sm btn-info"><i class="fas fa-print"></i></a>';
+                    $printResetVa = $billing->lunas ? '<button type="button" class="btn btn-sm btn-info disabled">Reset VA</button>' :
+                        '<a href="' . route('billing.ukt.resetva', $billing->id) . '" class="btn btn-sm btn-info">Reset VA</a>';
 
                     $setLunasButton = ($billing->lunas) ?
                         '<button type="button" class="btn btn-sm btn-success disabled">Set Lunas</button>' :
@@ -63,10 +63,10 @@ class BillingMhsController extends Controller
 
                     if (Auth::check() && Auth::user()->hasRole(['developper', 'admin'])) {
                         // return $printButton . ' ' . $setLunasButton;
-                        return $editButton . ' ' . $printButton . ' ' . $setLunasButton;
+                        return $editButton . ' ' . $printResetVa . ' ' . $setLunasButton;
                     }
                     // return $printButton;
-                    return $editButton . ' ' . $printButton;
+                    return $editButton . ' ' . $printResetVa;
                 })
                 ->filter(function ($instance) use ($request) {
                     if ($request->get('prodi')) {
@@ -147,6 +147,17 @@ class BillingMhsController extends Controller
             'tgl_expire' => NULL,
         ]);
         return redirect()->route('billing.ukt')->with('success', 'Berhasil Update Billing');
+    }
+
+    public function reset_billing_ukt($id)
+    {
+        $billing = BillingMahasiswa::find($id);
+        $billing->update([
+            'trx_id' => NULL,
+            'no_va' => NULL,
+            'tgl_expire' => NULL,
+        ]);
+        return redirect()->route('billing.ukt')->with('success', 'Berhasil Reset Billing');
     }
 
     public function set_lunas_billing(Request $request)
