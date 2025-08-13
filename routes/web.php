@@ -37,117 +37,143 @@ Livewire::setScriptRoute(function ($handle) {
 });
 
 // MANAJEMEN BILLING
-Route::controller(BillingController::class)->group(function () {
-    Route::get('/billing-pembayaran', 'billing_pembayaran')->name('billing.pembayaran');
-    Route::get('/tambah-billing', 'create_billing')->name('billing.tambah');
-    Route::post('/tambah-billing', 'store_billing')->name('billing.store');
+Route::controller(BillingController::class)
+    ->middleware(['auth'])
+    ->group(function () {
+        Route::get('/billing-pembayaran', 'billing_pembayaran')->name('billing.pembayaran');
+        Route::get('/tambah-billing', 'create_billing')->name('billing.tambah');
+        Route::post('/tambah-billing', 'store_billing')->name('billing.store');
 
-    Route::get('/billing-dosen', 'billing_dosen')->name('billing.dosen');
-    Route::get('/billing-dosen/tambah', 'create_billing_dosen')->name('billing.dosen.tambah');
-    Route::post('/billing-dosen/tambah', 'store_billing_dosen')->name('billing.dosen.store');
-})->middleware(['auth']);
+        Route::get('/billing-dosen', 'billing_dosen')->name('billing.dosen');
+        Route::get('/billing-dosen/tambah', 'create_billing_dosen')->name('billing.dosen.tambah');
+        Route::post('/billing-dosen/tambah', 'store_billing_dosen')->name('billing.dosen.store');
+    });
 
 
 // BILLING MAHASISWA
-Route::controller(BillingMhsController::class)->group(function () {
-    Route::get('/billing-ukt', 'billing_ukt')->name('billing.ukt');
-    Route::get('/billing-ukt/create', 'create_billing_ukt')->name('billing.ukt.create');
-    Route::get('/billing-ukt/edit/{id}', 'edit_billing_ukt')->name('billing.ukt.edit');
-    Route::get('/billing-ukt/resetva/{id}', 'reset_billing_ukt')->name('billing.ukt.resetva');
-    Route::patch('/billing-ukt/edit/{id}', 'update_billing_ukt')->name('billing.ukt.update');
-    Route::post('/billing-ukt/lunas', 'set_lunas_billing')->name('billing.ukt.lunas');
+Route::controller(BillingMhsController::class)
+    ->middleware(['auth', 'role:admin|spp|keuangan'])
+    ->group(function () {
+        Route::get('/billing-ukt', 'billing_ukt')->name('billing.ukt');
+        Route::get('/billing-ukt/create', 'create_billing_ukt')->name('billing.ukt.create');
+        Route::get('/billing-ukt/edit/{id}', 'edit_billing_ukt')->name('billing.ukt.edit');
+        Route::get('/billing-ukt/resetva/{id}', 'reset_billing_ukt')->name('billing.ukt.resetva');
+        Route::patch('/billing-ukt/edit/{id}', 'update_billing_ukt')->name('billing.ukt.update');
+        Route::post('/billing-ukt/lunas', 'set_lunas_billing')->name('billing.ukt.lunas');
 
-    Route::get('/billing-umb', 'billing_umb')->name('billing.umb');
+        Route::get('/billing-umb', 'billing_umb')->name('billing.umb');
 
-    Route::get('/billing-ipi', 'billing_ipi')->name('billing.ipi');
-    Route::get('/billing-ipi/create', 'create_billing_ipi')->name('billing.ipi.create');
+        Route::get('/billing-ipi', 'billing_ipi')->name('billing.ipi');
+        Route::get('/billing-ipi/create', 'create_billing_ipi')->name('billing.ipi.create');
 
-    Route::get('/billing-pemkes', 'billing_pemkes')->name('billing.pemkes');
-})->middleware(['auth', 'role:admin|spp|keuangan']);
+        Route::get('/billing-pemkes', 'billing_pemkes')->name('billing.pemkes');
+    });
 
 // REKENING KORAN MAHASISWA
-Route::controller(RekeningKoranController::class)->group(function () {
-    Route::get('/rekening-koran', 'index')->name('rekening-koran.index');
-    Route::get('/rekening-koran/show', 'tampil')->name('rekening-koran.tampil');
-    Route::get('/rekening-koran/export-excel', 'excel')->name('rekening-koran.export-excel');
-    Route::get('/rekening-koran/export-pdf', 'pdf')->name('rekening-koran.export-pdf');
-})->middleware(['auth', 'role:developper|admin|spp|keuangan']);
+Route::controller(RekeningKoranController::class)
+    ->middleware(['auth', 'role:developper|admin|spp|keuangan'])
+    ->group(function () {
+        Route::get('/rekening-koran', 'index')->name('rekening-koran.index');
+        Route::get('/rekening-koran/show', 'tampil')->name('rekening-koran.tampil');
+        Route::get('/rekening-koran/export-excel', 'excel')->name('rekening-koran.export-excel');
+        Route::get('/rekening-koran/export-pdf', 'pdf')->name('rekening-koran.export-pdf');
+    });
 
 // REKENING KORAN MANAJEMEN E-BILLING
-Route::controller(RekeningKoran2Controller::class)->group(function () {
-    Route::get('/rekeningkoran/index', 'index')->name('rekeningkoran.index');
-    Route::get('/rekeningkoran/show/{jenisbayar}', 'index')->name('rekeningkoran.pilih-jenisbayar');
-    Route::get('/rekeningkoran/ebilling-mahasiswa/{jenisbayar}', 'ebilling_mahasiswa')->name('rekeningkoran.ebilling-mahasiswa');
-    Route::get('/rekeningkoran/manajemen-ebilling/{jenisbayar}', 'manajemen_ebilling')->name('rekeningkoran.manajemen_ebilling');
+Route::controller(RekeningKoran2Controller::class)
+    ->middleware(['auth', 'role:developper|admin|spp|keuangan'])
+    ->group(function () {
+        Route::get('/rekeningkoran/index', 'index')->name('rekeningkoran.index');
+        Route::get('/rekeningkoran/show/{jenisbayar}', 'index')->name('rekeningkoran.pilih-jenisbayar');
+        Route::get('/rekeningkoran/ebilling-mahasiswa/{jenisbayar}', 'ebilling_mahasiswa')->name('rekeningkoran.ebilling-mahasiswa');
+        Route::get('/rekeningkoran/manajemen-ebilling/{jenisbayar}', 'manajemen_ebilling')->name('rekeningkoran.manajemen_ebilling');
 
-    Route::get('/rekeningkoran/export-excel', 'excel')->name('rekeningkoran.export-excel');
-})->middleware(['auth', 'role:developper|admin|spp|keuangan']);
+        Route::get('/rekeningkoran/export-excel', 'excel')->name('rekeningkoran.export-excel');
+    });
 
 
 // LAPORAN UKT MAHASISWA
-Route::controller(LaporanUktMahasiswaController::class)->group(function () {
-    Route::get('/laporan-ukt', 'index')->name('laporan.ukt');
-    Route::post('/laporan-ukt/show', 'index')->name('laporan.ukt.tampil');
-})->middleware(['auth', 'role:developper|admin|spp|keuangan']);
+Route::controller(LaporanUktMahasiswaController::class)
+    ->middleware(['auth', 'role:developper|admin|spp|keuangan'])
+    ->group(function () {
+        Route::get('/laporan-ukt', 'index')->name('laporan.ukt');
+        Route::post('/laporan-ukt/show', 'index')->name('laporan.ukt.tampil');
+    });
 
 // IMPORT DATA UKT
-Route::controller(DataImportController::class)->group(function () {
-    Route::get('/billing-ukt/import-data', 'import_data_ukt_form')->name('ukt.import.form');
-    Route::post('/billing-ukt/import-data', 'import_data_ukt')->name('ukt.import');
-})->middleware(['auth', 'role:developper|admin|spp|keuangan']);
+Route::controller(DataImportController::class)
+    ->middleware(['auth', 'role:developper|admin|spp|keuangan'])
+    ->group(function () {
+        Route::get('/billing-ukt/import-data', 'import_data_ukt_form')->name('ukt.import.form');
+        Route::post('/billing-ukt/import-data', 'import_data_ukt')->name('ukt.import');
+    });
 
 
 // JENIS BAYAR
-Route::controller(JenisBayarController::class)->group(function () {
-    Route::get('/jenis-bayar', 'index')->name('jenis-bayar');
-    Route::get('/jenis-bayar/tambah', 'create')->name('jenis-bayar.tambah');
-    Route::post('/jenis-bayar/tambah', 'store')->name('jenis-bayar.store');
-})->middleware(['auth', 'role:developper|admin']);
+Route::controller(JenisBayarController::class)
+    ->middleware(['auth', 'role:developper|admin'])
+    ->group(function () {
+        Route::get('/jenis-bayar', 'index')->name('jenis-bayar');
+        Route::get('/jenis-bayar/tambah', 'create')->name('jenis-bayar.tambah');
+        Route::post('/jenis-bayar/tambah', 'store')->name('jenis-bayar.store');
+    });
 
 // TAHUN PEMBAYARAN
-Route::controller(TahunPembayaranController::class)->group(function () {
-    Route::get('/tahun-pembayaran', 'index')->name('tahun-pembayaran');
-    Route::post('/tahun-pembayaran', 'store')->name('tahun-pembayaran.store');
-})->middleware(['auth', 'role:developper|admin|spp|keuangan']);
+Route::controller(TahunPembayaranController::class)
+    ->middleware(['auth', 'role:developper|admin|spp|keuangan'])
+    ->group(function () {
+        Route::get('/tahun-pembayaran', 'index')->name('tahun-pembayaran');
+        Route::post('/tahun-pembayaran', 'store')->name('tahun-pembayaran.store');
+    });
 
 // FAKULTAS
-Route::controller(FakultasController::class)->group(function () {
-    Route::get('/fakultas', 'index')->name('fakultas.index');
-    Route::get('/fakultas/import', 'import')->name('fakultas.import');
-})->middleware(['auth', 'role:developper|admin']);
+Route::controller(FakultasController::class)
+    ->middleware(['auth', 'role:developper|admin'])
+    ->group(function () {
+        Route::get('/fakultas', 'index')->name('fakultas.index');
+        Route::get('/fakultas/import', 'import')->name('fakultas.import');
+    });
 
 // PRODI
-Route::controller(ProdiController::class)->group(function () {
-    Route::get('/prodi', 'index')->name('prodi.index');
-    Route::get('/prodi/import', 'import')->name('prodi.import');
-})->middleware(['auth', 'role:developper|admin']);
+Route::controller(ProdiController::class)
+    ->middleware(['auth', 'role:developper|admin'])
+    ->group(function () {
+        Route::get('/prodi', 'index')->name('prodi.index');
+        Route::get('/prodi/import', 'import')->name('prodi.import');
+    });
 
 
 // PENGGUNA
-Route::controller(UserController::class)->group(function () {
-    Route::get('/pengguna', 'index')->name('pengguna.index');
-    Route::get('/pengguna/tambah', 'create')->name('pengguna.tambah');
-    Route::get('/pengguna/import', 'import')->name('pengguna.import');
-    Route::post('/pengguna/tambah', 'store')->name('pengguna.store');
-    Route::get('/pengguna/{id}', 'edit')->name('pengguna.edit');
-    Route::patch('/pengguna/{id}', 'update')->name('pengguna.update');
-    Route::delete('/pengguna/{id}', 'destroy')->name('pengguna.destroy');
-})->middleware(['auth', 'role:developper|admin']);
+Route::controller(UserController::class)
+    ->middleware(['auth', 'role:developper|admin'])
+    ->group(function () {
+        Route::get('/pengguna', 'index')->name('pengguna.index');
+        Route::get('/pengguna/tambah', 'create')->name('pengguna.tambah');
+        Route::get('/pengguna/import', 'import')->name('pengguna.import');
+        Route::post('/pengguna/tambah', 'store')->name('pengguna.store');
+        Route::get('/pengguna/{id}', 'edit')->name('pengguna.edit');
+        Route::patch('/pengguna/{id}', 'update')->name('pengguna.update');
+        Route::delete('/pengguna/{id}', 'destroy')->name('pengguna.destroy');
+    });
 
 // LOG
-Route::controller(LogController::class)->group(function () {
-    Route::get('/log', 'index')->name('log.index');
-    Route::get('/log/view/{nama_file}', 'lihat')->name('log.lihat');
-    Route::get('/log/ecoll', 'ecoll')->name('log.ecoll');
-    Route::get('/log/failed-pelunasan-ukt', 'failed_set_lunas_ukt')->name('log.failed-pelunasan-ukt');
-    Route::post('/log/set-pelunasan-ukt', 'set_lunas_ukt')->name('log.set-pelunasan-ukt');
+Route::controller(LogController::class)
+    ->middleware(['auth', 'role:developper'])
+    ->group(function () {
+        Route::get('/log', 'index')->name('log.index');
+        Route::get('/log/view/{nama_file}', 'lihat')->name('log.lihat');
+        Route::get('/log/ecoll', 'ecoll')->name('log.ecoll');
+        Route::get('/log/failed-pelunasan-ukt', 'failed_set_lunas_ukt')->name('log.failed-pelunasan-ukt');
+        Route::post('/log/set-pelunasan-ukt', 'set_lunas_ukt')->name('log.set-pelunasan-ukt');
 
-    Route::get('/log/error_logjob', 'error_logjob');
-})->middleware(['auth', 'role:developper']);
+        Route::get('/log/error_logjob', 'error_logjob');
+    });
 
 
 // BILLING PMB
-Route::controller(BillingPmbController::class)->group(function () {
-    Route::get('/billing-pmb', 'index')->name('billing-pmb.index');
-    Route::get('/billing-pmb/create', 'create')->name('billing-pmb.create');
-})->middleware(['auth', 'role:admin|keuangan']);
+Route::controller(BillingPmbController::class)
+    ->middleware(['auth', 'role:admin|keuangan'])
+    ->group(function () {
+        Route::get('/billing-pmb', 'index')->name('billing-pmb.index');
+        Route::get('/billing-pmb/create', 'create')->name('billing-pmb.create');
+    });
