@@ -56,7 +56,7 @@ class BillingMhsController extends Controller
                     $printResetVa = ($billing->lunas || empty($billing->trx_id)) ? '<button type="button" class="btn btn-sm btn-secondary disabled">Reset VA</button>' :
                         '<a href="' . route('billing.ukt.resetva', $billing->id) . '" class="btn btn-sm btn-secondary">Reset VA</a>';
 
-                    $setLunasButton = ($billing->lunas || empty($billing->trx_id)) ?
+                    $setLunasButton = ($billing->lunas) ?
                         '<button type="button" class="btn btn-sm btn-success disabled">Set Lunas</button>' :
                         '<form id="lunas-form-' . $billing->id . '" action="' . route('billing.ukt.lunas') . '" method="POST" style="display: inline;">' .
                         csrf_field() .
