@@ -15,7 +15,8 @@
     <table style="width: 100%;" border="0" cellspacing="0" cellpadding="10">
         <tr>
             <td style="text-align: center">
-                <img src="{{ public_path('/logo.png') }}" alt="Unkhair" style="width: 65px">
+                <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('logo.png'))) }}"
+                    alt="Unkhair" style="width: 65px">
             </td>
             <td>
                 <div style="text-align: center; line-height: 2px; font-weight: bold; font-size: large; margin: auto">
@@ -26,14 +27,17 @@
             </td>
             <td style="text-align: center;">
                 @if ($bank == 'BTN')
-                    <img src="{{ public_path('/logo/btn.png') }}" alt="btn"
-                        style="width: 60px; border: 1px solid blue; border-radius: 100%">
+                    <div
+                        style="height: 60px; width: 60px;  border: 1px solid blue; border-radius: 100%; margin-left: auto; margin-right: auto;">
+                        <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('/logo/btn.png'))) }}"
+                            alt="btn" style="width: 50px; margin-top: 50%; transform: translateY(-50%);">
+                    </div>
                 @endif
                 @if ($bank == 'BNI')
                     <div
                         style="height: 60px; width: 60px; border: 1px solid rgb(215, 97, 0); border-radius: 100%; margin-left: auto; margin-right: auto;">
-                        <img src="{{ public_path('/logo/bni.png') }}" alt="bni"
-                            style="width: 50px; margin-top: 50%; transform: translateY(-50%);">
+                        <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('/logo/bni.png'))) }}"
+                            alt="bni" style="width: 50px; margin-top: 50%; transform: translateY(-50%);">
                     </div>
                 @endif
             </td>
@@ -104,27 +108,6 @@
                 Bank BNI di seluruh Indonesia sebelum tanggal jatuh tempo {{ $expire }}.</p>
         @endif
     </div>
-    {{-- <div class="head">
-        <div>img unkhair</div>
-        <div>
-            <h2>Billing Tagihan Pembayaran UKT</h2>
-            <h2>Tahun Akademik 20251</h2>
-            <h2>Universitas Khairun Ternate</h2>
-        </div>
-        <div>img bank</div>
-    </div>
-
-    <div>
-        <p>Ternate, 12 Agustus 2025</p>
-        <p>Kepada Yth Usamah Robbani Abdullah</p>
-        <p>Berikut kami sampaikan tagihan pembayaran UKT anda kepada UNKHAIR dengan rincian sebagai berikut : </p>
-
-        <div class="detail">
-            <div>Kode Tagihan</div>
-            <div>:</div>
-            <div>UKTMHS9023479023</div>
-        </div>
-    </div> --}}
 </body>
 
 </html>
