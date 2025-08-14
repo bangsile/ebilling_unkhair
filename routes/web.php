@@ -5,6 +5,7 @@ use App\Http\Controllers\BillingController;
 use App\Http\Controllers\BillingMhsController;
 use App\Http\Controllers\BillingPmbController;
 use App\Http\Controllers\DataImportController;
+use App\Http\Controllers\ExportController;
 use App\Http\Controllers\FakultasController;
 use App\Http\Controllers\JenisBayarController;
 use App\Http\Controllers\LaporanUktMahasiswaController;
@@ -67,6 +68,8 @@ Route::controller(BillingMhsController::class)
         Route::get('/billing-ipi/create', 'create_billing_ipi')->name('billing.ipi.create');
 
         Route::get('/billing-pemkes', 'billing_pemkes')->name('billing.pemkes');
+
+        Route::get('/cetak-billing/{id}', [ExportController::class, 'tagihanBillingMhs'])->name('export.tagihanMhs');
     });
 
 // REKENING KORAN MAHASISWA

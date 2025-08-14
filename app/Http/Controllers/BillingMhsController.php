@@ -44,11 +44,14 @@ class BillingMhsController extends Controller
                             return '<span class="badge badge-warning" style="font-size: 1rem">Pending</span>';
                         }
                     }
-                    return '';
+                    // return '';
                 })
                 ->addColumn('action', function ($billing) {
                     $editButton = $billing->lunas ? '<button type="button" class="btn btn-sm btn-warning disabled"><i class="fas fa-edit"></i></button>' :
                         '<a href="' . route('billing.ukt.edit', $billing->id) . '" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>';
+
+                    $cetak = ($billing->lunas || empty($billing->trx_id)) ? '<button type="button" class="btn btn-sm btn-info disabled"><i class="fas fa-print"></i></button>' :
+                        '<a href="' . route('export.tagihanMhs', $billing->trx_id) . '" target="_blank" class="btn btn-sm btn-info"><i class="fas fa-print"></i></a>';
 
                     $printResetVa = ($billing->lunas || empty($billing->trx_id)) ? '<button type="button" class="btn btn-sm btn-secondary disabled">Reset VA</button>' :
                         '<a href="' . route('billing.ukt.resetva', $billing->id) . '" class="btn btn-sm btn-secondary">Reset VA</a>';
@@ -66,7 +69,7 @@ class BillingMhsController extends Controller
                     //     return $editButton . ' ' . $printResetVa . ' ' . $setLunasButton;
                     // }
 
-                    return $editButton . ' ' . $printResetVa . ' ' . $setLunasButton;
+                    return $editButton . ' ' . $cetak . ' ' . $printResetVa . ' ' . $setLunasButton;
                 })
                 ->filter(function ($instance) use ($request) {
                     if ($request->get('prodi')) {

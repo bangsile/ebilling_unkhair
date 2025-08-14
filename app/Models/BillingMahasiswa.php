@@ -73,4 +73,9 @@ class BillingMahasiswa extends Model
             $query->where('kode_prodi', $value);
         }
     }
+
+    public function jenis_pembayaran()
+    {
+        return $this->hasOne(JenisBayar::class, 'kode', 'jenis_bayar');
+    }
 }
