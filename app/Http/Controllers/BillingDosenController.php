@@ -65,7 +65,7 @@ class BillingDosenController extends Controller
         }
 
         $data = [
-            'judul' => 'My Billing',
+            'judul' => 'Billing Dosen',
             'datatable' => [
                 'url' => route('billing-dosen.index'),
                 'id_table' => 'id-datatable',

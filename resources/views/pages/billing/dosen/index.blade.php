@@ -1,4 +1,4 @@
-div<x-app-layout>
+<x-app-layout>
     <x-slot name="head">
         <!-- yajra datatble css -->
         <link href="https://cdn.datatables.net/2.0.1/css/dataTables.dataTables.min.css" rel="stylesheet">
