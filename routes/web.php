@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\BillingController;
+use App\Http\Controllers\BillingDosenController;
 use App\Http\Controllers\BillingMhsController;
 use App\Http\Controllers\BillingPmbController;
 use App\Http\Controllers\DataImportController;
@@ -179,4 +180,14 @@ Route::controller(BillingPmbController::class)
     ->group(function () {
         Route::get('/billing-pmb', 'index')->name('billing-pmb.index');
         Route::get('/billing-pmb/create', 'create')->name('billing-pmb.create');
+    });
+
+// BILLING DOSEN
+Route::controller(BillingDosenController::class)
+    ->middleware(['auth', 'role:admin|keuangan|dosen'])
+    ->group(function () {
+        Route::get('/billing-dosen', 'index')->name('billing-dosen.index');
+        Route::get('/billing-dosen/create', 'create')->middleware('role:dosen')->name('billing-dosen.create');
+        Route::get('/billing-dosen/cetak-billing/{id}', [ExportController::class, 'tagihanDosen'])->name('export.tagihanDosen');
+
     });

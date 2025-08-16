@@ -82,7 +82,7 @@
                 @endif
 
                 @if (Auth::user()->hasRole(['admin', 'keuangan']))
-                    <x-nav-link icon="nav-icon fas fa-money-bill-wave" active="{{ Route::is('billing-pmb.*') }}">
+                    <x-nav-link icon="nav-icon fas fa-money-bill-wave" active="{{ Route::is(['billing-pmb.*','billing-dosen.*']) }}">
                         Manajemen E-Billing
                         <i class="right fas fa-angle-left"></i>
                         <x-slot name="navtree">
@@ -102,6 +102,10 @@
                                 </x-nav-link>
                                 <x-nav-link icon="far fa-circle nav-icon" href="" active="">
                                     Pembayaran Sewa Rusunawa
+                                </x-nav-link>
+                                <x-nav-link icon="far fa-circle nav-icon" href="{{ route('billing-dosen.index') }}"
+                                    active="{{ Route::is('billing-dosen.*') }}">
+                                    Pembayaran Fee Dosen
                                 </x-nav-link>
                             </ul>
                         </x-slot>
@@ -139,6 +143,13 @@
                                 </x-nav-link>
                             </ul>
                         </x-slot>
+                    </x-nav-link>
+                @endif
+
+                @if (Auth::user()->hasRole(['dosen']))
+                    <x-nav-link icon="nav-icon fas fa-money-bill-wave" href="{{ route('billing-dosen.index') }}"
+                        active="{{ Route::is('billing-dosen.*') }}">
+                        Billing Dosen
                     </x-nav-link>
                 @endif
 

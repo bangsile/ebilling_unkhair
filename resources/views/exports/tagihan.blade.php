@@ -21,7 +21,9 @@
             <td>
                 <div style="text-align: center; line-height: 2px; font-weight: bold; font-size: large; margin: auto">
                     <p>Billing Tagihan {{ $keterangan }}</p>
-                    <p>Tahun Akademik {{ $tahun_akademik }}</p>
+                    @if ($tahun_akademik)
+                        <p>Tahun Akademik {{ $tahun_akademik }}</p>
+                    @endif
                     <p>Universitas Khairun Ternate</p>
                 </div>
             </td>
@@ -52,7 +54,7 @@
         <div>
             <p style="font-weight: bold; line-height: 14px;">Berikut kami sampaikan tagihan {{ $keterangan }} anda
                 kepada UNKHAIR dengan
-                rincian sebagai berikut :</p>
+                rincian sebagai berikut:</p>
             <table border="0" cellspacing="0" cellpadding="0" style="width: 100%">
                 <tr>
                     <td style="width: 30%; padding-bottom: 7px;">Kode Tagihan</td>
@@ -74,11 +76,13 @@
                     <td>:</td>
                     <td>{{ $nama }}</td>
                 </tr>
-                <tr>
-                    <td style="padding-bottom: 7px">Program Studi</td>
-                    <td>:</td>
-                    <td>{{ $prodi }}</td>
-                </tr>
+                @if ($prodi)
+                    <tr>
+                        <td style="padding-bottom: 7px">Program Studi</td>
+                        <td>:</td>
+                        <td>{{ $prodi }}</td>
+                    </tr>
+                @endif
                 <tr>
                     <td style="padding-bottom: 7px">Total Tagihan</td>
                     <td>:</td>
@@ -87,7 +91,7 @@
                 <tr>
                     <td style="padding-bottom: 7px">Keterangan</td>
                     <td>:</td>
-                    <td>{{ $keterangan . ' ' . $tahun_akademik }}</td>
+                    <td>{{ $keterangan . ' ' }} <span>{{ $tahun_akademik ?? '' }}</span></td>
                 </tr>
                 <tr>
                     <td>Jatuh Tempo</td>

@@ -50,4 +50,9 @@ class Billing extends Model
             $query->where('lunas', '=', $value);
         }
     }
+
+    public function jenis_pembayaran()
+    {
+        return $this->hasOne(JenisBayar::class, 'kode', 'jenis_bayar');
+    }
 }

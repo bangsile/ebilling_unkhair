@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -81,7 +80,7 @@ class AuthController extends Controller
 			}
 			$token = $token['data']['token'];
 			// Login dengan API SIMAK
-			$response_dosen = json_decode(get_data(str_curl(env('API_URL_SIMAK') . '/4pisim4k/index.php/dosen', ['token' => $token, 'nidn' => $request->username])), TRUE);
+			$response_dosen = json_decode(get_data(str_curl(env('API_URL_SIMAK') . '/apiv2/dosen', ['token' => $token, 'nidn' => $request->username])), TRUE);
 			// User Admin
 			if ($response_dosen['status'] == 200) {
 				if (password_verify($request->password, $response_dosen['data']['dosen']['password'])) {
